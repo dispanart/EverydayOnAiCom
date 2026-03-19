@@ -27,8 +27,8 @@ export const metadata = {
   // ── PWA / Icons ─────────────────────────────────────────────────
   manifest: '/manifest.json',
   icons: {
-    icon: '/favicon.ico',
-    apple: '/icon-192.png',
+    icon: '/icon-512.webp',
+    apple: '/icon-512.webp',
   },
   openGraph: {
     type: 'website', locale: SITE.locale, url: SITE.url,
