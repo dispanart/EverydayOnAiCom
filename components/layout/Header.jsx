@@ -147,10 +147,13 @@ export default function Header() {
 
           {/* ── Logo ── */}
           <Link href="/" className="flex items-center gap-2 group" aria-label="EverydayOnAI Home">
-            <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center
-                           group-hover:bg-blue-700 transition-colors">
-              <Zap size={16} className="text-white fill-white" />
-            </div>
+            <Image 
+  src="/nama-logo-kamu.webp" 
+  alt="EverydayOnAI Logo" 
+  width={32} 
+  height={32}
+  className="rounded-lg"
+/>
             <span className="font-bold text-slate-900 text-lg tracking-tight">
               EverydayOn<span className="text-blue-600">AI</span>
             </span>
