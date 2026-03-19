@@ -148,7 +148,7 @@ export default function Header() {
           {/* ── Logo ── */}
           <Link href="/" className="flex items-center gap-2 group" aria-label="EverydayOnAI Home">
             <Image 
-  src="/nama-logo-kamu.webp" 
+  src="/icon-512.webp" 
   alt="EverydayOnAI Logo" 
   width={32} 
   height={32}
