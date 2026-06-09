@@ -18,7 +18,7 @@ everydayonai/
 ├── app/
 │   ├── layout.jsx           ← Root layout, fonts, metadata
 │   ├── globals.css          ← Tailwind + article typography styles
-│   ├── page.jsx             ← Homepage
+│   ├── page.jsx             ← Homepage web
 │   ├── sitemap.js           ← Auto XML sitemap
 │   ├── robots.js            ← robots.txt
 │   ├── not-found.jsx        ← Custom 404 page
