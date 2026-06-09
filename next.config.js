@@ -75,7 +75,14 @@ const nextConfig = {
       },
     ];
   },
-
+  async rewrites() {
+  return [
+    {
+      source: '/ads.txt',
+      destination: '/api/ads-txt',
+    },
+  ];
+},
   async redirects() {
     return [];
   },
