@@ -40,7 +40,7 @@ function decodeHtmlEntities(str) {
 }
 // ─────────────────────────────────────────────────────────────────────────────
 
-export const revalidate = 60;
+export const revalidate = 0;
 
 export async function generateStaticParams() {
   const slugs = await getAllPostSlugs();
