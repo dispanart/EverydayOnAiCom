@@ -21,7 +21,7 @@ everydayonai/
 │   ├── page.jsx             ← Homepage website
 │   ├── sitemap.js           ← Auto XML sitemap
 │   ├── robots.js            ← robots.txt
-│   ├── not-found.jsx        ← Custom 404 page
+│   ├── not-found.jsx        ← Custom 404 pages
 │   │
 │   ├── [slug]/page.jsx      ← Single article page
 │   │                           (reading progress, share bar, author, updated date)
