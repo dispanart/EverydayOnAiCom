@@ -161,25 +161,20 @@ export default async function PostPage({ params }) {
               <div className="flex flex-wrap items-center gap-4 py-5 mb-6 border-t border-b border-slate-100">
                 {/* Author */}
                 <div className="flex items-center gap-2.5">
-                  {author?.avatar?.url ? (
-                    <Image src={author.avatar.url} alt={author.name} width={36} height={36}
-                           className="rounded-full ring-2 ring-slate-100" unoptimized />
-                  ) : (
-                    <span className="w-9 h-9 rounded-full bg-blue-100 flex items-center justify-center">
-                      <User size={15} className="text-blue-600" />
-                    </span>
-                  )}
+                  {/* Author avatar — use local photo for Dispa, fallback to WP avatar */}
+                  <Link href="/about/dispa" className="flex-shrink-0">
+                    <Image
+                      src="/authors/dispa-ai-buff-author-photo.webp"
+                      alt="Dispa — The AI Buff"
+                      width={36} height={36}
+                      className="rounded-full ring-2 ring-blue-100 hover:ring-blue-400 transition-all"
+                    />
+                  </Link>
                   <div>
-                    {author?.slug ? (
-                      <Link href={`/author/${author.slug}`}
-                            className="text-sm font-semibold text-slate-800 hover:text-blue-600 transition-colors leading-none">
-                        {author.name ?? 'Editorial Team'}
-                      </Link>
-                    ) : (
-                      <p className="text-sm font-semibold text-slate-800 leading-none">
-                        {author?.name ?? 'Editorial Team'}
-                      </p>
-                    )}
+                    <Link href="/about/dispa"
+                          className="text-sm font-semibold text-slate-800 hover:text-blue-600 transition-colors leading-none">
+                      {author?.name ?? 'Dispa — The AI Buff'}
+                    </Link>
                     <p className="text-xs text-slate-400 mt-0.5">Author</p>
                   </div>
                 </div>
