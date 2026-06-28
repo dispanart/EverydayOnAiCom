@@ -27,10 +27,8 @@ export default function Sidebar({ recentPosts = [] }) {
             return (
               <li key={post.id} style={{ borderBottom: i < recentPosts.length - 1 ? '1px solid var(--bdr)' : 'none', paddingBottom: i < recentPosts.length - 1 ? '12px' : 0, marginBottom: i < recentPosts.length - 1 ? '12px' : 0 }}>
                 <Link href={`/${post.slug}`} className="group flex items-start gap-3">
-                  <span className="text-2xl font-black leading-none min-w-[26px] transition-colors select-none"
-                    style={{ color: 'rgba(66,116,217,.18)' }}
-                    onMouseEnter={e => e.currentTarget.style.color = 'rgba(66,116,217,.45)'}
-                    onMouseLeave={e => e.currentTarget.style.color = 'rgba(66,116,217,.18)'}>
+                  <span className="text-2xl font-black leading-none min-w-[26px] transition-colors select-none group-hover:text-[rgba(66,116,217,.45)]"
+                    style={{ color: 'rgba(66,116,217,.18)' }}>
                     {String(i + 1).padStart(2, '0')}
                   </span>
                   <div>

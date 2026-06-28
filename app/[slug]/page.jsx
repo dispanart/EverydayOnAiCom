@@ -205,10 +205,8 @@ export default async function PostPage({ params }) {
                     <Tag size={14} style={{ color: 'var(--tm)' }} />
                     {tags.map(tag => (
                       <Link key={tag.slug} href={`/tag/${tag.slug}`}
-                        className="px-3 py-1 text-xs font-medium rounded-full transition-colors"
-                        style={{ background: 'var(--bg3)', color: 'var(--ts)', border: '1px solid var(--bdr)' }}
-                        onMouseEnter={e => { e.currentTarget.style.background = 'rgba(66,116,217,.1)'; e.currentTarget.style.color = 'var(--c2)'; }}
-                        onMouseLeave={e => { e.currentTarget.style.background = 'var(--bg3)'; e.currentTarget.style.color = 'var(--ts)'; }}>
+                        className="px-3 py-1 text-xs font-medium rounded-full transition-colors hover:bg-[rgba(66,116,217,.1)] hover:text-[var(--c2)]"
+                        style={{ background: 'var(--bg3)', color: 'var(--ts)', border: '1px solid var(--bdr)' }}>
                         {tag.name}
                       </Link>
                     ))}

@@ -27,7 +27,7 @@ export function CategoryBadge({ name, slug, className = '' }) {
     <span className={`chip chip-royal ${className}`}>{name}</span>
   );
   return slug
-    ? <Link href={`/category/${slug}`} onClick={e => e.stopPropagation()}>{content}</Link>
+    ? <Link href={`/category/${slug}`}>{content}</Link>
     : content;
 }
 
@@ -167,10 +167,8 @@ export function HorizontalCard({ post }) {
 
   return (
     <Link href={`/${post.slug}`}
-      className="group flex gap-4 items-start p-4 rounded-[14px] transition-all"
-      style={{ background: 'var(--sur)', border: '1px solid var(--bdr)', boxShadow: 'var(--sh-sm)' }}
-      onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-3px)'; e.currentTarget.style.boxShadow = 'var(--sh-hv)'; e.currentTarget.style.borderColor = 'rgba(66,116,217,.3)'; }}
-      onMouseLeave={e => { e.currentTarget.style.transform = ''; e.currentTarget.style.boxShadow = 'var(--sh-sm)'; e.currentTarget.style.borderColor = 'var(--bdr)'; }}>
+      className="group flex gap-4 items-start p-4 rounded-[14px] transition-all hover:-translate-y-[3px] hover:shadow-[var(--sh-hv)] hover:border-[rgba(66,116,217,.3)]"
+      style={{ background: 'var(--sur)', border: '1px solid var(--bdr)', boxShadow: 'var(--sh-sm)' }}>
       <div className="relative w-28 h-20 flex-shrink-0 rounded-xl overflow-hidden" style={{ background: 'var(--bg3)' }}>
         {img?.sourceUrl ? (
           <Image src={img.sourceUrl} alt={img.altText || post.title} fill sizes="112px"
