@@ -250,9 +250,3 @@
 .dark .text-slate-700 { color: var(--ts) !important; }
 .dark .text-slate-600 { color: var(--tm) !important; }
 .dark .text-slate-500 { color: var(--tm) !important; }
-
-/* ── Hero "Updated Daily" pulsing dot ────────────────────────── */
-@keyframes pulse {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(149,204,213,.5); }
-  50% { box-shadow: 0 0 0 6px rgba(149,204,213,0); }
-}

@@ -15,8 +15,10 @@ export default function CategorySilo({ title, viewAllHref, posts, layout }) {
           {title}
         </h2>
         <Link href={viewAllHref}
-          className="flex items-center gap-1.5 text-sm font-bold px-3 py-1.5 rounded-lg transition-all hover:bg-[rgba(66,116,217,.12)]"
-          style={{ color: 'var(--c2)', border: '1px solid rgba(66,116,217,.2)', background: 'rgba(66,116,217,.05)' }}>
+          className="flex items-center gap-1.5 text-sm font-bold px-3 py-1.5 rounded-lg transition-all"
+          style={{ color: 'var(--c2)', border: '1px solid rgba(66,116,217,.2)', background: 'rgba(66,116,217,.05)' }}
+          onMouseEnter={e => { e.currentTarget.style.background = 'rgba(66,116,217,.12)'; }}
+          onMouseLeave={e => { e.currentTarget.style.background = 'rgba(66,116,217,.05)'; }}>
           View All <ArrowRight size={13} />
         </Link>
       </div>

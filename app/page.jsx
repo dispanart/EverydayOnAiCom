@@ -5,7 +5,6 @@ import Footer from '@/components/layout/Footer';
 import HeroSection from '@/components/home/HeroSection';
 import CategorySilo from '@/components/home/CategorySilo';
 import Sidebar from '@/components/home/Sidebar';
-import TrendingTools from '@/components/home/TrendingTools';
 import { AdSlot } from '@/components/ui';
 
 export const revalidate = 60;
@@ -102,12 +101,6 @@ export default async function HomePage() {
             {/* Sidebar */}
             <Sidebar recentPosts={recentPosts} />
           </div>
-        </div>
-
-        {/* Trending AI Tools strip */}
-        <div className="glow-divider" />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-          <TrendingTools />
         </div>
       </main>
 
