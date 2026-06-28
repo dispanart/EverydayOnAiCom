@@ -69,7 +69,7 @@ export const CATEGORIES = [
 export const NAV_LINKS = [
   { label: 'Home',                    href: '/' },
   { label: 'Business AI',             href: '/category/ai-for-business',          slug: 'ai-for-business' },
-  { label: 'AI Tools',                href: '/category/ai-tools-review-comparison', slug: 'ai-tools-review-comparison' },
+  { label: 'AI Tools',                href: '/tools' },
   { label: 'Ideas & Creativity',      href: '/category/ai-for-ideas-creativity',   slug: 'ai-for-ideas-creativity' },
   { label: 'Everyday AI',             href: '/category/everyday-ai-lifestyle',     slug: 'everyday-ai-lifestyle' },
   { label: 'About',                   href: '/about' },

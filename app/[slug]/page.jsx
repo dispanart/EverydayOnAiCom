@@ -16,6 +16,8 @@ import BookmarkButton from '@/components/article/BookmarkButton';
 import CommentsSection from '@/components/article/CommentsSection';
 import RelatedArticles from '@/components/article/RelatedArticles';
 import TableOfContents from '@/components/article/TableOfContents';
+import MostReadWidget from '@/components/article/MostReadWidget';
+import NewsletterForm from '@/components/ui/NewsletterForm';
 import ErrorBoundary from '@/components/ui/ErrorBoundary';
 import PrintButton from '@/components/ui/PrintButton';
 import FontSizeAdjuster from '@/components/ui/FontSizeAdjuster';
@@ -293,11 +295,38 @@ export default async function PostPage({ params }) {
                   </div>
                 </div>
 
+                {/* Most Read widget */}
+                <ErrorBoundary fallbackMessage="">
+                  <MostReadWidget excludeSlug={post.slug} />
+                </ErrorBoundary>
+
+                {/* Newsletter box */}
+                <div className="relative rounded-[20px] overflow-hidden px-[22px] pt-7 pb-[22px]"
+                  style={{ background: 'linear-gradient(135deg,#1a2560 0%,#293581 45%,#2a5ac8 75%,#4274d9 100%)' }}>
+                  <div className="relative z-10">
+                    <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full mb-2.5"
+                      style={{ background: 'rgba(149,204,213,.22)', border: '1px solid rgba(149,204,213,.35)' }}>
+                      <span className="w-1.5 h-1.5 rounded-full" style={{ background: '#95ccd5' }} />
+                      <span className="text-[9.5px] font-extrabold uppercase tracking-[.07em]" style={{ color: '#ddeef0' }}>
+                        Free Newsletter
+                      </span>
+                    </div>
+                    <h4 className="text-base font-black text-white mb-1.5">Enjoyed this article?</h4>
+                    <p className="text-xs leading-[1.55] mb-4" style={{ color: 'rgba(255,255,255,.65)' }}>
+                      Get the best AI insights delivered every Friday morning.
+                    </p>
+                    <NewsletterForm />
+                    <p className="text-[10.5px] mt-2.5" style={{ color: 'rgba(255,255,255,.45)' }}>
+                      No spam. Unsubscribe anytime.
+                    </p>
+                  </div>
+                </div>
+
                 {/* Second sidebar ad */}
                 <div className="rounded-2xl p-4 text-center" style={{ background: 'var(--sur)', border: '1px solid var(--bdr)' }}>
                   <p className="text-xs font-bold uppercase tracking-widest mb-2" style={{ color: 'var(--tm)' }}>Advertisement</p>
-                  <div className="rounded-xl flex items-center justify-center ad-slot" style={{ height: '250px' }}>
-                    <span className="text-xs" style={{ color: 'var(--tm)' }}>Ad · 300×250</span>
+                  <div className="rounded-xl flex items-center justify-center ad-slot" style={{ height: '280px' }}>
+                    <span className="text-xs" style={{ color: 'var(--tm)' }}>Ad · 300×280</span>
                   </div>
                 </div>
               </div>

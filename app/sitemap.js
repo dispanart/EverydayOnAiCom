@@ -13,6 +13,7 @@ export default async function sitemap() {
   // Static pages
   const staticPages = [
     { url: SITE.url, lastModified: now, changeFrequency: 'daily', priority: 1.0 },
+    { url: `${SITE.url}/tools`, lastModified: now, changeFrequency: 'weekly', priority: 0.8 },
     { url: `${SITE.url}/about`, lastModified: now, changeFrequency: 'monthly', priority: 0.5 },
     { url: `${SITE.url}/contact`, lastModified: now, changeFrequency: 'monthly', priority: 0.4 },
     { url: `${SITE.url}/privacy-policy`, lastModified: now, changeFrequency: 'yearly', priority: 0.3 },
