@@ -3,8 +3,8 @@
 /**
  * ArticleAdSlots — Inject AdSense slots based on article word count.
  *
- * Word count < 2,000  → 3 ad slots (after para 2, para 5, end)
- * Word count ≥ 2,000  → 4 ad slots (after para 2, para 5, middle, end)
+ * Word count < 2,000  3 ad slots (after para 2, para 5, end)
+ * Word count ≥ 2,000  4 ad slots (after para 2, para 5, middle, end)
  *
  * After AdSense approved:
  * 1. Set NEXT_PUBLIC_ADSENSE_CLIENT in Vercel
@@ -81,8 +81,8 @@ export default function ArticleAdSlots({ html }) {
   }, [html]);
 
   // ── Render ────────────────────────────────────────────────────
-  // Short article  (3 slots): p1 → AD → p2 → AD → p3 → AD
-  // Long article   (4 slots): p1 → AD → p2 → AD → p3 → AD → p4 → AD
+  // Short article  (3 slots): p1 AD p2 AD p3 AD
+  // Long article   (4 slots): p1 AD p2 AD p3 AD p4 AD
 
   if (!parts.p2) {
     // Not enough paragraphs — render without any ads

@@ -53,7 +53,7 @@ export const CATEGORIES = [
     layout: 'grid-4',
     postCount: 4,
     parentSlug: 'ai-for-ideas-creativity',
-    icon: '✍️',
+    icon: 'PenLine',
   },
   {
     label: 'Everyday AI & Lifestyle',

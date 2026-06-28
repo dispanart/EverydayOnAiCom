@@ -60,7 +60,7 @@ export async function POST(request) {
       revalidatePath('/search', 'page'),          // Search results
     ]);
 
-    console.log(`[Revalidate] ✓ Revalidated /${slug} at ${new Date().toISOString()}`);
+    console.log(`[Revalidate] OK Revalidated /${slug} at ${new Date().toISOString()}`);
 
     return NextResponse.json({
       revalidated: true,

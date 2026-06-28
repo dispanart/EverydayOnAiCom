@@ -42,7 +42,7 @@ export default async function DisclaimerPage() {
             dangerouslySetInnerHTML={{ __html: page?.content ?? DEFAULT_CONTENT }}
           />
           <div className="mt-12">
-            <Link href="/" className="text-sm text-blue-600 hover:underline">← Back to Home</Link>
+            <Link href="/" className="text-sm text-blue-600 hover:underline">Back to Home</Link>
           </div>
         </div>
       </main>

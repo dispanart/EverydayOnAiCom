@@ -13,65 +13,65 @@ export default function Footer() {
   const handleSubscribe = async (e) => {
     e.preventDefault();
     if (!email.trim() || status === 'loading') return;
-    setStatus('loading');
-    setErrorMsg('');
+    setStatus('loading'); setErrorMsg('');
     try {
       const res = await fetch('/api/subscribe', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: email.trim() }),
       });
       const data = await res.json();
       if (res.ok && data.success) {
         setStatus(data.message === 'already_subscribed' ? 'duplicate' : 'success');
         setEmail('');
-      } else {
-        setStatus('error');
-        setErrorMsg(data.error || 'Failed to subscribe, please try again.');
-      }
-    } catch {
-      setStatus('error');
-      setErrorMsg('Connection failed, please try again.');
-    }
+      } else { setStatus('error'); setErrorMsg(data.error || 'Failed to subscribe, please try again.'); }
+    } catch { setStatus('error'); setErrorMsg('Connection failed, please try again.'); }
   };
 
   return (
-    <footer className="bg-slate-900 text-slate-400 mt-16">
+    <footer style={{ background: 'var(--c1)', color: 'rgba(255,255,255,.8)', marginTop: '48px' }}>
+      {/* Glow top line */}
+      <div style={{ height: '1px', background: 'linear-gradient(90deg,transparent,rgba(149,204,213,.5),rgba(66,116,217,.4),transparent)' }} />
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
 
           {/* Brand */}
           <div>
-            <Link href="/" className="flex items-center gap-2 mb-4" aria-label="EverydayOnAI">
-              <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-                <Zap size={16} className="text-white fill-white" />
+            <Link href="/" className="flex items-center gap-2.5 mb-4" aria-label="EverydayOnAI">
+              <div className="w-9 h-9 rounded-[10px] flex items-center justify-center"
+                style={{ background: 'rgba(255,255,255,.15)', border: '1px solid rgba(255,255,255,.2)' }}>
+                <Zap size={17} className="text-white fill-white" />
               </div>
-              <span className="font-bold text-white text-lg tracking-tight">
-                EverydayOn<span className="text-blue-400">AI</span>
+              <span className="font-extrabold text-[17px] text-white tracking-tight" style={{ letterSpacing: '-.02em' }}>
+                EverydayOn<em style={{ fontStyle: 'normal', color: 'var(--c3)' }}>AI</em>
               </span>
             </Link>
-            <p className="text-sm text-slate-500 leading-relaxed">{SITE.description}</p>
-            <div className="flex gap-3 mt-5">
-              {[
-                { Icon: Twitter,  label: 'Twitter',  href: '#' },
-                { Icon: Linkedin, label: 'LinkedIn', href: '#' },
-                { Icon: Youtube,  label: 'YouTube',  href: '#' },
-              ].map(({ Icon, label, href }) => (
-                <a key={label} href={href} aria-label={label}
-                   className="w-8 h-8 bg-slate-800 hover:bg-blue-600 rounded-lg flex items-center justify-center transition-colors">
-                  <Icon size={14} className="text-slate-400" />
-                </a>
-              ))}
+            <p className="text-sm leading-relaxed mb-5" style={{ color: 'rgba(255,255,255,.5)' }}>{SITE.description}</p>
+            <div className="flex gap-2.5">
+              {[{ Icon: Twitter, label: 'Twitter', href: '#' }, { Icon: Linkedin, label: 'LinkedIn', href: '#' }, { Icon: Youtube, label: 'YouTube', href: '#' }]
+                .map(({ Icon, label, href }) => (
+                  <a key={label} href={href} aria-label={label}
+                    className="w-8 h-8 rounded-lg flex items-center justify-center transition-all"
+                    style={{ background: 'rgba(255,255,255,.08)', border: '1px solid rgba(255,255,255,.12)', color: 'rgba(255,255,255,.5)' }}
+                    onMouseEnter={e => { e.currentTarget.style.background = 'rgba(149,204,213,.2)'; e.currentTarget.style.color = 'var(--c3)'; }}
+                    onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,.08)'; e.currentTarget.style.color = 'rgba(255,255,255,.5)'; }}>
+                    <Icon size={14} />
+                  </a>
+                ))}
             </div>
           </div>
 
           {/* Topics */}
           <div>
-            <h3 className="text-white font-bold text-sm mb-4 uppercase tracking-wider">Topics</h3>
+            <h3 className="font-extrabold text-xs mb-4 uppercase tracking-[.1em]" style={{ color: 'var(--c3)' }}>Topics</h3>
             <ul className="space-y-2.5">
-              {FOOTER_LINKS.topics.map((l) => (
+              {FOOTER_LINKS.topics.map(l => (
                 <li key={l.href}>
-                  <Link href={l.href} className="text-sm text-slate-500 hover:text-white transition-colors">{l.label}</Link>
+                  <Link href={l.href} className="text-sm transition-colors" style={{ color: 'rgba(255,255,255,.5)' }}
+                    onMouseEnter={e => e.currentTarget.style.color = 'var(--c3)'}
+                    onMouseLeave={e => e.currentTarget.style.color = 'rgba(255,255,255,.5)'}>
+                    {l.label}
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -79,11 +79,15 @@ export default function Footer() {
 
           {/* Company */}
           <div>
-            <h3 className="text-white font-bold text-sm mb-4 uppercase tracking-wider">Company</h3>
+            <h3 className="font-extrabold text-xs mb-4 uppercase tracking-[.1em]" style={{ color: 'var(--c3)' }}>Company</h3>
             <ul className="space-y-2.5">
-              {FOOTER_LINKS.company.map((l) => (
+              {FOOTER_LINKS.company.map(l => (
                 <li key={l.href}>
-                  <Link href={l.href} className="text-sm text-slate-500 hover:text-white transition-colors">{l.label}</Link>
+                  <Link href={l.href} className="text-sm transition-colors" style={{ color: 'rgba(255,255,255,.5)' }}
+                    onMouseEnter={e => e.currentTarget.style.color = 'var(--c3)'}
+                    onMouseLeave={e => e.currentTarget.style.color = 'rgba(255,255,255,.5)'}>
+                    {l.label}
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -91,61 +95,52 @@ export default function Footer() {
 
           {/* Newsletter */}
           <div>
-            <h3 className="text-white font-bold text-sm mb-2 uppercase tracking-wider">Newsletter</h3>
-            <p className="text-sm text-slate-500 mb-4 leading-relaxed">
+            <h3 className="font-extrabold text-xs mb-2 uppercase tracking-[.1em]" style={{ color: 'var(--c3)' }}>Newsletter</h3>
+            <p className="text-sm leading-relaxed mb-4" style={{ color: 'rgba(255,255,255,.5)' }}>
               The best AI insights every week. Free, no spam.
             </p>
 
             {status === 'success' && (
-              <div className="flex items-center gap-2 text-green-400 text-sm font-semibold">
-                <CheckCircle size={16} />You're in! Check your inbox. 🎉
+              <div className="flex items-center gap-2 text-sm font-semibold" style={{ color: '#34d399' }}>
+                <CheckCircle size={16} /><span>You're in! Check your inbox.</span>
               </div>
             )}
-
             {status === 'duplicate' && (
-              <div className="flex items-center gap-2 text-blue-400 text-sm font-semibold">
-                <CheckCircle size={16} />This email is already subscribed. ✓
+              <div className="flex items-center gap-2 text-sm font-semibold" style={{ color: 'var(--c3)' }}>
+                <CheckCircle size={16} /><span>Already subscribed.</span>
               </div>
             )}
-
             {status !== 'success' && status !== 'duplicate' && (
               <form onSubmit={handleSubscribe} className="flex flex-col gap-2">
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                  placeholder="your@email.com"
-                  aria-label="Email for newsletter"
+                <input type="email" value={email} onChange={e => setEmail(e.target.value)}
+                  required placeholder="your@email.com" aria-label="Email for newsletter"
                   disabled={status === 'loading'}
-                  className="bg-slate-800 text-white text-sm px-4 py-2.5 rounded-lg
-                             border border-slate-700 focus:outline-none focus:border-blue-500
-                             placeholder:text-slate-600 transition-colors disabled:opacity-60"
+                  className="text-sm px-4 py-2.5 rounded-lg outline-none transition-colors disabled:opacity-60"
+                  style={{ background: 'rgba(255,255,255,.1)', border: '1px solid rgba(255,255,255,.15)', color: 'white', fontFamily: 'inherit' }}
+                  onFocus={e => e.target.style.borderColor = 'var(--c3)'}
+                  onBlur={e => e.target.style.borderColor = 'rgba(255,255,255,.15)'}
                 />
                 {status === 'error' && (
-                  <div className="flex items-center gap-1.5 text-red-400 text-xs">
+                  <div className="flex items-center gap-1.5 text-xs" style={{ color: '#f87171' }}>
                     <AlertCircle size={12} />{errorMsg}
                   </div>
                 )}
-                <button
-                  type="submit"
-                  disabled={status === 'loading'}
-                  className="flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700
-                             text-white text-sm font-semibold px-4 py-2.5 rounded-lg
-                             transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
-                >
-                  {status === 'loading' ? (
-                    <><Loader2 size={14} className="animate-spin" />Subscribing...</>
-                  ) : (
-                    <><Mail size={14} />Subscribe Free</>
-                  )}
+                <button type="submit" disabled={status === 'loading'}
+                  className="flex items-center justify-center gap-2 text-sm font-bold px-4 py-2.5 rounded-lg transition-all disabled:opacity-60 disabled:cursor-not-allowed"
+                  style={{ background: 'var(--c3)', color: 'var(--c1)', fontFamily: 'inherit' }}
+                  onMouseEnter={e => e.currentTarget.style.opacity = '.9'}
+                  onMouseLeave={e => e.currentTarget.style.opacity = '1'}>
+                  {status === 'loading'
+                    ? <><Loader2 size={14} className="animate-spin" />Subscribing...</>
+                    : <><Mail size={14} /><span>Subscribe Free</span></>}
                 </button>
               </form>
             )}
           </div>
         </div>
 
-        <div className="border-t border-slate-800 pt-6 flex flex-col sm:flex-row justify-between items-center gap-3 text-xs text-slate-600">
+        <div className="pt-6 flex flex-col sm:flex-row justify-between items-center gap-3 text-xs"
+          style={{ borderTop: '1px solid rgba(255,255,255,.1)', color: 'rgba(255,255,255,.3)' }}>
           <span>© {new Date().getFullYear()} {SITE.name}. All rights reserved.</span>
           <span>Built with Next.js + Headless WordPress</span>
         </div>

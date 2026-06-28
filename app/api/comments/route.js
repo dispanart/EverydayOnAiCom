@@ -1,6 +1,6 @@
 /**
- * GET  /api/comments?slug=xxx  → get approved comments
- * POST /api/comments           → submit new comment (pending approval)
+ * GET  /api/comments?slug=xxx  -> get approved comments
+ * POST /api/comments           -> submit new comment (pending approval)
  */
 
 import { NextResponse } from 'next/server';

@@ -1,3 +1,4 @@
+import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import PageWrapper from '@/components/layout/PageWrapper';
 import { SITE } from '@/config/site';
@@ -28,7 +29,7 @@ export default async function ContactPage() {
             dangerouslySetInnerHTML={{ __html: page?.content ?? DEFAULT_CONTENT }}
           />
           <div className="mt-12">
-            <Link href="/" className="text-sm text-blue-600 hover:underline">← Back to Home</Link>
+            <Link href="/" className="text-sm text-blue-600 hover:underline"><ArrowLeft size={14} style={{marginRight:"5px"}} />Back to Home</Link>
           </div>
         </div>
       </main>

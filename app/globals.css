@@ -1,311 +1,252 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* ── Dark mode base ──────────────────────────────────────────── */
+/* ── CSS Design Tokens ─────────────────────────────────────────── */
+:root {
+  --c1: #293581;
+  --c2: #4274d9;
+  --c3: #95ccd5;
+  --c4: #ddeef0;
+
+  --bg:   #f0f8fa;
+  --bg2:  #ffffff;
+  --bg3:  #ddeef0;
+  --sur:  #ffffff;
+  --sur2: #f5fafc;
+
+  --bdr:  rgba(149,204,213,0.4);
+  --bdr2: rgba(66,116,217,0.2);
+
+  --tp: #0f1a3a;
+  --ts: #354a7a;
+  --tm: #6b84a8;
+
+  --acc:  #293581;
+  --acc2: #4274d9;
+  --acl:  #95ccd5;
+
+  --sh-sm: 0 1px 3px rgba(41,53,129,.08), 0 1px 2px rgba(41,53,129,.04);
+  --sh-md: 0 4px 16px rgba(41,53,129,.1),  0 2px 4px rgba(41,53,129,.06);
+  --sh-lg: 0 8px 32px rgba(41,53,129,.14);
+  --sh-hv: 0 12px 40px rgba(41,53,129,.18), 0 0 0 2px rgba(66,116,217,.2);
+}
+
+.dark {
+  --bg:   #080e20;
+  --bg2:  #0d1630;
+  --bg3:  #121d3a;
+  --sur:  #111d3c;
+  --sur2: #162244;
+
+  --bdr:  rgba(66,116,217,.18);
+  --bdr2: rgba(66,116,217,.28);
+
+  --tp: #e8eeff;
+  --ts: #95b4e8;
+  --tm: #546a96;
+
+  --acc:  #4274d9;
+  --acc2: #95ccd5;
+  --acl:  rgba(66,116,217,.2);
+
+  --sh-sm: 0 1px 3px rgba(0,0,0,.3);
+  --sh-md: 0 4px 16px rgba(0,0,0,.4);
+  --sh-lg: 0 8px 32px rgba(0,0,0,.5);
+  --sh-hv: 0 12px 40px rgba(0,0,0,.6), 0 0 0 2px rgba(66,116,217,.35);
+}
+
+/* ── Base ──────────────────────────────────────────────────────── */
 @layer base {
   html { scroll-behavior: smooth; overflow-x: hidden; }
   body {
-    @apply bg-white text-slate-900 transition-colors duration-200;
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--tp);
+    transition: background .3s, color .3s;
     overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
   }
-  html.dark body {
-    @apply bg-slate-950 text-slate-100;
-  }
-  html.dark { color-scheme: dark; }
 }
 
-/* ── Card hover ──────────────────────────────────────────────── */
-.card-hover {
-  @apply transition-all duration-200 hover:shadow-md hover:-translate-y-0.5;
-}
-
-/* ── Article prose ───────────────────────────────────────────── */
-.article-prose {
-  @apply prose prose-slate max-w-none
-    prose-headings:font-extrabold prose-headings:tracking-tight
-    prose-a:text-blue-600 prose-a:no-underline hover:prose-a:underline
-    prose-img:rounded-2xl prose-img:shadow-md
-    prose-pre:bg-slate-900 prose-pre:text-slate-100 prose-pre:rounded-2xl
-    prose-code:text-blue-600 prose-code:bg-blue-50 prose-code:px-1.5 prose-code:py-0.5
-    prose-code:rounded-md prose-code:text-sm prose-code:font-medium
-    prose-code:before:content-none prose-code:after:content-none
-    prose-blockquote:border-blue-500 prose-blockquote:bg-blue-50
-    prose-blockquote:rounded-r-xl prose-blockquote:py-1;
-  /* Prevent horizontal overflow on mobile */
-  overflow-x: hidden;
-  word-break: break-word;
-  overflow-wrap: break-word;
-}
-
-/* ── Mobile overflow fixes for WordPress content ─────────────── */
-
-/* Code blocks */
-.article-prose pre {
-  overflow-x: auto !important;
-  max-width: 100% !important;
-  white-space: pre !important;
-  word-break: normal !important;
-}
-
-/* ── TABLE FIXES ─────────────────────────────────────────────── */
-/* All tables — whether bare or inside wp-block-table figure */
-.article-prose table {
-  /* Do NOT set display:block here — .table-scroll wrapper handles overflow */
-  width: max-content !important;  /* Let table be natural width */
-  min-width: 100%;                 /* But at least fill container */
-  max-width: none !important;      /* Allow wider than container → scroll */
-  border-collapse: collapse;
-}
-
-/* WordPress Gutenberg table block: <figure class="wp-block-table"> */
-.article-prose figure.wp-block-table {
-  overflow-x: visible !important;  /* Let .table-scroll wrapper control this */
-  margin: 0 !important;
-  width: max-content;
-  min-width: 100%;
-}
-
-/* Bare tables NOT yet wrapped by JS (SSR / first paint) */
-.article-prose > table,
-.article-prose > figure.wp-block-table {
-  display: block !important;
-  overflow-x: auto !important;
-  -webkit-overflow-scrolling: touch;
-  width: 100% !important;
-  max-width: 100% !important;
-}
-
-/* Tailwind prose overrides — must reset table width inside wrapper */
-.table-scroll .article-prose table,
-.table-scroll table {
-  width: max-content !important;
-  min-width: 100% !important;
-  max-width: none !important;
-}
-
-/* ── END TABLE FIXES ─────────────────────────────────────────── */
-
-/* Images */
-.article-prose img {
-  max-width: 100% !important;
-  height: auto !important;
-}
-
-/* Iframes */
-.article-prose iframe {
-  max-width: 100% !important;
-}
-
-/* WordPress wide/full blocks & code */
-.article-prose .alignwide,
-.article-prose .alignfull,
-.article-prose .wp-block-code,
-.article-prose .wp-block-preformatted {
-  max-width: 100% !important;
-  overflow-x: auto !important;
-}
-
-/* Long URLs & unbreakable strings */
-.article-prose p,
-.article-prose li,
-.article-prose td,
-.article-prose th {
-  overflow-wrap: break-word !important;
-  word-break: break-word !important;
-}
-
-/* ── Fix bullet points & list markers ───────────────────────── */
-/* Ensure • symbol and list items render correctly from WordPress */
-.article-prose ul {
-  list-style-type: disc !important;
-  padding-left: 1.625em !important;
-  margin-top: 1em !important;
-  margin-bottom: 1em !important;
-}
-.article-prose ol {
-  list-style-type: decimal !important;
-  padding-left: 1.625em !important;
-  margin-top: 1em !important;
-  margin-bottom: 1em !important;
-}
-.article-prose li {
-  margin-top: 0.5em !important;
-  margin-bottom: 0.5em !important;
-  display: list-item !important;
-}
-.article-prose ul > li::marker {
-  color: #2563eb !important;
-  font-size: 1.1em !important;
-}
-.article-prose ol > li::marker {
-  color: #2563eb !important;
-  font-weight: 700 !important;
-}
-/* WordPress sometimes uses <p> inside <li> */
-.article-prose li p { margin: 0 !important; }
-/* WordPress class for bullet lists */
-.article-prose .wp-block-list {
-  list-style-type: disc !important;
-  padding-left: 1.625em !important;
-}
-
-/* ── In-article Ad Slot ──────────────────────────────────────── */
-.article-ad {
-  @apply my-8 rounded-2xl overflow-hidden border border-slate-100 bg-slate-50 text-center;
-  min-height: 100px;
-}
-.article-ad-label {
-  @apply text-xs text-slate-400 uppercase tracking-widest pt-2 pb-1 block;
-}
-html.dark .article-ad {
-  @apply bg-slate-900 border-slate-800;
-}
-
-/* ── Dark mode prose ─────────────────────────────────────────── */
-html.dark .article-prose {
-  @apply prose-invert
-    prose-a:text-blue-400
-    prose-code:text-blue-400 prose-code:bg-slate-800
-    prose-blockquote:bg-slate-800 prose-blockquote:border-blue-400;
-}
-html.dark .article-prose ul > li::marker { color: #60a5fa !important; }
-html.dark .article-prose ol > li::marker { color: #60a5fa !important; }
-
-/* ── Dark mode overrides ─────────────────────────────────────── */
-html.dark .bg-white       { background-color: rgb(15 23 42)  !important; }
-html.dark .bg-slate-50    { background-color: rgb(15 23 42)  !important; }
-html.dark .bg-slate-100   { background-color: rgb(30 41 59)  !important; }
-html.dark .border-slate-100 { border-color: rgb(51 65 85)    !important; }
-html.dark .border-slate-200 { border-color: rgb(51 65 85)    !important; }
-html.dark .text-slate-900 { color: rgb(248 250 252)          !important; }
-html.dark .text-slate-800 { color: rgb(226 232 240)          !important; }
-html.dark .text-slate-700 { color: rgb(203 213 225)          !important; }
-html.dark .text-slate-600 { color: rgb(148 163 184)          !important; }
-html.dark .text-slate-500 { color: rgb(100 116 139)          !important; }
-
-/* ── Print styles ────────────────────────────────────────────── */
-@media print {
-  header, footer, nav, aside,
-  .print\:hidden, button,
-  [class*="ShareBar"], [class*="LikeButton"],
-  [class*="CommentsSection"], [class*="RelatedArticles"],
-  [class*="BackToTop"], [class*="PushNotif"],
-  [class*="FontSize"], [class*="PrintButton"],
-  .article-ad { display: none !important; }
-  body { background: white !important; color: black !important; }
-  .article-prose {
-    font-size: 12pt !important;
-    line-height: 1.6 !important;
-    color: black !important;
-  }
-  h1 { font-size: 20pt !important; }
-  a { color: black !important; text-decoration: underline; }
-  img { max-width: 100% !important; page-break-inside: avoid; }
-}
-
-/* ── Scrollbar ───────────────────────────────────────────────── */
-::-webkit-scrollbar { width: 6px; height: 6px; }
+/* ── Scrollbar ─────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 5px; height: 5px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
-html.dark ::-webkit-scrollbar-thumb { background: #334155; }
+::-webkit-scrollbar-thumb { background: var(--acc2); border-radius: 3px; }
 
-/* ── Reading Progress Bar ────────────────────────────────────────── */
+/* ── Reading Progress Bar ──────────────────────────────────────── */
 #reading-progress {
   position: fixed;
-  top: 0;
-  left: 0;
+  top: 0; left: 0;
   height: 3px;
-  background: linear-gradient(90deg, #2563eb 0%, #7c3aed 100%);
+  background: linear-gradient(90deg, var(--c1), var(--c2), var(--c3));
   z-index: 9999;
   transition: width 0.1s linear;
   border-radius: 0 2px 2px 0;
-  box-shadow: 0 0 8px rgba(37, 99, 235, 0.5);
+  box-shadow: 0 0 8px rgba(66,116,217,.5);
+  pointer-events: none;
 }
 
-/* ── Responsive table wrapper (injected by ArticleContent.jsx) ── */
+/* ── Card hover ────────────────────────────────────────────────── */
+.card-hover {
+  transition: transform .22s cubic-bezier(.4,0,.2,1), box-shadow .22s, border-color .22s;
+}
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--sh-hv);
+  border-color: rgba(66,116,217,.35) !important;
+}
+
+/* ── Section bar ───────────────────────────────────────────────── */
+.section-bar {
+  display: inline-block;
+  width: 4px; height: 22px; border-radius: 4px;
+  background: linear-gradient(180deg, var(--c1), var(--c2));
+  flex-shrink: 0;
+}
+
+/* ── Chip / Badge ──────────────────────────────────────────────── */
+.chip {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 3px 10px; border-radius: 999px;
+  font-size: 9.5px; font-weight: 800; letter-spacing: .07em; text-transform: uppercase;
+}
+.chip-blue   { background: rgba(41,53,129,.1);   color: #293581; border: 1px solid rgba(41,53,129,.18); }
+.chip-royal  { background: rgba(66,116,217,.1);  color: #2d5fbe; border: 1px solid rgba(66,116,217,.2); }
+.chip-teal   { background: rgba(149,204,213,.22); color: #1e7a8c; border: 1px solid rgba(149,204,213,.35); }
+.chip-green  { background: rgba(34,197,94,.1);   color: #15803d; border: 1px solid rgba(34,197,94,.2); }
+.chip-amber  { background: rgba(245,158,11,.1);  color: #b45309; border: 1px solid rgba(245,158,11,.2); }
+.chip-red    { background: rgba(239,68,68,.1);   color: #b91c1c; border: 1px solid rgba(239,68,68,.2); }
+.dark .chip-blue  { background: rgba(66,116,217,.15); color: #95b4e8; border-color: rgba(66,116,217,.25); }
+.dark .chip-royal { background: rgba(66,116,217,.15); color: #7aa4f0; border-color: rgba(66,116,217,.25); }
+.dark .chip-teal  { background: rgba(149,204,213,.12); color: #95ccd5; border-color: rgba(149,204,213,.2); }
+
+/* ── New badge ─────────────────────────────────────────────────── */
+.badge-new {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 2px 9px; border-radius: 999px;
+  background: #22c55e; color: #fff;
+  font-size: 9.5px; font-weight: 800; text-transform: uppercase; letter-spacing: .06em;
+}
+
+/* ── Glow divider ──────────────────────────────────────────────── */
+.glow-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--c3), rgba(66,116,217,.4), transparent);
+}
+
+/* ── Ad slot ───────────────────────────────────────────────────── */
+.ad-slot {
+  background: linear-gradient(90deg, rgba(221,238,240,.5), rgba(149,204,213,.3));
+  border: 1px dashed var(--bdr2);
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  font-size: 11px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .08em; color: var(--tm);
+  border-radius: 10px; cursor: pointer; transition: background .2s;
+}
+.ad-slot:hover { background: rgba(66,116,217,.05); }
+.dark .ad-slot { background: rgba(66,116,217,.06); border-color: rgba(66,116,217,.15); }
+
+/* ── Article prose ───────────────────────────────────────────────── */
+.article-prose {
+  @apply prose max-w-none
+    prose-headings:font-extrabold prose-headings:tracking-tight
+    prose-a:no-underline hover:prose-a:underline
+    prose-img:rounded-2xl prose-img:shadow-md
+    prose-pre:rounded-2xl
+    prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded-md
+    prose-code:text-sm prose-code:font-medium
+    prose-code:before:content-none prose-code:after:content-none;
+  overflow-x: hidden;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  color: var(--ts);
+}
+.article-prose h1,.article-prose h2,.article-prose h3,.article-prose h4 { color: var(--tp); }
+.article-prose a { color: var(--c2); }
+.article-prose code { background: rgba(66,116,217,.08); color: #2d5fbe; border: 1px solid rgba(66,116,217,.15); }
+.article-prose pre { background: #0a0e1a; color: #e2e8f0; border: 1px solid var(--bdr); }
+.article-prose blockquote { border-left-color: var(--c2); background: rgba(66,116,217,.06); border-radius: 0 .75rem .75rem 0; padding: .5rem 1rem; color: var(--c2); }
+.article-prose ul > li::marker { color: var(--c2) !important; }
+.article-prose ol > li::marker { color: var(--c2) !important; font-weight: 700 !important; }
+.dark .article-prose { color: var(--ts); }
+.dark .article-prose h1,.dark .article-prose h2,.dark .article-prose h3 { color: var(--tp); }
+.dark .article-prose a { color: var(--c3); }
+.dark .article-prose code { background: rgba(66,116,217,.15); color: #95ccd5; border-color: rgba(66,116,217,.2); }
+.dark .article-prose pre { background: #080e20; }
+.dark .article-prose blockquote { background: rgba(66,116,217,.1); color: #95ccd5; }
+.dark .article-prose ul > li::marker { color: var(--c3) !important; }
+.dark .article-prose ol > li::marker { color: var(--c3) !important; }
+
+/* Mobile overflow fixes */
+.article-prose pre { overflow-x: auto !important; max-width: 100% !important; }
+.article-prose table { width: max-content !important; min-width: 100%; max-width: none !important; border-collapse: collapse; }
+.article-prose figure.wp-block-table { overflow-x: visible !important; margin: 0 !important; width: max-content; min-width: 100%; }
+.article-prose > table, .article-prose > figure.wp-block-table { display: block !important; overflow-x: auto !important; -webkit-overflow-scrolling: touch; width: 100% !important; max-width: 100% !important; }
+.table-scroll .article-prose table, .table-scroll table { width: max-content !important; min-width: 100% !important; max-width: none !important; }
+.article-prose img { max-width: 100% !important; height: auto !important; }
+.article-prose iframe { max-width: 100% !important; }
+.article-prose .alignwide,.article-prose .alignfull,.article-prose .wp-block-code,.article-prose .wp-block-preformatted { max-width: 100% !important; overflow-x: auto !important; }
+.article-prose p,.article-prose li,.article-prose td,.article-prose th { overflow-wrap: break-word !important; word-break: break-word !important; }
+.article-prose ul { list-style-type: disc !important; padding-left: 1.625em !important; margin-top: 1em !important; margin-bottom: 1em !important; }
+.article-prose ol { list-style-type: decimal !important; padding-left: 1.625em !important; margin-top: 1em !important; margin-bottom: 1em !important; }
+.article-prose li { margin-top: .5em !important; margin-bottom: .5em !important; display: list-item !important; }
+.article-prose li p { margin: 0 !important; }
+.article-prose .wp-block-list { list-style-type: disc !important; padding-left: 1.625em !important; }
+
+/* ── In-article Ad ────────────────────────────────────────────── */
+.article-ad {
+  @apply my-8 rounded-2xl overflow-hidden text-center;
+  background: var(--bg3);
+  border: 1px solid var(--bdr);
+  min-height: 100px;
+}
+.article-ad-label { @apply text-xs uppercase tracking-widest pt-2 pb-1 block; color: var(--tm); }
+
+/* ── Table scroll wrapper ─────────────────────────────────────── */
 .table-scroll {
-  width: 100%;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-  margin: 1.5rem 0;
-  border-radius: 0.75rem;
-  border: 1px solid #e2e8f0;
-  box-shadow: inset -8px 0 8px -8px rgba(0, 0, 0, 0.06);
-  /* Critical: isolate overflow context */
-  position: relative;
-  display: block;
+  width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch;
+  margin: 1.5rem 0; border-radius: .75rem;
+  border: 1px solid var(--bdr); position: relative; display: block;
+}
+.table-scroll table { display: table !important; width: max-content !important; min-width: 100% !important; max-width: none !important; margin: 0 !important; border: none !important; border-radius: 0 !important; }
+.table-scroll figure.wp-block-table { margin: 0 !important; padding: 0 !important; overflow: visible !important; width: max-content !important; min-width: 100% !important; }
+.table-scroll .article-prose table,.table-scroll > table,.table-scroll figure table { width: max-content !important; min-width: 100% !important; max-width: none !important; display: table !important; }
+@media (max-width:768px) { .table-scroll::after { content:''; position:absolute; top:0; right:0; width:32px; height:100%; background:linear-gradient(to right,transparent,rgba(240,248,250,.9)); pointer-events:none; border-radius:0 .75rem .75rem 0; } }
+.dark .table-scroll { border-color: rgba(66,116,217,.18); }
+.dark .table-scroll::after { background: linear-gradient(to right, transparent, rgba(8,14,32,.9)); }
+
+/* ── Iframe wrap ──────────────────────────────────────────────── */
+.iframe-wrap { position:relative; width:100%; padding-bottom:56.25%; height:0; overflow:hidden; border-radius:.75rem; margin:1.5rem 0; }
+.iframe-wrap iframe { position:absolute; top:0; left:0; width:100% !important; height:100% !important; border:0; }
+
+/* ── Lazy image ───────────────────────────────────────────────── */
+.img-lazy { transition: filter .4s; }
+.img-lazy.loading { filter: blur(6px); }
+
+/* ── Print ────────────────────────────────────────────────────── */
+@media print {
+  header,footer,nav,aside,.print\:hidden,button,
+  [class*="ShareBar"],[class*="LikeButton"],[class*="CommentsSection"],
+  [class*="RelatedArticles"],[class*="BackToTop"],[class*="PushNotif"],
+  [class*="FontSize"],[class*="PrintButton"],.article-ad { display:none !important; }
+  body { background:white !important; color:black !important; }
+  .article-prose { font-size:12pt !important; line-height:1.6 !important; color:black !important; }
+  h1 { font-size:20pt !important; }
+  a { color:black !important; text-decoration:underline; }
+  img { max-width:100% !important; page-break-inside:avoid; }
 }
 
-/* Tables directly inside wrapper */
-.table-scroll table {
-  display: table !important;
-  width: max-content !important;
-  min-width: 100% !important;
-  max-width: none !important;
-  margin: 0 !important;
-  border: none !important;
-  border-radius: 0 !important;
-}
-
-/* WordPress figure.wp-block-table inside wrapper */
-.table-scroll figure.wp-block-table {
-  margin: 0 !important;
-  padding: 0 !important;
-  overflow: visible !important;
-  width: max-content !important;
-  min-width: 100% !important;
-}
-
-/* Tailwind prose resets width to 100% — override it */
-.table-scroll .article-prose table,
-.table-scroll > table,
-.table-scroll figure table {
-  width: max-content !important;
-  min-width: 100% !important;
-  max-width: none !important;
-  display: table !important;
-}
-
-/* Mobile scroll hint gradient */
-@media (max-width: 768px) {
-  .table-scroll::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 32px;
-    height: 100%;
-    background: linear-gradient(to right, transparent, rgba(255,255,255,0.9));
-    pointer-events: none;
-    border-radius: 0 0.75rem 0.75rem 0;
-  }
-}
-
-html.dark .table-scroll {
-  border-color: #334155;
-  box-shadow: inset -8px 0 8px -8px rgba(0, 0, 0, 0.3);
-}
-html.dark .table-scroll::after {
-  background: linear-gradient(to right, transparent, rgba(15,23,42,0.9));
-}
-
-/* ── Responsive iframe wrapper (YouTube, Vimeo, etc) ───────────── */
-.iframe-wrap {
-  position: relative;
-  width: 100%;
-  padding-bottom: 56.25%; /* 16:9 ratio */
-  height: 0;
-  overflow: hidden;
-  border-radius: 0.75rem;
-  margin: 1.5rem 0;
-}
-.iframe-wrap iframe {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100% !important;
-  height: 100% !important;
-  border: 0;
-}
+/* ── Dark mode overrides for Tailwind utilities ──────────────── */
+.dark .bg-white       { background-color: var(--sur)  !important; }
+.dark .bg-slate-50    { background-color: var(--bg)   !important; }
+.dark .bg-slate-100   { background-color: var(--bg3)  !important; }
+.dark .border-slate-100 { border-color: var(--bdr)    !important; }
+.dark .border-slate-200 { border-color: var(--bdr)    !important; }
+.dark .text-slate-900 { color: var(--tp) !important; }
+.dark .text-slate-800 { color: var(--ts) !important; }
+.dark .text-slate-700 { color: var(--ts) !important; }
+.dark .text-slate-600 { color: var(--tm) !important; }
+.dark .text-slate-500 { color: var(--tm) !important; }

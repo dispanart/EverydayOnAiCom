@@ -220,7 +220,7 @@ export default function AdminPage() {
               <h3 className="font-bold mb-4 text-slate-300 text-sm uppercase tracking-wider">Quick Links</h3>
               <div className="flex flex-wrap gap-3">
                 {[
-                  { label: '← Back to Website', href: '/' },
+                  { label: 'Back to Website', href: '/' },
                   { label: 'Supabase Dashboard',    href: 'https://supabase.com/dashboard' },
                   { label: 'Vercel Dashboard',       href: 'https://vercel.com' },
                   { label: 'WordPress Admin',        href: 'https://wp.everydayonai.com/dpadmin' },
