@@ -1,7 +1,7 @@
 /**
- * GET    /api/bookmarks?session=xxx          -> get all bookmarks for session
- * POST   /api/bookmarks                      -> add bookmark
- * DELETE /api/bookmarks?session=xxx&slug=xxx -> remove bookmark
+ * GET    /api/bookmarks?session=xxx          → get all bookmarks for session
+ * POST   /api/bookmarks                      → add bookmark
+ * DELETE /api/bookmarks?session=xxx&slug=xxx → remove bookmark
  */
 
 import { NextResponse } from 'next/server';

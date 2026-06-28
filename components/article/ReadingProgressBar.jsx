@@ -1,27 +1,36 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
+/**
+ * Reading progress bar — fixed at top, tracks scroll position.
+ * Only active when on an article page (always rendered, JS handles visibility).
+ */
 export function ReadingProgressBar() {
+  const [progress, setProgress] = useState(0);
+
   useEffect(() => {
-    const bar = document.createElement('div');
-    bar.id = 'reading-progress';
-    bar.style.width = '0';
-    document.body.appendChild(bar);
-
-    const update = () => {
-      const scrollTop = window.pageYOffset;
-      const docH = document.documentElement.scrollHeight - window.innerHeight;
-      const pct = docH > 0 ? (scrollTop / docH) * 100 : 0;
-      bar.style.width = `${pct}%`;
+    const updateProgress = () => {
+      const scrollTop = window.scrollY;
+      const docHeight =
+        document.documentElement.scrollHeight - window.innerHeight;
+      const pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+      setProgress(Math.min(pct, 100));
     };
 
-    window.addEventListener('scroll', update, { passive: true });
-    return () => {
-      window.removeEventListener('scroll', update);
-      bar.remove();
-    };
+    window.addEventListener('scroll', updateProgress, { passive: true });
+    return () => window.removeEventListener('scroll', updateProgress);
   }, []);
 
-  return null;
+  return (
+    <div
+      id="reading-progress"
+      role="progressbar"
+      aria-valuenow={Math.round(progress)}
+      aria-valuemin={0}
+      aria-valuemax={100}
+      aria-label="Reading progress"
+      style={{ width: `${progress}%` }}
+    />
+  );
 }

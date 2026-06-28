@@ -1,4 +1,3 @@
-import { ArrowLeft, Bot, Briefcase, ChevronRight, Mail, Newspaper, Palette } from 'lucide-react';
 import Link from 'next/link';
 import PageWrapper from '@/components/layout/PageWrapper';
 import { SITE } from '@/config/site';
@@ -37,7 +36,7 @@ export default async function AboutPage() {
 
   return (
     <PageWrapper>
-      <main className="min-h-screen dark:bg-slate-950">
+      <main className="min-h-screen bg-white dark:bg-slate-950">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 py-16">
           <h1 className="text-3xl font-extrabold text-slate-900 dark:text-white mb-10">
             {page?.title ?? 'About EverydayOnAI'}
@@ -47,7 +46,7 @@ export default async function AboutPage() {
             dangerouslySetInnerHTML={{ __html: page?.content ?? DEFAULT_CONTENT }}
           />
           <div className="mt-12">
-            <Link href="/" className="text-sm text-blue-600 hover:underline"><ArrowLeft size={14} style={{marginRight:"5px"}} />Back to Home</Link>
+            <Link href="/" className="text-sm text-blue-600 hover:underline">← Back to Home</Link>
           </div>
         </div>
       </main>

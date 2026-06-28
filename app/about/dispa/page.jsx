@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { SITE } from '@/config/site';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
-import { ChevronRight, Search, Scale, Check, ArrowRight } from 'lucide-react';
+import { ChevronRight } from 'lucide-react';
 
 export const revalidate = 3600;
 
@@ -47,7 +47,7 @@ const jsonLd = {
         'AI Risk Assessment', 'Shadow AI Compliance', 'Featured Snippet Optimization',
         'Schema Markup', 'Google AI Overviews', 'ChatGPT Content Strategy',
         'Perplexity AI Optimization', 'AI Ethics and Responsible AI',
-        'Colorado AI Act', 'Singapore IMDA AI Framework', 'Indonesian Digital Marketing',
+        'Colorado AI Act', 'Singapore IMDA AI Framework',
       ],
       worksFor: {
         '@type': 'Organization',
@@ -68,9 +68,9 @@ const jsonLd = {
       founder: { '@type': 'Person', '@id': 'https://everydayonai.com/about/dispa/#person' },
       foundingDate: '2023',
       description:
-        'EverydayOnAI is an independent AI research and strategy publication covering AI search optimization (GEO, AEO, LLMO), AI governance frameworks, EU AI Act compliance, and practical AI strategy for business. Based in Jakarta, Indonesia.',
+        'EverydayOnAI is an independent AI research and strategy publication covering AI search optimization (GEO, AEO, LLMO), AI governance frameworks, EU AI Act compliance, and practical AI strategy for business.',
       areaServed: 'Worldwide',
-      inLanguage: ['en', 'id'],
+      inLanguage: ['en'],
     },
   ],
 };
@@ -79,7 +79,7 @@ const jsonLd = {
 
 const BADGES_SEO  = ['GEO', 'AEO', 'LLMO', 'AI SEO'];
 const BADGES_GOV  = ['AI Governance', 'EU AI Act', 'NIST AI RMF', 'Enterprise AI'];
-const BADGES_GEN  = ['Content Strategy', 'Schema Markup', 'Indonesian Market'];
+const BADGES_GEN  = ['Content Strategy', 'Schema Markup'];
 
 const STATS = [
   { num: '3+',  label: 'Years researching AI strategy & policy' },
@@ -87,26 +87,26 @@ const STATS = [
   { num: '2',   label: 'Major clusters: AI SEO Hub & AI Governance Hub' },
   { num: '60+', label: 'Primary sources cited across both clusters' },
   { num: '8',   label: 'AI platforms tracked (ChatGPT, Perplexity, Gemini, Claude…)' },
-  { num: '2',   label: 'Languages covered: English & Bahasa Indonesia' },
+
 ];
 
 const EXPERTISE = [
-  { icon: 'search', title: 'GEO — Generative Engine Optimization', gov: false,
+  { icon: '🔍', title: 'GEO — Generative Engine Optimization', gov: false,
     desc: 'Structuring content for citation inside AI-generated answers — ChatGPT, Perplexity, Google AI Overviews. Research grounded in the Princeton/KDD 2024 academic study and ongoing industry benchmarks (ConvertMate, Ahrefs, Semrush).' },
-  { icon: 'search', title: 'AEO — Answer Engine Optimization', gov: false,
+  { icon: '🔍', title: 'AEO — Answer Engine Optimization', gov: false,
     desc: 'Winning featured snippets (paragraph 40-60w, list 5-8 items, table 3-4 columns), People Also Ask, voice search, and AI answer boxes. Includes query fan-out mapping, PAA chain research, and snippet-format matching.' },
-  { icon: 'search', title: 'LLMO — LLM Optimization', gov: false,
+  { icon: '🔍', title: 'LLMO — LLM Optimization', gov: false,
     desc: 'Building brand entity clarity for AI model representation — Person and Organization schema, consistent entity signals, and third-party brand mention strategy for long-term LLM brand recall.' },
-  { icon: 'search', title: 'Schema Markup & Structured Data', gov: false,
+  { icon: '🔍', title: 'Schema Markup & Structured Data', gov: false,
     desc: 'Practical implementation of Article, FAQPage, Speakable, Person, Organization, HowTo schema — with current data on what each schema type actually produces for AI citation versus traditional rich results.' },
-  { icon: 'scale', title: 'EU AI Act', gov: true,
+  { icon: '⚖️', title: 'EU AI Act', gov: true,
     desc: 'Risk classification (unacceptable, high, limited, minimal), compliance timelines, documentation requirements, conformity assessment obligations, and practical guidance for organizations building or deploying AI systems in the EU.' },
-  { icon: 'scale', title: 'AI Governance Frameworks', gov: true,
+  { icon: '⚖️', title: 'AI Governance Frameworks', gov: true,
     desc: 'NIST AI RMF, ISO/IEC 42001:2023, EU AI Act, Singapore IMDA framework, Colorado AI Act, and how these frameworks compare across seven dimensions for enterprise compliance planning.' },
-  { icon: 'scale', title: 'Enterprise AI Risk', gov: true,
+  { icon: '⚖️', title: 'Enterprise AI Risk', gov: true,
     desc: 'Shadow AI compliance risk, AI impact assessments, bias auditing, documentation requirements, and the organizational governance structures that regulatory frameworks increasingly require.' },
-  { icon: 'scale', title: 'AI Policy & Emerging Regulation', gov: true,
-    desc: 'Comparative analysis of global AI regulation — EU vs US AI policy divergence, the Colorado AI Act as a US state-level precedent, and Southeast Asian regulatory approaches relevant to Indonesian and ASEAN markets.' },
+  { icon: '⚖️', title: 'AI Policy & Emerging Regulation', gov: true,
+    desc: 'Comparative analysis of global AI regulation — EU vs US AI policy divergence, the Colorado AI Act as a US state-level precedent, and how different regulatory approaches affect organizations globally.' },
 ];
 
 const ARTICLES_GOV = [
@@ -190,7 +190,7 @@ export default function DispaAuthorPage() {
                   AI Strategist, Independent Researcher & Founder of EverydayOnAI.com
                 </p>
                 <p className="text-slate-400 text-sm mb-5">
-                   Based in Jakarta, Indonesia &nbsp;·&nbsp; Writing about AI since 2023
+                  Writing about AI since 2023
                 </p>
 
                 {/* Badges */}
@@ -210,15 +210,15 @@ export default function DispaAuthorPage() {
                 <div className="flex flex-wrap gap-3 justify-center sm:justify-start">
                   <a href="https://www.linkedin.com/in/[REPLACE-WITH-LINKEDIN]" target="_blank" rel="noopener noreferrer"
                     className="flex items-center gap-2 text-sm font-semibold text-blue-700 bg-blue-50 border border-blue-200 px-4 py-2 rounded-lg hover:bg-blue-100 transition-colors">
-                     LinkedIn
+                    🔗 LinkedIn
                   </a>
                   <a href="https://twitter.com/[REPLACE-WITH-TWITTER]" target="_blank" rel="noopener noreferrer"
                     className="flex items-center gap-2 text-sm font-semibold text-blue-700 bg-blue-50 border border-blue-200 px-4 py-2 rounded-lg hover:bg-blue-100 transition-colors">
-                     Twitter / X
+                    🔗 Twitter / X
                   </a>
                   <a href="https://everydayonai.com"
                     className="flex items-center gap-2 text-sm font-semibold text-blue-700 bg-blue-50 border border-blue-200 px-4 py-2 rounded-lg hover:bg-blue-100 transition-colors">
-                     EverydayOnAI.com
+                    🌐 EverydayOnAI.com
                   </a>
                 </div>
               </div>
@@ -245,8 +245,7 @@ export default function DispaAuthorPage() {
             <div className="prose prose-slate max-w-none text-slate-600 space-y-4">
               <p>Dispa is an independent AI researcher and the founder of <a href="https://everydayonai.com" className="text-blue-600 font-semibold hover:underline">EverydayOnAI.com</a>, a publication covering two intersecting areas of the AI landscape: <strong>AI search optimization</strong> (GEO, AEO, LLMO, and AI SEO) and <strong>AI governance</strong> (EU AI Act, NIST AI RMF, ISO 42001, enterprise compliance, and emerging AI policy globally).</p>
               <p>Writing under the name "The AI Buff" since 2023, Dispa's approach is grounded in primary source research — academic papers, regulatory texts, and named industry benchmarks — rather than repurposed aggregator content. Every article on EverydayOnAI cites sources inline with organization name and year, and distinguishes clearly between documented data and editorial analysis.</p>
-              <p>Based in Jakarta, Indonesia, Dispa brings a Southeast Asian perspective to topics often dominated by US and European voices. This includes coverage of AI governance through the lens of emerging-market adoption, Indonesian-language content for local audiences, and analysis of how global AI regulation (EU AI Act, Colorado AI Act, Singapore IMDA framework) affects organizations operating in the Asia-Pacific region.</p>
-              <p>Before founding EverydayOnAI, Dispa built software projects localized for the Indonesian market — including a React/TypeScript football management game with regional player data and an Indonesian personal finance application (MoneyFlow) integrating Rupiah currency, local banks, and Indonesian e-wallets. This technical background directly informs EverydayOnAI's coverage of how AI tools are built, deployed, and regulated — not just how they are marketed.</p>
+              <p>Before founding EverydayOnAI, Dispa built software products across web and mobile — experience that directly informs coverage of how AI tools are built, deployed, and regulated — not just how they are marketed.</p>
             </div>
           </div>
 
@@ -258,7 +257,7 @@ export default function DispaAuthorPage() {
               {EXPERTISE.map(({ icon, title, gov, desc }) => (
                 <div key={title} className={`rounded-xl border p-5 ${gov ? 'bg-orange-50 border-orange-200' : 'bg-slate-50 border-slate-200'}`}>
                   <h3 className={`text-xs font-bold uppercase tracking-wider mb-2 ${gov ? 'text-orange-700' : 'text-blue-700'}`}>
-                    <>{gov ? <Scale size={13} style={{color:'var(--c2)',flexShrink:0}} /> : <Search size={13} style={{color:'var(--c2)',flexShrink:0}} />}<span>{title}</span></>
+                    {icon} {title}
                   </h3>
                   <p className="text-sm text-slate-600 leading-relaxed">{desc}</p>
                 </div>
@@ -272,7 +271,7 @@ export default function DispaAuthorPage() {
 
             {/* AI Governance */}
             <p className="text-xs font-bold uppercase tracking-wider text-orange-700 border-b-2 border-orange-200 pb-2 mb-4">
-              AI Governance Hub — Live Articles
+              ⚖️ AI Governance Hub — Live Articles
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-8">
               {ARTICLES_GOV.map(({ tag, title, meta, href }) => (
@@ -287,7 +286,7 @@ export default function DispaAuthorPage() {
 
             {/* AI SEO */}
             <p className="text-xs font-bold uppercase tracking-wider text-blue-700 border-b-2 border-blue-200 pb-2 mb-4">
-              AI SEO Hub — Live & In Production
+              🔍 AI SEO Hub — Live & In Production
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {ARTICLES_SEO.map(({ tag, title, meta, href }) => (
@@ -308,7 +307,7 @@ export default function DispaAuthorPage() {
               <strong>Note for readers and advertisers:</strong> EverydayOnAI is an independently operated publication. All content reflects Dispa's independent research and analysis. No article is sponsored, ghostwritten, or produced at the direction of any vendor or advertiser. Editorial opinion is clearly separated from cited research in all articles.
             </div>
             <div className="bg-green-50 border border-green-200 rounded-xl p-6">
-              <h3 className="text-sm font-bold text-green-800 mb-4"><Check size={14} style={{marginRight:'6px'}} />How EverydayOnAI Maintains Content Quality</h3>
+              <h3 className="text-sm font-bold text-green-800 mb-4">✓ How EverydayOnAI Maintains Content Quality</h3>
               <ul className="space-y-3">
                 {EDITORIAL_STANDARDS.map(({ title, body }) => (
                   <li key={title} className="text-sm text-slate-700 leading-relaxed">
@@ -320,7 +319,7 @@ export default function DispaAuthorPage() {
 
             {/* EverydayOnAI Opinion Box */}
             <div className="border-l-4 border-orange-500 bg-orange-50 rounded-r-xl p-5 mt-5">
-              <p className="text-xs font-bold text-orange-600 uppercase tracking-wider mb-2"> Why This Matters for Both Readers and Advertisers</p>
+              <p className="text-xs font-bold text-orange-600 uppercase tracking-wider mb-2">💬 Why This Matters for Both Readers and Advertisers</p>
               <p className="text-sm text-slate-700 leading-relaxed">Google's AdSense policies and Search Quality Evaluator Guidelines both require demonstrable E-E-A-T — Experience, Expertise, Authoritativeness, and Trustworthiness — as a condition for sustained ad revenue and search visibility. The editorial standards above are not just ethical commitments; they are the operational foundation for EverydayOnAI's long-term viability as a publication.</p>
             </div>
           </div>
@@ -372,7 +371,7 @@ export default function DispaAuthorPage() {
             <p className="text-blue-100 text-sm mb-5 max-w-sm mx-auto">Join the newsletter. Free, practical, no spam.</p>
             <Link href="/subscribe"
               className="inline-block bg-white text-blue-700 font-bold text-sm px-6 py-3 rounded-xl hover:bg-blue-50 transition-colors">
-              Subscribe Free
+              Subscribe Free →
             </Link>
           </div>
 
@@ -390,3 +389,4 @@ export default function DispaAuthorPage() {
     </>
   );
 }
+

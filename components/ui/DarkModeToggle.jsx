@@ -25,12 +25,12 @@ export default function DarkModeToggle() {
   if (!mounted) return <div className="w-9 h-9" />;
 
   return (
-    <button onClick={toggle} aria-label={dark ? 'Switch to light mode' : 'Switch to dark mode'}
-      className="w-9 h-9 rounded-lg flex items-center justify-center transition-all"
-      style={{ border: '1px solid var(--bdr)', background: 'var(--sur)', color: 'var(--ts)' }}
-      onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--c2)'; e.currentTarget.style.color = 'var(--c2)'; }}
-      onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--bdr)'; e.currentTarget.style.color = 'var(--ts)'; }}>
-      {dark ? <Sun size={16} /> : <Moon size={16} />}
+    <button onClick={toggle} aria-label={dark ? 'Light mode' : 'Dark mode'}
+      className="w-9 h-9 rounded-lg flex items-center justify-center
+                 text-slate-500 hover:text-blue-600 hover:bg-blue-50
+                 dark:text-slate-400 dark:hover:text-blue-400 dark:hover:bg-slate-800
+                 transition-all">
+      {dark ? <Sun size={17} /> : <Moon size={17} />}
     </button>
   );
 }

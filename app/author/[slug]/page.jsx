@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowLeft, Calendar, RefreshCw, User } from 'lucide-react';
+import { User, RefreshCw, Calendar } from 'lucide-react';
 import { SITE } from '@/config/site';
 import { getDisplayDate, formatShortDate, stripHtml } from '@/lib/wordpress';
 import Header from '@/components/layout/Header';
@@ -101,7 +101,7 @@ export default async function AuthorPage({ params }) {
           {posts.length === 0 ? (
             <div className="text-center py-20 text-slate-400">
               <p>No articles from this author yet.</p>
-              <Link href="/" className="mt-4 inline-block text-blue-600 text-sm hover:underline"><ArrowLeft size={14} style={{marginRight:"5px"}} />Back</Link>
+              <Link href="/" className="mt-4 inline-block text-blue-600 text-sm hover:underline">← Back</Link>
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">

@@ -109,7 +109,7 @@ export default function CommentsSection({ slug }) {
           <div className="flex items-start gap-3 text-green-700 bg-green-50 border border-green-200 rounded-xl p-4">
             <CheckCircle size={18} className="flex-shrink-0 mt-0.5" />
             <div>
-              <p className="font-semibold text-sm">Comment submitted!</p>
+              <p className="font-semibold text-sm">Comment submitted! 🎉</p>
               <p className="text-xs text-green-600 mt-0.5">
                 Your comment is awaiting moderator approval and will appear shortly.
               </p>

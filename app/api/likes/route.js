@@ -1,6 +1,6 @@
 /**
- * GET  /api/likes?slug=xxx  -> get like count + whether current IP liked
- * POST /api/likes           -> toggle like (like/unlike)
+ * GET  /api/likes?slug=xxx  → get like count + whether current IP liked
+ * POST /api/likes           → toggle like (like/unlike)
  */
 
 import { NextResponse } from 'next/server';

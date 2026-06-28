@@ -24,7 +24,7 @@ export async function GET(request) {
             width: '44px', height: '44px', background: '#2563eb',
             borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center',
           }}>
-            <span style={{ color: 'white', fontSize: '22px', fontWeight: '900' }}>[FAST]</span>
+            <span style={{ color: 'white', fontSize: '22px', fontWeight: '900' }}>⚡</span>
           </div>
           <span style={{ color: 'white', fontSize: '24px', fontWeight: '800', letterSpacing: '-0.5px' }}>
             EverydayOn<span style={{ color: '#60a5fa' }}>AI</span>
