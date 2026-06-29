@@ -54,8 +54,8 @@ export async function POST(request) {
 
  // Validation
  if (!slug) return NextResponse.json({ error: 'Missing slug' }, { status: 400 });
- if (!name || name.length < 2) return NextResponse.json({ error: 'Nama minimal 2 karakter' }, { status: 400 });
- if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return NextResponse.json({ error: 'Email tidak valid' }, { status: 400 });
+ if (!name || name.length < 2) return NextResponse.json({ error: 'Name must be at least 2 characters' }, { status: 400 });
+ if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return NextResponse.json({ error: 'Invalid email' }, { status: 400 });
  if (!content || content.length < 5) return NextResponse.json({ error: 'Comment must be at least 5 characters' }, { status: 400 });
  if (content.length > 1000) return NextResponse.json({ error: 'Comment must be under 1000 characters' }, { status: 400 });
 
@@ -69,7 +69,7 @@ export async function POST(request) {
  .gte('created_at', oneDayAgo);
 
  if ((count ?? 0) >= 3) {
- return NextResponse.json({ error: 'Terlalu banyak komentar. Coba lagi besok.' }, { status: 429 });
+ return NextResponse.json({ error: 'Too many comments. Please try again tomorrow.' }, { status: 429 });
  }
 
  const { error } = await supabase.from('comments').insert({

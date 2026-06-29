@@ -64,8 +64,8 @@ export default function BookmarkButton({ slug, title }) {
  <button
  onClick={handleBookmark}
  disabled={loading}
- aria-label={bookmarked ? 'Hapus bookmark' : 'Simpan artikel ini'}
- title={bookmarked ? 'Hapus dari bookmark' : 'Simpan ke bookmark'}
+ aria-label={bookmarked ? 'Remove bookmark' : 'Save this article'}
+ title={bookmarked ? 'Remove from bookmarks' : 'Save to bookmarks'}
  className={`group flex items-center gap-2 px-4 py-2.5 rounded-full
  border-2 font-semibold text-sm transition-all duration-200
  disabled:cursor-not-allowed
@@ -80,7 +80,7 @@ export default function BookmarkButton({ slug, title }) {
  ${bookmarked ? 'fill-blue-500 text-blue-500' : 'fill-none group-hover:text-blue-400'}`}
  />
  <span className="hidden sm:inline text-xs">
- {bookmarked ? 'Disimpan' : 'Simpan'}
+ {bookmarked ? 'Saved' : 'Save'}
  </span>
  </button>
  );

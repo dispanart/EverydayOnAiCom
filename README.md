@@ -209,21 +209,21 @@ If `NEXT_PUBLIC_ADSENSE_ENABLED` is not `true`, or if a slot ID is empty, no ad 
 
 ## Real Article Views Counter
 
-Project ini sudah menyiapkan counter views artikel real-data untuk headless WordPress + Next.js.
+This project includes a real-data article views counter for headless WordPress + Next.js.
 
-File penting:
+Important files:
 
-- `app/api/views/[id]/route.js` — API route Next.js untuk membaca/menambah views.
-- `components/article/ArticleViews.jsx` — komponen client untuk trigger view saat artikel dibuka.
-- `wordpress-plugin/eonai-view-counter.php` — plugin WordPress sederhana untuk endpoint views.
+- `app/api/views/[id]/route.js` — Next.js API route for reading and incrementing views.
+- `components/article/ArticleViews.jsx` — client component that triggers a view when an article is opened.
+- `wordpress-plugin/eonai-view-counter.php` — simple WordPress plugin for the views endpoint.
 
-Environment variables yang perlu diisi di Vercel:
+Environment variables to set in Vercel:
 
 ```env
 WORDPRESS_REST_URL=https://wp.yourdomain.com
-EONAI_VIEW_KEY=ganti-dengan-random-string-panjang
+EONAI_VIEW_KEY=replace-with-a-long-random-string
 ```
 
-`EONAI_VIEW_KEY` harus sama dengan nilai `EONAI_VIEW_KEY` di plugin WordPress.
+`EONAI_VIEW_KEY` must match the `EONAI_VIEW_KEY` value in the WordPress plugin.
 
-Counter memakai cookie 6 jam per artikel supaya satu pembaca tidak dihitung terus-menerus setiap refresh.
+The counter uses a 6-hour cookie per article so one reader is not counted repeatedly on every refresh.

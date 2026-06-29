@@ -3,6 +3,8 @@ import Image from 'next/image';
 import { Calendar, RefreshCw, Star } from 'lucide-react';
 import { getDisplayDate, formatShortDate, stripHtmlAndDecode } from '@/lib/wordpress';
 
+const BLUR_DATA_URL = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/wAAARCAAIAAoDASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAABgUE/8QAIhAAAQQCAgMBAAAAAAAAAAAAAQIDBBEFEiExQVH/xAAUAQEAAAAAAAAAAAAAAAAAAAAA/8QAFBEBAAAAAAAAAAAAAAAAAAAAAP/aAAwDAQACEQMRAD8Aq9c1ha5rnuVt5UbdFk2yQyNFjOSOiSFuuFKlFSlfJJP3oii0Wq1DP//Z';
+
 export function DateMeta({ post, className = '' }) {
  const { date, isUpdated } = getDisplayDate(post);
  return (
@@ -31,6 +33,8 @@ function ImageBlock({ post, sizes = '(max-width: 768px) 100vw, 400px' }) {
  fill
  sizes={sizes}
  className="object-cover"
+ placeholder="blur"
+ blurDataURL={BLUR_DATA_URL}
  />
  )}
  </div>
@@ -105,7 +109,7 @@ export function MasonryCard({ post, tall = false, index = 0 }) {
  style={{ minHeight: tall ? 340 : 160, position: 'relative', gridRow: tall ? 'span 2' : undefined, background: gradients[index % gradients.length] }}
  >
  {img?.sourceUrl && (
- <Image src={img.sourceUrl} alt={img.altText || title} fill sizes="(max-width: 768px) 50vw, 300px" style={{ objectFit: 'cover', opacity: 0.55 }} />
+ <Image src={img.sourceUrl} alt={img.altText || title} fill sizes="(max-width: 768px) 50vw, 300px" style={{ objectFit: 'cover', opacity: 0.55 }} placeholder="blur" blurDataURL={BLUR_DATA_URL} />
  )}
  <div className="fo" />
  <div className="feat-body">
@@ -125,7 +129,7 @@ export function HorizontalCard({ post }) {
  <Link href={`/${post.slug}`} className="card post-link-card" style={{ display: 'flex', gap: 14, padding: 12 }}>
  <div style={{ position: 'relative', width: 112, height: 80, flexShrink: 0, overflow: 'hidden', borderRadius: 12, background: 'var(--bg3)' }}>
  {img?.sourceUrl ? (
- <Image src={img.sourceUrl} alt={img.altText || title} fill sizes="112px" style={{ objectFit: 'cover' }} />
+ <Image src={img.sourceUrl} alt={img.altText || title} fill sizes="112px" style={{ objectFit: 'cover' }} placeholder="blur" blurDataURL={BLUR_DATA_URL} />
  ) : (
  <div className="ci-ph">AI</div>
  )}

@@ -68,7 +68,7 @@ export async function generateMetadata({ params }) {
  const name = tag?.name ?? params.slug.replace(/-/g, ' ');
  return {
  title: `#${name}`,
- description: `Semua artikel tentang ${name} di ${SITE.name}`,
+ description: `All articles about ${name} on ${SITE.name}`,
  };
 }
 
@@ -105,7 +105,7 @@ export default async function TagPage({ params }) {
  {tag?.description && (
  <p className="text-slate-500 mt-2 ml-13 max-w-2xl">{tag.description}</p>
  )}
- <p className="text-slate-400 text-sm mt-1">{posts.length} artikel</p>
+ <p className="text-slate-400 text-sm mt-1">{posts.length} articles</p>
  </div>
  </div>
 

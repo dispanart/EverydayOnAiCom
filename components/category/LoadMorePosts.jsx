@@ -7,7 +7,7 @@ import { Loader2, RefreshCw, Calendar, ChevronDown } from 'lucide-react';
 
 function timeDisplay(date, isUpdated) {
  const d = new Date(date);
- return d.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
+ return d.toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' });
 }
 
 // Use full decode version instead
@@ -104,7 +104,7 @@ export default function LoadMorePosts({ initialPosts, categorySlug }) {
  >
  {loading
  ? <><Loader2 size={16} className="animate-spin" />Loading...</>
- : <><ChevronDown size={16} />Muat Lebih Banyak</>
+ : <><ChevronDown size={16} />Load More</>
  }
  </button>
  </div>
@@ -112,7 +112,7 @@ export default function LoadMorePosts({ initialPosts, categorySlug }) {
 
  {!hasMore && posts.length > 12 && (
  <p className="text-center text-sm text-slate-400 mt-10">
- Semua artikel sudah ditampilkan ({posts.length} artikel)
+ All articles are displayed ({posts.length} articles)
  </p>
  )}
  </>

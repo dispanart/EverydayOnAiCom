@@ -12,16 +12,16 @@ export default async function RelatedArticles({ currentSlug, categorySlug, categ
  if (!related.length) return null;
 
  return (
- <section className="mt-14 pt-10 border-t border-slate-100" aria-label="Artikel terkait">
+ <section className="mt-14 pt-10 border-t border-slate-100" aria-label="Related articles">
  <div className="flex items-center justify-between mb-6">
  <h2 className="text-xl font-extrabold text-slate-900 tracking-tight flex items-center gap-2">
  <span className="w-1 h-6 bg-blue-600 rounded-full block" aria-hidden="true" />
- Artikel Terkait
+ Related Articles
  </h2>
  {categorySlug && (
  <Link href={`/category/${categorySlug}`}
  className="text-sm font-semibold text-blue-600 hover:text-blue-800 flex items-center gap-1 transition-colors">
- Lihat Semua <ArrowRight size={14} />
+ View All <ArrowRight size={14} />
  </Link>
  )}
  </div>

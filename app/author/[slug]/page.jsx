@@ -46,8 +46,8 @@ export async function generateMetadata({ params }) {
  const author = await getAuthorWithPosts(params.slug);
  const name = author?.name ?? params.slug;
  return {
- title: `Artikel oleh ${name}`,
- description: `Semua artikel dari ${name} di ${SITE.name}`,
+ title: `Articles by ${name}`,
+ description: `All articles by ${name} on ${SITE.name}`,
  };
 }
 
@@ -67,7 +67,7 @@ export default async function AuthorPage({ params }) {
  <nav className="flex items-center gap-2 text-sm text-slate-400 mb-6">
  <Link href="/" className="hover:text-blue-600 transition-colors">Home</Link>
  <span>/</span>
- <span className="text-slate-700 font-semibold">Penulis</span>
+ <span className="text-slate-700 font-semibold">Author</span>
  <span>/</span>
  <span className="text-slate-700 font-semibold">{author.name}</span>
  </nav>
@@ -90,7 +90,7 @@ export default async function AuthorPage({ params }) {
  {author.description && (
  <p className="text-slate-500 max-w-xl leading-relaxed">{author.description}</p>
  )}
- <p className="text-slate-400 text-sm mt-2">{posts.length} artikel ditulis</p>
+ <p className="text-slate-400 text-sm mt-2">{posts.length} articles written</p>
  </div>
  </div>
  </div>

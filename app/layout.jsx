@@ -5,6 +5,7 @@ import ServiceWorkerRegister from '@/components/ui/ServiceWorkerRegister';
 import GoogleAnalytics from '@/components/ui/GoogleAnalytics';
 import GoogleAdSenseScript from '@/components/ui/GoogleAdSenseScript';
 import AuthSessionProvider from '@/components/auth/AuthSessionProvider';
+import ViewTransitions from '@/components/ui/ViewTransitions';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import { Analytics } from '@vercel/analytics/react';
 import './globals.css';
@@ -26,6 +27,11 @@ export const metadata = {
  verification: { google: 'MqKgcfUgejGqP6YDGL6uzlVoeNlyTBH4gTHG2ZeOuOQ' },
  manifest: '/manifest.json',
  icons: { icon: '/icon-512.webp', apple: '/icon-512.webp' },
+ alternates: {
+ types: {
+ 'application/rss+xml': `${SITE.url}/rss.xml`,
+ },
+ },
  openGraph: {
  type: 'website',
  locale: SITE.locale,
@@ -61,6 +67,7 @@ export default function RootLayout({ children }) {
  </head>
  <body>
  <AuthSessionProvider>{children}</AuthSessionProvider>
+ <ViewTransitions />
  <BackToTop />
  <ServiceWorkerRegister />
  <GoogleAnalytics />

@@ -18,6 +18,7 @@ export default async function sitemap() {
  { url: `${SITE.url}/privacy-policy`, lastModified: now, changeFrequency: 'yearly', priority: 0.3 },
  { url: `${SITE.url}/terms`, lastModified: now, changeFrequency: 'yearly', priority: 0.3 },
  { url: `${SITE.url}/disclaimer`, lastModified: now, changeFrequency: 'yearly', priority: 0.3 },
+ { url: `${SITE.url}/rss.xml`, lastModified: now, changeFrequency: 'daily', priority: 0.2 },
  ];
 
  // Category pages

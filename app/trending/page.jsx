@@ -9,7 +9,7 @@ import BackToTop from '@/components/ui/BackToTop';
 export const revalidate = 300; // 5 minutes
 export const metadata = {
  title: 'Trending',
- description: `Artikel paling populer di ${SITE.name}`,
+ description: `Most popular articles on ${SITE.name}`,
 };
 
 async function getTrending() {
@@ -38,7 +38,7 @@ export default async function TrendingPage() {
  </div>
  <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">Trending</h1>
  </div>
- <p className="text-slate-500">Artikel paling banyak disukai pembaca</p>
+ <p className="text-slate-500">Articles readers like most</p>
  </div>
  </div>
 
@@ -47,7 +47,7 @@ export default async function TrendingPage() {
  <div className="text-center py-20 text-slate-400">
  <TrendingUp size={48} className="mx-auto mb-4 opacity-20" />
  <p>No trending data yet. Start liking articles!</p>
- <Link href="/" className="mt-4 inline-block text-blue-600 text-sm hover:underline">← Jelajahi Artikel</Link>
+ <Link href="/" className="mt-4 inline-block text-blue-600 text-sm hover:underline">← Browse Articles</Link>
  </div>
  ) : (
  <div className="space-y-3">

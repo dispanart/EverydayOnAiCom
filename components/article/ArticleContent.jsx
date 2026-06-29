@@ -32,7 +32,7 @@ export default function ArticleContent({ html, className = 'article-prose aib' }
  // ── 1. Clone & eksekusi semua <script> tags ───────────────────────────
  const scriptNodes = Array.from(container.querySelectorAll('script'));
  scriptNodes.forEach(orig => {
- // Skip ld+json — tidak perlu dieksekusi
+ // Skip ld+json — does not need to run
  if (orig.type === 'application/ld+json') return;
 
  const s = document.createElement('script');
@@ -51,7 +51,7 @@ export default function ArticleContent({ html, className = 'article-prose aib' }
  });
 
  // ── 2. Scan data-widget-script attributes (fallback jika WP strip script) ─
- // Cara pakai di WordPress: tambahkan ke elemen manapun di artikel:
+ // How to use in WordPress: add it to any element in the article:
  // <div data-widget-script="function myWidget(){...}"></div>
  const widgetEls = container.querySelectorAll('[data-widget-script]');
  widgetEls.forEach(el => {

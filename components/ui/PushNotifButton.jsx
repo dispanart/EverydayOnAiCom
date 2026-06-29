@@ -70,7 +70,7 @@ export default function PushNotifButton() {
 
  return (
  <button onClick={toggle} disabled={status === 'loading'}
- title={status === 'subscribed' ? 'Matikan notifikasi' : 'Aktifkan notifikasi artikel baru'}
+ title={status === 'subscribed' ? 'Turn off notifications' : 'Enable new article notifications'}
  className={`flex items-center gap-2 px-3 py-2 rounded-full text-xs font-semibold border-2 transition-all
  ${status === 'subscribed'
  ? 'border-green-400 text-green-600 bg-green-50 hover:bg-green-100'
@@ -78,7 +78,7 @@ export default function PushNotifButton() {
  {status === 'loading' ? <Loader2 size={13} className="animate-spin" />
  : status === 'subscribed' ? <Bell size={13} className="fill-green-500" />
  : <BellOff size={13} />}
- {status === 'subscribed' ? 'Notif Aktif' : 'Aktifkan Notif'}
+ {status === 'subscribed' ? 'Notifications On' : 'Enable Notifications'}
  </button>
  );
 }

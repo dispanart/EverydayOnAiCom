@@ -52,9 +52,9 @@ export default function BookmarksPage() {
  <Bookmark size={18} className="text-blue-600" />
  </div>
  <div>
- <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight">Artikel Tersimpan</h1>
+ <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight">Saved Articles</h1>
  <p className="text-slate-400 text-sm mt-0.5">
- {loading ? '...' : `${bookmarks.length} artikel disimpan di perangkat ini`}
+ {loading ? '...' : `${bookmarks.length} articles saved on this device`}
  </p>
  </div>
  </div>
@@ -70,11 +70,11 @@ export default function BookmarksPage() {
  <BookOpen size={48} className="mx-auto text-slate-200 mb-4" />
  <p className="text-slate-500 font-semibold">No saved articles yet</p>
  <p className="text-slate-400 text-sm mt-1 mb-6">
- Klik tombol bookmark di artikel untuk menyimpannya di sini.
+ Click the bookmark button on an article to save it here.
  </p>
  <Link href="/" className="inline-flex items-center gap-2 bg-blue-600 text-white
  font-semibold text-sm px-5 py-2.5 rounded-xl hover:bg-blue-700 transition-colors">
- Jelajahi Artikel
+ Browse Articles
  </Link>
  </div>
  ) : (
@@ -89,18 +89,18 @@ export default function BookmarksPage() {
  {b.title || b.slug}
  </p>
  <p className="text-xs text-slate-400 mt-0.5">
- {new Date(b.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}
+ {new Date(b.created_at).toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' })}
  </p>
  </Link>
  <div className="flex items-center gap-2 flex-shrink-0">
  <Link href={`/${b.slug}`}
  className="p-2 rounded-lg text-slate-400 hover:text-blue-600 hover:bg-blue-50 transition-all"
- title="Buka artikel">
+ title="Open article">
  <ExternalLink size={15} />
  </Link>
  <button onClick={() => removeBookmark(b.slug)}
  className="p-2 rounded-lg text-slate-400 hover:text-red-500 hover:bg-red-50 transition-all"
- title="Hapus bookmark">
+ title="Remove bookmark">
  <Trash2 size={15} />
  </button>
  </div>
@@ -111,7 +111,7 @@ export default function BookmarksPage() {
 
  {bookmarks.length > 0 && (
  <p className="text-center text-xs text-slate-400 mt-8">
- Bookmark tersimpan di browser ini. Membersihkan cache browser akan menghapus bookmark.
+ Bookmarks are saved in this browser. Clearing browser cache will remove them.
  </p>
  )}
  </div>

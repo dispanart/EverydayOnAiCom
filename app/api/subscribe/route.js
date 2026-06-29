@@ -12,7 +12,7 @@ export async function POST(request) {
  // Basic email validation
  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
  return NextResponse.json(
- { error: 'Email tidak valid' },
+ { error: 'Invalid email' },
  { status: 400 }
  );
  }

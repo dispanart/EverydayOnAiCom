@@ -12,7 +12,7 @@ const TABS = [
  { id: 'overview', label: 'Overview', Icon: LayoutDashboard },
  { id: 'comments', label: 'Comments', Icon: MessageSquare },
  { id: 'trending', label: 'Trending', Icon: TrendingUp },
- { id: 'push', label: 'Push Notif', Icon: Bell },
+ { id: 'push', label: 'Push Alerts', Icon: Bell },
 ];
 
 // ── Helper ────────────────────────────────────────────────────────
@@ -267,7 +267,7 @@ export default function AdminPage() {
  <CheckCircle size={15} />
  </button>
  <button onClick={() => deleteComment(c.id, false)}
- className="p-2 bg-red-600/80 hover:bg-red-700 rounded-lg transition-colors" title="Hapus">
+ className="p-2 bg-red-600/80 hover:bg-red-700 rounded-lg transition-colors" title="Delete">
  <Trash2 size={15} />
  </button>
  </div>
@@ -313,7 +313,7 @@ export default function AdminPage() {
  <div className="bg-slate-900 rounded-2xl border border-slate-800 overflow-hidden">
  <div className="p-5 border-b border-slate-800 flex items-center gap-2">
  <TrendingUp size={16} className="text-blue-400" />
- <h2 className="font-bold">Artikel Paling Banyak Disukai</h2>
+ <h2 className="font-bold">Most Liked Articles</h2>
  </div>
  {trending.length === 0
  ? <p className="p-6 text-slate-500 text-sm">No like data yet.</p>
@@ -340,33 +340,33 @@ export default function AdminPage() {
  </div>
  )}
 
- {/* ── Push Notifications ── */}
+ {/* ── Push Alertsications ── */}
  {tab === 'push' && (
  <div className="max-w-lg space-y-6">
  <div className="bg-slate-900 rounded-2xl border border-slate-800 p-6">
  <h2 className="font-bold mb-5 flex items-center gap-2">
  <Bell size={16} className="text-blue-400" />
- Send Push Notification
+ Send Push Alertsication
  </h2>
  <form onSubmit={sendPush} className="space-y-4">
  <div>
  <label className="text-xs text-slate-400 uppercase tracking-wider block mb-1.5">Judul *</label>
  <input value={pushTitle} onChange={e => setPushTitle(e.target.value)} required
- placeholder="Artikel baru: ..."
+ placeholder="New article: ..."
  className="w-full bg-slate-800 text-white px-4 py-3 rounded-xl border border-slate-700
  focus:outline-none focus:border-blue-500 text-sm placeholder:text-slate-600" />
  </div>
  <div>
  <label className="text-xs text-slate-400 uppercase tracking-wider block mb-1.5">Pesan *</label>
  <textarea value={pushBody} onChange={e => setPushBody(e.target.value)} required rows={3}
- placeholder="Deskripsi singkat artikel..."
+ placeholder="Short article description..."
  className="w-full bg-slate-800 text-white px-4 py-3 rounded-xl border border-slate-700
  focus:outline-none focus:border-blue-500 text-sm placeholder:text-slate-600 resize-none" />
  </div>
  <div>
  <label className="text-xs text-slate-400 uppercase tracking-wider block mb-1.5">URL Tujuan</label>
  <input value={pushUrl} onChange={e => setPushUrl(e.target.value)}
- placeholder="https://everydayonai.com/nama-artikel"
+ placeholder="https://everydayonai.com/article-slug"
  className="w-full bg-slate-800 text-white px-4 py-3 rounded-xl border border-slate-700
  focus:outline-none focus:border-blue-500 text-sm placeholder:text-slate-600" />
  </div>

@@ -1,9 +1,9 @@
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { SITE } from '@/config/site';
-import { Play, Search, Star } from 'lucide-react';
 import AdSense from '@/components/ui/AdSense';
 import { AD_SLOTS } from '@/config/ads';
+import ToolsDirectory from '@/components/tools/ToolsDirectory';
 
 export const metadata = {
  title: `AI Tools — ${SITE.name}`,
@@ -37,12 +37,6 @@ const groups = [
  },
 ];
 
-function Icon({ item }) {
- if (item.icon === 'play') return <Play size={26} fill="white" color="white" />;
- if (item.icon === 'search') return <Search size={26} color="#20B2AA" />;
- return <span style={{ color: '#fff', fontSize: 22, fontWeight: 900 }}>{item.icon}</span>;
-}
-
 export default function ToolsPage() {
  return (
  <>
@@ -51,30 +45,7 @@ export default function ToolsPage() {
  <div className="tph"><div className="w"><h1>AI Tools Directory</h1><p>Curated AI tools for everyday productivity, business workflows, research, and creativity.</p></div></div>
  <div className="w">
  <AdSense slot={AD_SLOTS.toolsTop} className="eonai-ad-list-top" />
- <div className="tcf" id="tcf">
- <span className="fb on">All Tools</span>
- <span className="fb">Assistants</span>
- <span className="fb">Creative AI</span>
- <span className="fb">Research</span>
- </div>
- <div id="tgrid">
- {groups.map((group) => (
- <section key={group.title}>
- <h2 className="ts-ttl"><span className="sb" />{group.title}</h2>
- <div className="tgf">
- {group.tools.map((tool) => (
- <a key={tool.name} className="tcl" href={tool.href} target="_blank" rel="noopener noreferrer">
- <div className="tll" style={{ background: tool.bg }}><Icon item={tool} /></div>
- <div className="tnl">{tool.name}</div>
- <div className="tdl">{tool.desc}</div>
- <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}><span className="fb2">{tool.cat}</span><span className="tsc"><Star size={10} fill="currentColor" /> {tool.score}</span></div>
- <span className="ttb">Visit tool</span>
- </a>
- ))}
- </div>
- </section>
- ))}
- </div>
+ <ToolsDirectory groups={groups} />
  </div>
  </main>
  <Footer />

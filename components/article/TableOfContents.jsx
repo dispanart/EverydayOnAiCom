@@ -77,7 +77,7 @@ export default function TableOfContents({ content }) {
  <h3 className="flex items-center gap-2 text-xs font-extrabold text-slate-700
  uppercase tracking-wider mb-4">
  <List size={13} className="text-blue-600" />
- Daftar Isi
+ Table of Contents
  </h3>
 
  {/* Progress bar */}

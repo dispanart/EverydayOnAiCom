@@ -52,7 +52,7 @@ export default function LikeButton({ postId }) {
  <button
  onClick={handleLike}
  disabled={loading || !postId}
- aria-label={liked ? 'Unlike artikel ini' : 'Like artikel ini'}
+ aria-label={liked ? 'Unlike this article' : 'Like this article'}
  className={`group flex items-center gap-2.5 px-5 py-2.5 rounded-full border-2 font-semibold text-sm transition-all duration-200 disabled:cursor-not-allowed select-none ${
  liked
  ? 'bg-red-50 border-red-400 text-red-500 hover:bg-red-100'

@@ -1,5 +1,5 @@
 // components/ui/GoogleAnalytics.jsx
-// Measurement ID diset via env var NEXT_PUBLIC_GA_ID di Vercel
+// Measurement ID is set via the NEXT_PUBLIC_GA_ID env var in Vercel
 
 import Script from 'next/script';
 

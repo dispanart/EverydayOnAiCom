@@ -3,7 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Calendar, Clock, Tag } from 'lucide-react';
 import { SITE } from '@/config/site';
-import { getPostBySlug, getAllPostSlugs, getDisplayDate, formatDisplayDate, stripHtml, stripHtmlAndDecode } from '@/lib/wordpress';
+import { getPostBySlug, getAllPostSlugs, getRecentPosts, getDisplayDate, formatDisplayDate, stripHtml, stripHtmlAndDecode } from '@/lib/wordpress';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { ReadingProgressBar } from '@/components/article/ReadingProgressBar';
@@ -61,6 +61,11 @@ export default async function PostPage({ params }) {
  const post = await getPostBySlug(params.slug);
  if (!post) notFound();
 
+ const recentPosts = await getRecentPosts(200);
+ const currentIndex = recentPosts.findIndex((item) => item.slug === post.slug);
+ const nextArticle = currentIndex > 0 ? recentPosts[currentIndex - 1] : null;
+ const previousArticle = currentIndex >= 0 ? recentPosts[currentIndex + 1] : null;
+
  const { date: displayDate, isUpdated } = getDisplayDate(post);
  const dateStr = formatDisplayDate(displayDate);
  const categories = post.categories?.nodes ?? [];
@@ -68,6 +73,7 @@ export default async function PostPage({ params }) {
  const tags = post.tags?.nodes ?? [];
  const img = post.featuredImage?.node;
  const author = post.author?.node;
+ const authorImage = '/authors/dispa-ai-buff-author-photo.webp';
  const mins = readingTime(post.content);
  const canonicalUrl = `${SITE.url}/${post.slug}`;
  const title = stripHtmlAndDecode(post.title);
@@ -91,8 +97,8 @@ export default async function PostPage({ params }) {
  <ReadingProgressBar />
  <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
- <main>
- <div className="w sec">
+ <main className="article-page">
+ <div className="w sec article-shell">
  <div className="al">
  <article>
  <nav aria-label="Breadcrumb" className="abrC">
@@ -108,9 +114,11 @@ export default async function PostPage({ params }) {
 
  <div className="abl">
  <div style={{ display: 'flex', alignItems: 'center', gap: 9 }}>
- <Link href="/about/dispa" className="av">AI</Link>
+ <Link href="/about/dispa" className="av author-photo" aria-label="Dispa - The AI Buff author profile">
+ <Image src={authorImage} alt={author?.name || 'Dispa - The AI Buff'} width={32} height={32} style={{ objectFit: 'cover' }} />
+ </Link>
  <div>
- <Link href="/about/dispa" style={{ color: 'var(--txt)', fontWeight: 700, textDecoration: 'none' }}>{author?.name ?? 'Dispa — The AI Buff'}</Link>
+ <Link href="/about/dispa" style={{ color: 'var(--txt)', fontWeight: 700, textDecoration: 'none' }}>{author?.name ?? 'Dispa - The AI Buff'}</Link>
  <div style={{ fontSize: 11, color: 'var(--muted)' }}>Author</div>
  </div>
  </div>
@@ -123,12 +131,10 @@ export default async function PostPage({ params }) {
  </div>
 
  <div className="article-tools">
- <ErrorBoundary fallbackMessage="Share tidak tersedia"><ShareBar title={title} url={canonicalUrl} postId={post.databaseId} /></ErrorBoundary>
- <ErrorBoundary fallbackMessage="Like tidak tersedia"><LikeButton postId={post.databaseId} /></ErrorBoundary>
- <ErrorBoundary fallbackMessage="Bookmark tidak tersedia"><BookmarkButton slug={post.slug} title={title} /></ErrorBoundary>
- <ErrorBoundary fallbackMessage="Print tidak tersedia"><PrintButton /></ErrorBoundary>
- <ErrorBoundary fallbackMessage="Font size tidak tersedia"><FontSizeAdjuster /></ErrorBoundary>
- <ErrorBoundary fallbackMessage="Push notification tidak tersedia"><PushNotifButton /></ErrorBoundary>
+ <ErrorBoundary fallbackMessage="Like is unavailable"><LikeButton postId={post.databaseId} /></ErrorBoundary>
+ <ErrorBoundary fallbackMessage="Bookmark is unavailable"><BookmarkButton slug={post.slug} title={title} /></ErrorBoundary>
+ <ErrorBoundary fallbackMessage="Font size controls are unavailable"><FontSizeAdjuster /></ErrorBoundary>
+ <ErrorBoundary fallbackMessage="Push notifications are unavailable"><PushNotifButton /></ErrorBoundary>
  </div>
 
  {img?.sourceUrl && (
@@ -146,7 +152,16 @@ export default async function PostPage({ params }) {
  </div>
  )}
 
+ <div className="mobile-toc">
+ <ErrorBoundary fallbackMessage=""><TableOfContents content={post.content} /></ErrorBoundary>
+ </div>
+
  <ArticleAdSlots html={post.content} />
+
+ <div className="article-after-actions">
+ <ErrorBoundary fallbackMessage="Share is unavailable"><ShareBar title={title} url={canonicalUrl} postId={post.databaseId} /></ErrorBoundary>
+ <ErrorBoundary fallbackMessage="Print is unavailable"><PrintButton /></ErrorBoundary>
+ </div>
 
  {tags.length > 0 && (
  <div className="wid" style={{ marginTop: 32 }}>
@@ -157,8 +172,22 @@ export default async function PostPage({ params }) {
  </div>
  )}
 
- <ErrorBoundary fallbackMessage="Related articles tidak tersedia"><RelatedArticles currentSlug={post.slug} categorySlug={primaryCategory?.slug} categoryName={primaryCategory?.name} /></ErrorBoundary>
- <ErrorBoundary fallbackMessage="Comments tidak tersedia"><CommentsSection postId={post.databaseId} /></ErrorBoundary>
+ <ErrorBoundary fallbackMessage="Related articles are unavailable"><RelatedArticles currentSlug={post.slug} categorySlug={primaryCategory?.slug} categoryName={primaryCategory?.name} /></ErrorBoundary>
+ <nav className="next-prev-articles" aria-label="Next and previous articles">
+ {previousArticle ? (
+ <Link href={`/${previousArticle.slug}`} className="next-prev-card">
+ <span>Previous Article</span>
+ <strong>{stripHtmlAndDecode(previousArticle.title)}</strong>
+ </Link>
+ ) : <span />}
+ {nextArticle ? (
+ <Link href={`/${nextArticle.slug}`} className="next-prev-card np-next">
+ <span>Next Article</span>
+ <strong>{stripHtmlAndDecode(nextArticle.title)}</strong>
+ </Link>
+ ) : <span />}
+ </nav>
+ <ErrorBoundary fallbackMessage="Comments are unavailable"><CommentsSection postId={post.databaseId} /></ErrorBoundary>
  </article>
 
  <aside className="sid hide-lg">

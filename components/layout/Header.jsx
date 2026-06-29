@@ -1,9 +1,10 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { Search, Menu, X, Moon, Sun, Zap } from 'lucide-react';
+import { Search, Menu, X, Moon, Sun } from 'lucide-react';
 
 const navLinks = [
  { label: 'Home', href: '/' },
@@ -74,7 +75,9 @@ export default function Header() {
  <header id="hdr">
  <div className="hi">
  <Link className="logo" href="/" aria-label="EverydayOnAI Home">
- <div className="li"><Zap size={17} fill="white" color="white" /></div>
+ <div className="li logo-img">
+ <Image src="/icon-512.png" alt="" width={34} height={34} priority />
+ </div>
  <span className="ln">EverydayOn<em>AI</em></span>
  </Link>
 
