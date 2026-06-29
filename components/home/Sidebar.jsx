@@ -29,11 +29,14 @@ function formatViews(value) {
 }
 
 export default async function Sidebar({ recentPosts = [] }) {
- const posts = recentPosts.slice(0, 5);
+ const posts = recentPosts.slice(0, 12);
  const postsWithViews = await Promise.all(posts.map(async (post) => ({
  ...post,
  views: await getPostViews(post.databaseId),
  })));
+ const trendingPosts = postsWithViews
+ .sort((a, b) => Number(b.views || 0) - Number(a.views || 0))
+ .slice(0, 5);
 
  return (
  <aside className="sid" aria-label="Sidebar">
@@ -42,7 +45,7 @@ export default async function Sidebar({ recentPosts = [] }) {
  <div className="wid">
  <div className="wt"><TrendingUp size={11} strokeWidth={2.5} />Trending Topics</div>
  <div className="trending-list">
- {postsWithViews.map((post, i) => (
+ {trendingPosts.map((post, i) => (
  <Link key={post.id || post.slug} href={`/${post.slug}`} className="tri post-link-card trending-card">
  <span className="trn trending-rank">{String(i + 1).padStart(2, '0')}</span>
  <div>

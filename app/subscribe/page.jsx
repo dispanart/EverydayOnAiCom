@@ -14,15 +14,18 @@ export default function SubscribePage() {
 
  const handleSubmit = async (e) => {
  e.preventDefault();
- if (!email.trim() || status === 'loading') return;
+ if (!email.trim() || status === 'loading' || status === 'saving') return;
  setStatus('loading');
  setErrorMsg('');
+ let slowTimer;
  try {
+ slowTimer = window.setTimeout(() => setStatus('saving'), 900);
  const res = await fetch('/api/subscribe', {
  method: 'POST',
  headers: { 'Content-Type': 'application/json' },
  body: JSON.stringify({ email: email.trim() }),
  });
+ window.clearTimeout(slowTimer);
  const data = await res.json();
  if (res.ok && (data.success || data.ok)) {
  setStatus(data.message === 'already_subscribed' || data.status === 'already_subscribed' ? 'duplicate' : 'success');
@@ -32,6 +35,7 @@ export default function SubscribePage() {
  setErrorMsg(data.message || data.error || 'Failed to subscribe, please try again.');
  }
  } catch {
+ if (slowTimer) window.clearTimeout(slowTimer);
  setStatus('error');
  setErrorMsg('Connection failed, please try again.');
  }
@@ -100,7 +104,7 @@ export default function SubscribePage() {
  required
  placeholder="your@email.com"
  aria-label="Email address"
- disabled={status === 'loading'}
+ disabled={status === 'loading' || status === 'saving'}
  className="subscribe-input"
  />
  {status === 'error' && (
@@ -110,11 +114,13 @@ export default function SubscribePage() {
  )}
  <button
  type="submit"
- disabled={status === 'loading'}
+ disabled={status === 'loading' || status === 'saving'}
  className="subscribe-submit"
  >
  {status === 'loading' ? (
  <><Loader2 size={16} className="animate-spin" />Subscribing...</>
+ ) : status === 'saving' ? (
+ <><Loader2 size={16} className="animate-spin" />Saving your email...</>
  ) : (
  <><Mail size={16} /><span>Subscribe Free</span></>
  )}

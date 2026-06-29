@@ -13,6 +13,7 @@ export async function POST(request) {
 
  return proxyToWordPress(request, {
  path: '/newsletter',
+ timeoutMs: 6000,
  body: {
  email,
  name: body.name || '',

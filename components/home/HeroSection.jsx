@@ -10,6 +10,8 @@ export default function HeroSection({ post }) {
  const heroImageSrc = img?.sourceUrl || fallbackHeroImage;
  const title = post ? stripHtmlAndDecode(post.title) : 'The State of Generative AI: A Comprehensive Global Outlook';
  const href = post?.slug ? `/${post.slug}` : '/articles';
+ const publishedAt = post?.date ? new Date(post.date).getTime() : 0;
+ const isNew = publishedAt && !Number.isNaN(publishedAt) && Date.now() - publishedAt <= 7 * 24 * 60 * 60 * 1000;
 
  return (
  <section className="hero">
@@ -34,6 +36,7 @@ export default function HeroSection({ post }) {
 
  <Link className="fc post-link-card" href={href} aria-label={title}>
  <div className="fi" style={{ background: 'linear-gradient(135deg,#1a2a6c,#2a5ac8)' }}>
+ {isNew && <span className="new-badge-overlay">New</span>}
  <Image
  src={heroImageSrc}
  alt={img?.altText || title}

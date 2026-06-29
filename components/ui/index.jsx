@@ -31,9 +31,11 @@ function isNewPost(post) {
 
 function ImageBlock({ post, sizes = '(max-width: 768px) 100vw, 400px' }) {
  const img = post.featuredImage?.node;
+ const showNew = isNewPost(post);
  return (
  <div className="ci">
  <div className="ci-ph">AI</div>
+ {showNew && <span className="new-badge-overlay">New</span>}
  {img?.sourceUrl && (
  <Image
  src={img.sourceUrl}
@@ -59,7 +61,6 @@ export function PostCard({ post }) {
  <ImageBlock post={post} />
  <div className="cb">
  <div className="ct">
- {isNewPost(post) && <span className="chip c4">New</span>}
  {category && <span className="chip c1">{category.name}</span>}
  </div>
  <h3 className="tt">{title}</h3>

@@ -118,33 +118,8 @@ export default async function PostPage({ params }) {
 
  <h1 className="ah1">{title}</h1>
 
- <div className="abl">
- <div style={{ display: 'flex', alignItems: 'center', gap: 9 }}>
- <Link href="/about/dispa" className="av author-photo" aria-label="Dispa - The AI Buff author profile">
- <Image src={authorImage} alt={author?.name || 'Dispa - The AI Buff'} width={32} height={32} style={{ objectFit: 'cover' }} />
- </Link>
- <div>
- <Link href="/about/dispa" style={{ color: 'var(--txt)', fontWeight: 700, textDecoration: 'none' }}>{author?.name ?? 'Dispa - The AI Buff'}</Link>
- <div style={{ fontSize: 11, color: 'var(--muted)' }}>Author</div>
- </div>
- </div>
- <span className="md" />
- <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}><Calendar size={14} />{isUpdated ? `Updated ${dateStr}` : dateStr}</span>
- <span className="md" />
- <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}><Clock size={14} />{mins} min read</span>
- <span className="md" />
- <ArticleViews postId={post.databaseId} />
- </div>
-
- <div className="article-tools">
- <ErrorBoundary fallbackMessage="Like is unavailable"><LikeButton postId={post.databaseId} /></ErrorBoundary>
- <ErrorBoundary fallbackMessage="Bookmark is unavailable"><BookmarkButton slug={post.slug} title={title} /></ErrorBoundary>
- <ErrorBoundary fallbackMessage="Font size controls are unavailable"><FontSizeAdjuster /></ErrorBoundary>
- <ErrorBoundary fallbackMessage="Push notifications are unavailable"><PushNotifButton /></ErrorBoundary>
- </div>
-
  {img?.sourceUrl && (
- <div className="afi" style={{ margin: '22px 0 32px' }}>
+ <div className="afi article-featured-under-title">
  <Image
  src={img.sourceUrl}
  alt={img.altText || title}
@@ -157,6 +132,30 @@ export default async function PostPage({ params }) {
  />
  </div>
  )}
+
+ <div className="abl article-byline">
+ <div className="article-author-row">
+ <Link href="/about/dispa" className="av author-photo" aria-label="Dispa - The AI Buff author profile">
+ <Image src={authorImage} alt={author?.name || 'Dispa - The AI Buff'} width={32} height={32} style={{ objectFit: 'cover' }} />
+ </Link>
+ <div>
+ <Link href="/about/dispa" style={{ color: 'var(--txt)', fontWeight: 700, textDecoration: 'none' }}>{author?.name ?? 'Dispa - The AI Buff'}</Link>
+ <div style={{ fontSize: 11, color: 'var(--muted)' }}>Author</div>
+ </div>
+ </div>
+ <div className="article-meta-row">
+ <span><Calendar size={14} />{isUpdated ? `Updated ${dateStr}` : dateStr}</span>
+ <span><Clock size={14} />{mins} min read</span>
+ <ArticleViews postId={post.databaseId} />
+ </div>
+ </div>
+
+ <div className="article-tools">
+ <ErrorBoundary fallbackMessage="Like is unavailable"><LikeButton postId={post.databaseId} /></ErrorBoundary>
+ <ErrorBoundary fallbackMessage="Bookmark is unavailable"><BookmarkButton slug={post.slug} title={title} /></ErrorBoundary>
+ <ErrorBoundary fallbackMessage="Font size controls are unavailable"><FontSizeAdjuster /></ErrorBoundary>
+ <ErrorBoundary fallbackMessage="Push notifications are unavailable"><PushNotifButton /></ErrorBoundary>
+ </div>
 
  <div className="mobile-toc">
  <ErrorBoundary fallbackMessage=""><TableOfContents content={post.content} /></ErrorBoundary>

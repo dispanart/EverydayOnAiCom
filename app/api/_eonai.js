@@ -18,7 +18,7 @@ function cleanWordPressMessage(value) {
  return text;
 }
 
-export async function proxyToWordPress(request, { path, method = 'POST', body = null, query = '' }) {
+export async function proxyToWordPress(request, { path, method = 'POST', body = null, query = '', timeoutMs = 8000 }) {
  const wpBase = process.env.WORDPRESS_REST_URL || process.env.WORDPRESS_API_URL;
  const secret = process.env.EONAI_ENGAGEMENT_KEY;
 
@@ -36,7 +36,9 @@ export async function proxyToWordPress(request, { path, method = 'POST', body = 
  const cleanBase = wpBase.replace(/\/$/, '');
  const url = `${cleanBase}/wp-json/eonai/v1${path}${query}`;
 
- const wpResponse = await fetch(url, {
+ let wpResponse;
+ try {
+ wpResponse = await fetch(url, {
  method,
  headers: {
  'content-type': 'application/json',
@@ -46,7 +48,20 @@ export async function proxyToWordPress(request, { path, method = 'POST', body = 
  },
  body: body ? JSON.stringify(body) : undefined,
  cache: 'no-store',
+ signal: AbortSignal.timeout(timeoutMs),
  });
+ } catch (error) {
+ if (error?.name === 'TimeoutError' || error?.name === 'AbortError') {
+ return NextResponse.json(
+ { ok: false, message: 'WordPress took too long to respond. Please try again.' },
+ { status: 504 }
+ );
+ }
+ return NextResponse.json(
+ { ok: false, message: 'Could not connect to WordPress. Please try again.' },
+ { status: 502 }
+ );
+ }
 
  const data = await wpResponse.json().catch(() => ({
  ok: false,
