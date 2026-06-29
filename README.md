@@ -4,61 +4,61 @@ A high-performance, SEO-optimized tech media site built with **Next.js 14 (App R
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 everydayonai/
 │
 ├── config/
-│   └── site.js              ← ✏️  EDIT THIS: category slugs, nav, site settings
+│ └── site.js ← EDIT THIS: category slugs, nav, site settings
 │
 ├── lib/
-│   └── wordpress.js         ← All GraphQL queries & date helpers
+│ └── wordpress.js ← All GraphQL queries & date helpers
 │
 ├── app/
-│   ├── layout.jsx           ← Root layout, fonts, metadata
-│   ├── globals.css          ← Tailwind + article typography styles
-│   ├── page.jsx             ← Homepage website
-│   ├── sitemap.js           ← Auto XML sitemap
-│   ├── robots.js            ← robots.txt
-│   ├── not-found.jsx        ← Custom 404 pages
-│   │
-│   ├── [slug]/page.jsx      ← Single article page
-│   │                           (reading progress, share bar, author, updated date)
-│   │
-│   ├── category/[slug]/     ← Category archive (works for ANY WP category)
-│   │
-│   ├── search/              ← Search results page
-│   ├── about/               ← About Us
-│   ├── subscribe/           ← Newsletter subscribe
-│   ├── contact/             ← Contact
-│   ├── privacy-policy/      ← Privacy Policy
-│   ├── terms/               ← Terms of Service
-│   ├── disclaimer/          ← Disclaimer
-│   │
-│   └── api/
-│       ├── categories/      ← Serves WP categories to Header dropdown
-│       └── revalidate/      ← Webhook: WordPress → Vercel real-time update
+│ ├── layout.jsx ← Root layout, fonts, metadata
+│ ├── globals.css ← Tailwind + article typography styles
+│ ├── page.jsx ← Homepage website
+│ ├── sitemap.js ← Auto XML sitemap
+│ ├── robots.js ← robots.txt
+│ ├── not-found.jsx ← Custom 404 pages
+│ │
+│ ├── [slug]/page.jsx ← Single article page
+│ │ (reading progress, share bar, author, updated date)
+│ │
+│ ├── category/[slug]/ ← Category archive (works for ANY WP category)
+│ │
+│ ├── search/ ← Search results page
+│ ├── about/ ← About Us
+│ ├── subscribe/ ← Newsletter subscribe
+│ ├── contact/ ← Contact
+│ ├── privacy-policy/ ← Privacy Policy
+│ ├── terms/ ← Terms of Service
+│ ├── disclaimer/ ← Disclaimer
+│ │
+│ └── api/
+│ ├── categories/ ← Serves WP categories to Header dropdown
+│ └── revalidate/ ← Webhook: WordPress → Vercel real-time update
 │
 ├── components/
-│   ├── layout/
-│   │   ├── Header.jsx       ← Sticky header with dynamic subcategory dropdown
-│   │   └── Footer.jsx       ← Dark footer with newsletter form
-│   │
-│   ├── home/
-│   │   ├── HeroSection.jsx  ← Featured post hero
-│   │   ├── CategorySilo.jsx ← Content section with 4 layout variants
-│   │   └── Sidebar.jsx      ← Trending posts + ad slot
-│   │
-│   ├── article/
-│   │   ├── ReadingProgressBar.jsx ← Blue progress bar at top
-│   │   └── ShareBar.jsx           ← WhatsApp, Facebook, X, LinkedIn, Telegram
-│   │
-│   └── ui/
-│       └── index.jsx        ← PostCard, RatedCard, MasonryCard, HorizontalCard,
-│                               DateMeta, CategoryBadge, AdSlot
+│ ├── layout/
+│ │ ├── Header.jsx ← Sticky header with dynamic subcategory dropdown
+│ │ └── Footer.jsx ← Dark footer with newsletter form
+│ │
+│ ├── home/
+│ │ ├── HeroSection.jsx ← Featured post hero
+│ │ ├── CategorySilo.jsx ← Content section with 4 layout variants
+│ │ └── Sidebar.jsx ← Trending posts + ad slot
+│ │
+│ ├── article/
+│ │ ├── ReadingProgressBar.jsx ← Blue progress bar at top
+│ │ └── ShareBar.jsx ← WhatsApp, Facebook, X, LinkedIn, Telegram
+│ │
+│ └── ui/
+│ └── index.jsx ← PostCard, RatedCard, MasonryCard, HorizontalCard,
+│ DateMeta, CategoryBadge, AdSlot
 │
-├── next.config.js           ← Image optimization, security headers, CSP
+├── next.config.js ← Image optimization, security headers, CSP
 ├── tailwind.config.js
 ├── vercel.json
 └── .env.local.example
@@ -66,7 +66,7 @@ everydayonai/
 
 ---
 
-## 🚀 Quick Start
+## Quick Start
 
 ### 1. WordPress Setup
 
@@ -124,7 +124,7 @@ Replace `AdSlot` placeholder content in `components/ui/index.jsx`.
 
 ---
 
-## ➕ Adding New Categories
+## Adding New Categories
 
 1. Create category in WordPress
 2. Open `config/site.js`
@@ -133,7 +133,7 @@ Replace `AdSlot` placeholder content in `components/ui/index.jsx`.
 
 ---
 
-## 🔒 Security Features
+## Security Features
 
 - **Content Security Policy (CSP)** — restricts script/style/image sources
 - **HSTS** — forces HTTPS for 1 year with preload
@@ -145,7 +145,7 @@ Replace `AdSlot` placeholder content in `components/ui/index.jsx`.
 
 ---
 
-## ⚡ Performance Features
+## Performance Features
 
 - **ISR** — pages revalidate every 60 seconds automatically
 - **On-demand revalidation** — webhook triggers instant update on publish
@@ -156,7 +156,7 @@ Replace `AdSlot` placeholder content in `components/ui/index.jsx`.
 
 ---
 
-## 🖼️ Image Optimization
+## Image Optimization
 
 All WordPress images are automatically:
 - Converted to **WebP** (primary) and **AVIF** (fallback)
@@ -168,7 +168,7 @@ No plugins needed — Next.js handles this automatically via `<Image>` component
 
 ---
 
-## 🛠️ Local Development
+## Local Development
 
 ```bash
 npm install
@@ -178,3 +178,52 @@ npm run dev
 ```
 
 Visit `http://localhost:3000`
+
+
+## Featured Image Hero Fix
+Hero card now renders the article featured image when available and falls back to a safe AI image if WordPress returns no featured image.
+
+## AdSense setup after approval
+
+The project is AdSense-ready but ads are disabled by default.
+
+1. In Vercel, add these Environment Variables:
+   - `NEXT_PUBLIC_ADSENSE_ENABLED=true`
+   - `NEXT_PUBLIC_ADSENSE_CLIENT=ca-pub-XXXXXXXXXXXXXXXX`
+   - `ADSENSE_PUBLISHER_ID=pub-XXXXXXXXXXXXXXXX`
+2. Create ad units in AdSense and copy only the numeric slot IDs.
+3. Add slot IDs to Vercel, for example:
+   - `NEXT_PUBLIC_ADSENSE_SLOT_HOME_TOP=1234567890`
+   - `NEXT_PUBLIC_ADSENSE_SLOT_HOME_INFEED=1234567890`
+   - `NEXT_PUBLIC_ADSENSE_SLOT_HOME_BOTTOM=1234567890`
+   - `NEXT_PUBLIC_ADSENSE_SLOT_SIDEBAR_TOP=1234567890`
+   - `NEXT_PUBLIC_ADSENSE_SLOT_SIDEBAR_BOTTOM=1234567890`
+   - `NEXT_PUBLIC_ADSENSE_SLOT_ARTICLE_TOP=1234567890`
+   - `NEXT_PUBLIC_ADSENSE_SLOT_ARTICLE_BOTTOM=1234567890`
+   - `NEXT_PUBLIC_ADSENSE_SLOT_ARTICLES_TOP=1234567890`
+   - `NEXT_PUBLIC_ADSENSE_SLOT_TOOLS_TOP=1234567890`
+4. Redeploy the site from Vercel.
+
+If `NEXT_PUBLIC_ADSENSE_ENABLED` is not `true`, or if a slot ID is empty, no ad block is rendered and no placeholder is shown.
+
+
+## Real Article Views Counter
+
+Project ini sudah menyiapkan counter views artikel real-data untuk headless WordPress + Next.js.
+
+File penting:
+
+- `app/api/views/[id]/route.js` — API route Next.js untuk membaca/menambah views.
+- `components/article/ArticleViews.jsx` — komponen client untuk trigger view saat artikel dibuka.
+- `wordpress-plugin/eonai-view-counter.php` — plugin WordPress sederhana untuk endpoint views.
+
+Environment variables yang perlu diisi di Vercel:
+
+```env
+WORDPRESS_REST_URL=https://wp.yourdomain.com
+EONAI_VIEW_KEY=ganti-dengan-random-string-panjang
+```
+
+`EONAI_VIEW_KEY` harus sama dengan nilai `EONAI_VIEW_KEY` di plugin WordPress.
+
+Counter memakai cookie 6 jam per artikel supaya satu pembaca tidak dihitung terus-menerus setiap refresh.
