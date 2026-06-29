@@ -98,6 +98,8 @@ export default function Header() {
  <input
  value={query}
  onChange={(e) => setQuery(e.target.value)}
+ onFocus={() => document.documentElement.classList.add('searching')}
+ onBlur={() => document.documentElement.classList.remove('searching')}
  aria-label="Search articles"
  placeholder="Search articles..."
  style={{ background: 'transparent', border: 0, outline: 0, color: 'inherit', width: '100%', font: 'inherit' }}

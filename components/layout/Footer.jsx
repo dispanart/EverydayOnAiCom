@@ -22,12 +22,12 @@ export default function Footer() {
  body: JSON.stringify({ email: email.trim() }),
  });
  const data = await res.json();
- if (res.ok && data.success) {
- setStatus(data.message === 'already_subscribed' ? 'duplicate' : 'success');
+ if (res.ok && (data.success || data.ok)) {
+ setStatus(data.message === 'already_subscribed' || data.status === 'already_subscribed' ? 'duplicate' : 'success');
  setEmail('');
  } else {
  setStatus('error');
- setErrorMsg(data.error || 'Failed to subscribe, please try again.');
+ setErrorMsg(data.message || data.error || 'Failed to subscribe, please try again.');
  }
  } catch {
  setStatus('error');

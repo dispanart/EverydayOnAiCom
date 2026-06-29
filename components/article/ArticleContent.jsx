@@ -29,24 +29,33 @@ export default function ArticleContent({ html, className = 'article-prose aib' }
  injectedScripts.current.forEach(s => s.remove());
  injectedScripts.current = [];
 
+ const prepareInlineScript = (code) => String(code || '')
+ .replace(/document\.addEventListener\(\s*['"]DOMContentLoaded['"]\s*,/g, 'window.setTimeout(')
+ .replace(/window\.addEventListener\(\s*['"]load['"]\s*,/g, 'window.setTimeout(');
+
+ const runScript = (orig, code = '') => {
+ const s = document.createElement('script');
+ Array.from(orig?.attributes || []).forEach(a => s.setAttribute(a.name, a.value));
+ s.setAttribute('data-eonai-article-script', 'true');
+
+ if (orig?.src) {
+ s.src = orig.src;
+ s.async = false;
+ } else {
+ s.textContent = prepareInlineScript(code || orig?.textContent || '');
+ }
+
+ document.body.appendChild(s);
+ injectedScripts.current.push(s);
+ };
+
  // ── 1. Clone & eksekusi semua <script> tags ───────────────────────────
  const scriptNodes = Array.from(container.querySelectorAll('script'));
  scriptNodes.forEach(orig => {
  // Skip ld+json — does not need to run
  if (orig.type === 'application/ld+json') return;
 
- const s = document.createElement('script');
- Array.from(orig.attributes).forEach(a => s.setAttribute(a.name, a.value));
-
- if (orig.src) {
- s.src = orig.src;
- s.async = true;
- } else {
- s.textContent = orig.textContent;
- }
-
- container.appendChild(s);
- injectedScripts.current.push(s);
+ runScript(orig);
  orig.style.display = 'none';
  });
 
@@ -57,10 +66,7 @@ export default function ArticleContent({ html, className = 'article-prose aib' }
  widgetEls.forEach(el => {
  const code = el.getAttribute('data-widget-script');
  if (!code) return;
- const s = document.createElement('script');
- s.textContent = decodeURIComponent(code);
- container.appendChild(s);
- injectedScripts.current.push(s);
+ runScript(null, decodeURIComponent(code));
  });
 
  // ── 3. Wrap tables ────────────────────────────────────────────────────
@@ -93,6 +99,9 @@ export default function ArticleContent({ html, className = 'article-prose aib' }
  img.style.maxWidth = '100%';
  img.style.height = 'auto';
  });
+
+ window.dispatchEvent(new Event('resize'));
+ document.dispatchEvent(new CustomEvent('eonai:article-ready', { detail: { container } }));
 
  return () => {
  injectedScripts.current.forEach(s => s.remove());

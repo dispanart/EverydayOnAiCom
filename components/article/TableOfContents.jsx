@@ -73,7 +73,7 @@ export default function TableOfContents({ content }) {
 
  return (
  <nav aria-label="Table of contents"
- className="bg-white rounded-2xl border border-slate-100 p-5 mb-6 shadow-sm sticky top-24">
+ className="toc-card toc-nav bg-white rounded-2xl border border-slate-100 p-5 mb-6 shadow-sm sticky top-24">
  <h3 className="flex items-center gap-2 text-xs font-extrabold text-slate-700
  uppercase tracking-wider mb-4">
  <List size={13} className="text-blue-600" />
