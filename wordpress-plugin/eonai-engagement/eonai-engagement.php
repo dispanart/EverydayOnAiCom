@@ -2,7 +2,7 @@
 /**
  * Plugin Name: EONAI Engagement Tracker
  * Description: Headless engagement backend for EverydayOnAI: newsletter, views, post likes, comments, comment likes, and share tracking.
- * Version: 1.1.0
+ * Version: 1.2.0
  * Author: EverydayOnAI
  * License: GPL-2.0-or-later
  */
@@ -12,7 +12,8 @@ if (!defined('ABSPATH')) {
 }
 
 final class EONAI_Engagement_Tracker {
-    const VERSION = '1.1.0';
+    const VERSION = '1.2.0';
+    const OPTION_SECRET = 'eonai_engagement_secret';
     const META_VIEWS = 'eonai_views';
     const META_POST_LIKES = 'eonai_post_likes';
     const META_SHARES_TOTAL = 'eonai_shares_total';
@@ -32,6 +33,7 @@ final class EONAI_Engagement_Tracker {
         add_action('rest_api_init', [$this, 'register_routes']);
         add_action('admin_menu', [$this, 'register_admin_menu']);
         add_action('admin_post_eonai_engagement_export', [$this, 'export_csv']);
+        add_action('admin_post_eonai_engagement_save_settings', [$this, 'save_settings']);
         add_action('init', [$this, 'register_public_meta']);
     }
 
@@ -198,13 +200,13 @@ final class EONAI_Engagement_Tracker {
     }
 
     public function require_secret(WP_REST_Request $request) {
-        $configured = defined('EONAI_ENGAGEMENT_KEY') ? (string) EONAI_ENGAGEMENT_KEY : '';
+        $configured = $this->get_secret();
         $provided = (string) $request->get_header('x-eonai-engagement-key');
 
         if (strlen($configured) < 16) {
             return new WP_Error(
                 'eonai_secret_missing',
-                'EONAI_ENGAGEMENT_KEY is not configured in wp-config.php.',
+                'EONAI engagement secret is not configured.',
                 ['status' => 500]
             );
         }
@@ -645,6 +647,26 @@ final class EONAI_Engagement_Tracker {
         return isset($_SERVER[$key]) ? sanitize_text_field(wp_unslash($_SERVER[$key])) : '';
     }
 
+    private function get_secret() {
+        if (defined('EONAI_ENGAGEMENT_KEY') && strlen((string) EONAI_ENGAGEMENT_KEY) >= 16) {
+            return (string) EONAI_ENGAGEMENT_KEY;
+        }
+
+        return (string) get_option(self::OPTION_SECRET, '');
+    }
+
+    private function secret_source() {
+        if (defined('EONAI_ENGAGEMENT_KEY') && strlen((string) EONAI_ENGAGEMENT_KEY) >= 16) {
+            return 'wp-config.php';
+        }
+
+        if (strlen((string) get_option(self::OPTION_SECRET, '')) >= 16) {
+            return 'WordPress settings';
+        }
+
+        return 'not configured';
+    }
+
     public function register_admin_menu() {
         add_menu_page(
             'EONAI Engagement',
@@ -662,6 +684,109 @@ final class EONAI_Engagement_Tracker {
             return;
         }
 
+        $tab = isset($_GET['tab']) ? sanitize_key(wp_unslash($_GET['tab'])) : 'overview';
+        if (!in_array($tab, ['overview', 'settings'], true)) {
+            $tab = 'overview';
+        }
+
+        $overview_url = admin_url('admin.php?page=eonai-engagement');
+        $settings_url = admin_url('admin.php?page=eonai-engagement&tab=settings');
+        $configured_secret = $this->get_secret();
+        $secret_source = $this->secret_source();
+        $is_constant_secret = 'wp-config.php' === $secret_source;
+
+        ?>
+        <div class="wrap">
+            <h1>EONAI Engagement</h1>
+
+            <h2 class="nav-tab-wrapper">
+                <a href="<?php echo esc_url($overview_url); ?>" class="nav-tab <?php echo 'overview' === $tab ? 'nav-tab-active' : ''; ?>">Overview</a>
+                <a href="<?php echo esc_url($settings_url); ?>" class="nav-tab <?php echo 'settings' === $tab ? 'nav-tab-active' : ''; ?>">Settings</a>
+            </h2>
+
+            <?php if (isset($_GET['settings-updated'])) : ?>
+                <div class="notice notice-success is-dismissible">
+                    <p>Settings saved.</p>
+                </div>
+            <?php endif; ?>
+
+            <?php if (strlen($configured_secret) < 16) : ?>
+                <div class="notice notice-error">
+                    <p><strong>Action required:</strong> Set an engagement secret in the Settings tab, then use the same value in Vercel as <code>EONAI_ENGAGEMENT_KEY</code>.</p>
+                </div>
+            <?php endif; ?>
+
+            <?php if ('settings' === $tab) : ?>
+                <?php $this->render_settings_tab($configured_secret, $secret_source, $is_constant_secret); ?>
+            <?php else : ?>
+                <?php $this->render_overview_tab(); ?>
+            <?php endif; ?>
+        </div>
+        <?php
+    }
+
+    private function render_settings_tab($configured_secret, $secret_source, $is_constant_secret) {
+        $example_secret = wp_generate_password(48, false, false);
+        ?>
+        <h2>Settings</h2>
+        <table class="widefat striped" style="max-width: 900px; margin-bottom: 18px;">
+            <tbody>
+                <tr>
+                    <td style="width: 220px;"><strong>Secret status</strong></td>
+                    <td><?php echo strlen($configured_secret) >= 16 ? 'Configured' : 'Not configured'; ?></td>
+                </tr>
+                <tr>
+                    <td><strong>Secret source</strong></td>
+                    <td><?php echo esc_html($secret_source); ?></td>
+                </tr>
+                <tr>
+                    <td><strong>REST health check</strong></td>
+                    <td><code><?php echo esc_html(rest_url('eonai/v1/health')); ?></code></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <?php if ($is_constant_secret) : ?>
+            <div class="notice notice-info">
+                <p>The secret is currently controlled by <code>EONAI_ENGAGEMENT_KEY</code> in <code>wp-config.php</code>. That is the most secure option. To edit from this screen, remove that constant from <code>wp-config.php</code>.</p>
+            </div>
+        <?php endif; ?>
+
+        <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" style="max-width: 900px;">
+            <?php wp_nonce_field('eonai_engagement_save_settings'); ?>
+            <input type="hidden" name="action" value="eonai_engagement_save_settings" />
+            <table class="form-table" role="presentation">
+                <tbody>
+                    <tr>
+                        <th scope="row"><label for="eonai_engagement_secret">Engagement Secret</label></th>
+                        <td>
+                            <input
+                                type="text"
+                                id="eonai_engagement_secret"
+                                name="eonai_engagement_secret"
+                                value="<?php echo esc_attr($is_constant_secret ? '' : get_option(self::OPTION_SECRET, '')); ?>"
+                                class="regular-text"
+                                minlength="16"
+                                autocomplete="off"
+                                <?php disabled($is_constant_secret); ?>
+                            />
+                            <p class="description">Use a long random string. This value must exactly match <code>EONAI_ENGAGEMENT_KEY</code> in Vercel.</p>
+                            <p class="description">Example random value: <code><?php echo esc_html($example_secret); ?></code></p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <?php submit_button('Save Settings', 'primary', 'submit', true, $is_constant_secret ? ['disabled' => 'disabled'] : []); ?>
+        </form>
+
+        <h2>Vercel Environment Variables</h2>
+        <p>Add these values in Vercel, then redeploy the frontend:</p>
+        <pre style="background:#fff;border:1px solid #ccd0d4;padding:12px;max-width:900px;overflow:auto;"><code>WORDPRESS_REST_URL=<?php echo esc_html(home_url()); ?>
+EONAI_ENGAGEMENT_KEY=use-the-same-secret-from-this-settings-page</code></pre>
+        <?php
+    }
+
+    private function render_overview_tab() {
         global $wpdb;
 
         $subscribers = $wpdb->prefix . 'eonai_subscribers';
@@ -702,15 +827,6 @@ final class EONAI_Engagement_Tracker {
         );
 
         ?>
-        <div class="wrap">
-            <h1>EONAI Engagement</h1>
-
-            <?php if (!defined('EONAI_ENGAGEMENT_KEY') || strlen((string) EONAI_ENGAGEMENT_KEY) < 16) : ?>
-                <div class="notice notice-error">
-                    <p><strong>Action required:</strong> Add <code>define('EONAI_ENGAGEMENT_KEY', 'your-long-secret');</code> to <code>wp-config.php</code>.</p>
-                </div>
-            <?php endif; ?>
-
             <h2>Overview</h2>
             <table class="widefat striped" style="max-width: 900px;">
                 <tbody>
@@ -766,8 +882,33 @@ final class EONAI_Engagement_Tracker {
                     <?php endif; ?>
                 </tbody>
             </table>
-        </div>
         <?php
+    }
+
+    public function save_settings() {
+        if (!current_user_can('manage_options')) {
+            wp_die('Forbidden', 403);
+        }
+
+        check_admin_referer('eonai_engagement_save_settings');
+
+        if (defined('EONAI_ENGAGEMENT_KEY') && strlen((string) EONAI_ENGAGEMENT_KEY) >= 16) {
+            wp_safe_redirect(admin_url('admin.php?page=eonai-engagement&tab=settings&settings-updated=1'));
+            exit;
+        }
+
+        $secret = isset($_POST['eonai_engagement_secret'])
+            ? sanitize_text_field(wp_unslash($_POST['eonai_engagement_secret']))
+            : '';
+
+        if (strlen($secret) >= 16) {
+            update_option(self::OPTION_SECRET, $secret, false);
+        } else {
+            delete_option(self::OPTION_SECRET);
+        }
+
+        wp_safe_redirect(admin_url('admin.php?page=eonai-engagement&tab=settings&settings-updated=1'));
+        exit;
     }
 
     public function export_csv() {
