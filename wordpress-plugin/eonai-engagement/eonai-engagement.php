@@ -2,7 +2,7 @@
 /**
  * Plugin Name: EONAI Engagement Tracker
  * Description: Headless engagement backend for EverydayOnAI: newsletter, views, post likes, comments, comment likes, and share tracking.
- * Version: 1.2.0
+ * Version: 1.2.1
  * Author: EverydayOnAI
  * License: GPL-2.0-or-later
  */
@@ -12,7 +12,7 @@ if (!defined('ABSPATH')) {
 }
 
 final class EONAI_Engagement_Tracker {
-    const VERSION = '1.2.0';
+    const VERSION = '1.2.1';
     const OPTION_SECRET = 'eonai_engagement_secret';
     const META_VIEWS = 'eonai_views';
     const META_POST_LIKES = 'eonai_post_likes';
@@ -425,12 +425,30 @@ final class EONAI_Engagement_Tracker {
             'comment_author_IP' => $this->server_value('REMOTE_ADDR'),
             'comment_agent' => $this->server_value('HTTP_USER_AGENT'),
             'comment_approved' => 0,
+            'comment_date' => current_time('mysql'),
+            'comment_date_gmt' => current_time('mysql', true),
         ];
 
-        $comment_id = wp_new_comment(wp_slash($comment_data), true);
+        try {
+            $comment_id = wp_insert_comment(wp_slash($comment_data));
+        } catch (Throwable $error) {
+            return new WP_Error(
+                'eonai_comment_insert_failed',
+                'WordPress could not save this comment. Check the WordPress error log for details.',
+                ['status' => 500]
+            );
+        }
 
         if (is_wp_error($comment_id)) {
             return $comment_id;
+        }
+
+        if (!$comment_id) {
+            return new WP_Error(
+                'eonai_comment_insert_failed',
+                'WordPress could not save this comment.',
+                ['status' => 500]
+            );
         }
 
         $comment = get_comment($comment_id);

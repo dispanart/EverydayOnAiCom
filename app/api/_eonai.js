@@ -3,6 +3,21 @@ import crypto from 'crypto';
 
 const VISITOR_COOKIE = 'eonai_vid';
 
+function cleanWordPressMessage(value) {
+ if (!value || typeof value !== 'string') return '';
+
+ const text = value
+ .replace(/<[^>]*>/g, ' ')
+ .replace(/\s+/g, ' ')
+ .trim();
+
+ if (text.toLowerCase().includes('critical error on this website')) {
+ return 'WordPress returned a server error. Check the EONAI Engagement plugin and WordPress error log.';
+ }
+
+ return text;
+}
+
 export async function proxyToWordPress(request, { path, method = 'POST', body = null, query = '' }) {
  const wpBase = process.env.WORDPRESS_REST_URL || process.env.WORDPRESS_API_URL;
  const secret = process.env.EONAI_ENGAGEMENT_KEY;
@@ -35,8 +50,12 @@ export async function proxyToWordPress(request, { path, method = 'POST', body = 
 
  const data = await wpResponse.json().catch(() => ({
  ok: false,
- message: 'Invalid WordPress response.',
+ message: 'WordPress returned an invalid response.',
  }));
+
+ if (data?.message) {
+ data.message = cleanWordPressMessage(data.message);
+ }
 
  const response = NextResponse.json(data, { status: wpResponse.status });
 
