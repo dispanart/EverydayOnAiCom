@@ -93,7 +93,7 @@ export default function TableOfContents({ content }) {
  <li key={h.id}>
  <button
  onClick={() => scrollTo(h.id)}
- className={`w-full text-left text-sm leading-snug py-1.5 px-2 rounded-lg
+ className={`toc-link w-full text-left text-sm leading-snug py-1.5 px-2 rounded-lg
  transition-all duration-150 border-l-2
  ${h.level === 3 ? 'pl-5' : ''}
  ${activeId === h.id
@@ -101,7 +101,8 @@ export default function TableOfContents({ content }) {
  : 'border-transparent text-slate-500 hover:text-slate-800 hover:bg-slate-50'
  }`}
  >
- {h.text}
+ <span className="toc-bullet" aria-hidden="true" />
+ <span>{h.text}</span>
  </button>
  </li>
  ))}
