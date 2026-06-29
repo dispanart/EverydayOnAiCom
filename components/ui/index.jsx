@@ -21,6 +21,14 @@ export function CategoryBadge({ name, slug, className = '' }) {
  return slug ? <Link href={`/category/${slug}`}>{badge}</Link> : badge;
 }
 
+function isNewPost(post) {
+ const raw = post?.date || post?.modifiedGmt;
+ if (!raw) return false;
+ const timestamp = new Date(raw).getTime();
+ if (Number.isNaN(timestamp)) return false;
+ return Date.now() - timestamp <= 7 * 24 * 60 * 60 * 1000;
+}
+
 function ImageBlock({ post, sizes = '(max-width: 768px) 100vw, 400px' }) {
  const img = post.featuredImage?.node;
  return (
@@ -51,6 +59,7 @@ export function PostCard({ post }) {
  <ImageBlock post={post} />
  <div className="cb">
  <div className="ct">
+ {isNewPost(post) && <span className="chip c4">New</span>}
  {category && <span className="chip c1">{category.name}</span>}
  </div>
  <h3 className="tt">{title}</h3>

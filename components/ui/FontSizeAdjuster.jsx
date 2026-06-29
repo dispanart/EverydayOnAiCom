@@ -2,8 +2,8 @@
 import { useState, useEffect } from 'react';
 import { Type } from 'lucide-react';
 
-const SIZES = ['text-sm', 'text-base', 'text-lg', 'text-xl'];
-const LABELS = ['S', 'M', 'L', 'XL'];
+const SIZES = ['eonai-font-sm', 'eonai-font-md', 'eonai-font-lg'];
+const LABELS = ['S', 'M', 'L'];
 const KEY = 'eai_font_size';
 
 export default function FontSizeAdjuster() {
@@ -12,14 +12,19 @@ export default function FontSizeAdjuster() {
 
  useEffect(() => {
  const saved = localStorage.getItem(KEY);
- if (saved) { const i = parseInt(saved); setIdx(i); applySize(i); }
+ if (saved) {
+ const parsed = parseInt(saved, 10);
+ const i = Number.isFinite(parsed) ? Math.min(Math.max(parsed, 0), SIZES.length - 1) : 1;
+ setIdx(i);
+ applySize(i);
+ }
  }, []);
 
  function applySize(i) {
  const prose = document.querySelector('.article-prose');
  if (!prose) return;
  SIZES.forEach(s => prose.classList.remove(s));
- prose.classList.add(SIZES[i]);
+ prose.classList.add(SIZES[i] || SIZES[1]);
  }
 
  function setSize(i) {
@@ -31,7 +36,7 @@ export default function FontSizeAdjuster() {
 
  return (
  <div className="relative">
- <button onClick={() => setOpen(o => !o)} title="Ukuran teks"
+ <button onClick={() => setOpen(o => !o)} title="Text size"
  className="flex items-center gap-1.5 px-3 py-2 rounded-lg border border-slate-200
  text-slate-500 hover:border-blue-300 hover:text-blue-600 text-xs font-semibold transition-all">
  <Type size={13} />{LABELS[idx]}

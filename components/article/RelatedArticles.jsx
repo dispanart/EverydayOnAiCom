@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowRight } from 'lucide-react';
-import { getPostsByCategory, getDisplayDate, formatShortDate } from '@/lib/wordpress';
+import { getPostsByCategory, stripHtmlAndDecode } from '@/lib/wordpress';
 
 export default async function RelatedArticles({ currentSlug, categorySlug, categoryName }) {
  if (!categorySlug) return null;
@@ -28,18 +28,17 @@ export default async function RelatedArticles({ currentSlug, categorySlug, categ
 
  <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
  {related.map((post) => {
- const { date, isUpdated } = getDisplayDate(post);
  const img = post.featuredImage?.node;
+ const title = stripHtmlAndDecode(post.title);
 
  return (
  <Link key={post.id} href={`/${post.slug}`}
- className="group block bg-white rounded-2xl border border-slate-100 overflow-hidden card-hover">
- {/* Thumbnail */}
+ className="group block bg-white rounded-2xl border border-slate-100 overflow-hidden card-hover related-simple-card">
  <div className="relative aspect-video bg-slate-100 overflow-hidden">
  {img?.sourceUrl ? (
  <Image
  src={img.sourceUrl}
- alt={img.altText || post.title}
+ alt={img.altText || title}
  fill
  sizes="(max-width: 640px) 100vw, 33vw"
  className="object-cover group-hover:scale-105 transition-transform duration-300"
@@ -52,15 +51,11 @@ export default async function RelatedArticles({ currentSlug, categorySlug, categ
  </div>
  )}
  </div>
- {/* Body */}
- <div className="p-4">
- <h3 className="font-bold text-slate-900 text-sm leading-snug mb-2 line-clamp-2
+ <div className="p-4 related-simple-body">
+ <h3 className="font-bold text-slate-900 text-sm leading-snug line-clamp-2
  group-hover:text-blue-600 transition-colors">
- {post.title}
+ {title}
  </h3>
- <span className={`text-xs flex items-center gap-1 ${isUpdated ? 'text-green-600' : 'text-slate-400'}`}>
- {isUpdated ? '↻ Updated ' : ''}{formatShortDate(date)}
- </span>
  </div>
  </Link>
  );

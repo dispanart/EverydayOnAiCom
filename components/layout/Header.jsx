@@ -13,6 +13,13 @@ const navLinks = [
  { label: 'About', href: '/about' },
 ];
 
+const mobileLinks = [
+ { label: 'Home', href: '/' },
+ { label: 'Article', href: '/articles' },
+ { label: 'AI Tools', href: '/tools' },
+ { label: 'About', href: '/about' },
+];
+
 function isActive(pathname, href) {
  if (href === '/') return pathname === '/';
  return pathname === href || pathname.startsWith(`${href}/`);
@@ -61,13 +68,9 @@ export default function Header() {
  </button>
  </div>
  <div style={{ marginTop: 24, display: 'flex', flexDirection: 'column', gap: 4 }}>
- {navLinks.map((link) => (
+ {mobileLinks.map((link) => (
  <Link key={link.href} className="mna" href={link.href}>{link.label}</Link>
  ))}
- <Link className="mna" href="/category/ai-for-business">Business AI</Link>
- <Link className="mna" href="/category/ai-tools-review-comparison">AI Tools Review</Link>
- <Link className="mna" href="/category/ai-for-ideas-creativity">Ideas & Creativity</Link>
- <Link className="mna" href="/category/everyday-ai-lifestyle">Everyday AI</Link>
  </div>
  </div>
  </div>

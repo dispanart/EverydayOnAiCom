@@ -4,8 +4,36 @@ import { formatShortDate, getDisplayDate, stripHtmlAndDecode } from '@/lib/wordp
 import AdSense from '@/components/ui/AdSense';
 import { AD_SLOTS } from '@/config/ads';
 
-export default function Sidebar({ recentPosts = [] }) {
+async function getPostViews(postId) {
+ if (!postId) return 0;
+ const base = process.env.WORDPRESS_REST_URL || process.env.WORDPRESS_API_URL;
+ if (!base) return 0;
+
+ try {
+ const res = await fetch(`${base.replace(/\/$/, '')}/wp-json/eonai/v1/post-engagement/${postId}`, {
+ next: { revalidate: 120 },
+ });
+ if (!res.ok) return 0;
+ const data = await res.json();
+ return Number(data.views || 0);
+ } catch {
+ return 0;
+ }
+}
+
+function formatViews(value) {
+ const views = Number(value || 0);
+ if (views >= 1000000) return `${(views / 1000000).toFixed(1)}M views`;
+ if (views >= 1000) return `${(views / 1000).toFixed(1)}K views`;
+ return `${views.toLocaleString('en-US')} views`;
+}
+
+export default async function Sidebar({ recentPosts = [] }) {
  const posts = recentPosts.slice(0, 5);
+ const postsWithViews = await Promise.all(posts.map(async (post) => ({
+ ...post,
+ views: await getPostViews(post.databaseId),
+ })));
 
  return (
  <aside className="sid" aria-label="Sidebar">
@@ -13,13 +41,14 @@ export default function Sidebar({ recentPosts = [] }) {
 
  <div className="wid">
  <div className="wt"><TrendingUp size={11} strokeWidth={2.5} />Trending Topics</div>
+ <div className="trending-list">
+ {postsWithViews.map((post, i) => (
+ <Link key={post.id || post.slug} href={`/${post.slug}`} className="tri post-link-card trending-card">
+ <span className="trn trending-rank">{String(i + 1).padStart(2, '0')}</span>
  <div>
- {posts.map((post, i) => (
- <Link key={post.id || post.slug} href={`/${post.slug}`} className="tri post-link-card">
- <span className="trn">{String(i + 1).padStart(2, '0')}</span>
- <div>
+ <div className="hot-row"><span className="hot-badge">Hot</span><span>{formatShortDate(getDisplayDate(post).date)}</span></div>
  <div className="trt">{stripHtmlAndDecode(post.title)}</div>
- <div className="tri-info"><Eye size={10} />{formatShortDate(getDisplayDate(post).date)}<span className="vd" />Read</div>
+ <div className="tri-info"><Eye size={10} />{formatViews(post.views)}<span className="vd" />Trending</div>
  </div>
  </Link>
  ))}

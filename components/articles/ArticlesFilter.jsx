@@ -11,9 +11,13 @@ function getPostCategories(post) {
  return post.categories?.nodes || [];
 }
 
-export default function ArticlesFilter({ posts = [] }) {
+export default function ArticlesFilter({ posts = [], categories = [] }) {
  const topics = useMemo(() => {
  const map = new Map();
+ categories.forEach((category) => {
+ if (!category?.name || category.slug === 'uncategorized') return;
+ map.set(category.slug || normalize(category.name), category.name);
+ });
  posts.forEach((post) => {
  getPostCategories(post).forEach((category) => {
  if (!category?.name) return;

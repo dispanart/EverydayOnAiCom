@@ -1,6 +1,6 @@
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
-import { getRecentPosts } from '@/lib/wordpress';
+import { getAllCategories, getRecentPosts } from '@/lib/wordpress';
 import { SITE } from '@/config/site';
 import AdSense from '@/components/ui/AdSense';
 import { AD_SLOTS } from '@/config/ads';
@@ -14,7 +14,10 @@ export const metadata = {
 };
 
 export default async function ArticlesPage() {
- const posts = await getRecentPosts(24);
+ const [posts, categories] = await Promise.all([
+ getRecentPosts(48),
+ getAllCategories(),
+ ]);
  return (
  <>
  <Header />
@@ -22,7 +25,7 @@ export default async function ArticlesPage() {
  <div className="apg"><div className="w"><h1>All Articles</h1><p>Explore our complete library of AI insights, tool reviews, tutorials, and business strategies.</p></div></div>
  <div className="w">
  <AdSense slot={AD_SLOTS.articlesTop} className="eonai-ad-list-top" />
- <ArticlesFilter posts={posts} />
+ <ArticlesFilter posts={posts} categories={categories} />
  </div>
  </main>
  <Footer />

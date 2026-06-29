@@ -2,17 +2,14 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowRight, Mail } from 'lucide-react';
 import NeuralCanvas from '@/components/home/NeuralCanvas';
-import { stripHtmlAndDecode, formatDisplayDate, getDisplayDate } from '@/lib/wordpress';
+import { stripHtmlAndDecode } from '@/lib/wordpress';
 
 export default function HeroSection({ post }) {
- const category = post?.categories?.nodes?.[0];
  const img = post?.featuredImage?.node;
  const fallbackHeroImage = 'https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=900&q=75';
  const heroImageSrc = img?.sourceUrl || fallbackHeroImage;
  const title = post ? stripHtmlAndDecode(post.title) : 'The State of Generative AI: A Comprehensive Global Outlook';
- const excerpt = post ? stripHtmlAndDecode(post.excerpt).slice(0, 150) : 'Practical insights on AI tools, business strategy, creativity, and everyday use — curated for founders, marketers, and curious minds.';
  const href = post?.slug ? `/${post.slug}` : '/articles';
- const displayDate = post ? formatDisplayDate(getDisplayDate(post).date) : 'Updated Daily';
 
  return (
  <section className="hero">
@@ -47,9 +44,7 @@ export default function HeroSection({ post }) {
  />
  <div className="fo" style={{ zIndex: 1 }} />
  <div className="feat-body">
- <span className="bn"> {category?.name || 'New'}</span>
  <div className="ft">{title}</div>
- {excerpt && <div className="fd">{displayDate} · {excerpt}</div>}
  </div>
  </div>
  </Link>

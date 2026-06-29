@@ -108,7 +108,13 @@ export default async function PostPage({ params }) {
  <span className="line-clamp-1">{title}</span>
  </nav>
 
- {primaryCategory && <Link href={`/category/${primaryCategory.slug}`} className="chip c2" style={{ marginBottom: 12 }}>{primaryCategory.name}</Link>}
+ {categories.length > 0 && (
+ <div className="article-category-list">
+ {categories.map((category) => (
+ <Link key={category.slug} href={`/category/${category.slug}`} className="chip c2">{category.name}</Link>
+ ))}
+ </div>
+ )}
 
  <h1 className="ah1">{title}</h1>
 
@@ -158,6 +164,21 @@ export default async function PostPage({ params }) {
 
  <ArticleAdSlots html={post.content} />
 
+ <nav className="next-prev-articles article-next-prev-top" aria-label="Next and previous articles">
+ {previousArticle ? (
+ <Link href={`/${previousArticle.slug}`} className="next-prev-card">
+ <span>Previous Article</span>
+ <strong>{stripHtmlAndDecode(previousArticle.title)}</strong>
+ </Link>
+ ) : <span />}
+ {nextArticle ? (
+ <Link href={`/${nextArticle.slug}`} className="next-prev-card np-next">
+ <span>Next Article</span>
+ <strong>{stripHtmlAndDecode(nextArticle.title)}</strong>
+ </Link>
+ ) : <span />}
+ </nav>
+
  <div className="article-after-actions">
  <ErrorBoundary fallbackMessage="Share is unavailable"><ShareBar title={title} url={canonicalUrl} postId={post.databaseId} /></ErrorBoundary>
  <ErrorBoundary fallbackMessage="Print is unavailable"><PrintButton /></ErrorBoundary>
@@ -173,20 +194,6 @@ export default async function PostPage({ params }) {
  )}
 
  <ErrorBoundary fallbackMessage="Related articles are unavailable"><RelatedArticles currentSlug={post.slug} categorySlug={primaryCategory?.slug} categoryName={primaryCategory?.name} /></ErrorBoundary>
- <nav className="next-prev-articles" aria-label="Next and previous articles">
- {previousArticle ? (
- <Link href={`/${previousArticle.slug}`} className="next-prev-card">
- <span>Previous Article</span>
- <strong>{stripHtmlAndDecode(previousArticle.title)}</strong>
- </Link>
- ) : <span />}
- {nextArticle ? (
- <Link href={`/${nextArticle.slug}`} className="next-prev-card np-next">
- <span>Next Article</span>
- <strong>{stripHtmlAndDecode(nextArticle.title)}</strong>
- </Link>
- ) : <span />}
- </nav>
  <ErrorBoundary fallbackMessage="Comments are unavailable"><CommentsSection postId={post.databaseId} /></ErrorBoundary>
  </article>
 

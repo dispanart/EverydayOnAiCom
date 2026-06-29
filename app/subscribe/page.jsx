@@ -1,8 +1,9 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
-import { Mail, CheckCircle, AlertCircle, Loader2, Zap, ArrowLeft } from 'lucide-react';
+import { Mail, CheckCircle, AlertCircle, Loader2, ArrowLeft, Sparkles, ShieldCheck, Clock3 } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 
@@ -39,11 +40,11 @@ export default function SubscribePage() {
  return (
  <>
  <Header />
- <main className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50/30 flex items-center justify-center px-4 py-20">
- <div className="w-full max-w-md">
- <div className="bg-white rounded-3xl shadow-xl shadow-slate-200/60 border border-slate-100 p-8">
- <div className="w-14 h-14 bg-blue-600 rounded-2xl flex items-center justify-center mb-6 mx-auto">
- <Zap size={28} className="text-white fill-white" />
+ <main className="subscribe-page min-h-screen">
+ <div className="subscribe-bg">
+ <div className="subscribe-card">
+ <div className="subscribe-logo">
+ <Image src="/icon-512.png" alt="EverydayOnAI" width={64} height={64} priority />
  </div>
 
  {status === 'success' ? (
@@ -69,23 +70,24 @@ export default function SubscribePage() {
  ) : (
  <>
  <div className="text-center mb-8">
- <h1 className="text-2xl font-extrabold text-slate-900 mb-2 tracking-tight">
- Subscribe to Newsletter
+ <div className="subscribe-eyebrow"><Sparkles size={13} />Free Weekly AI Briefing</div>
+ <h1 className="subscribe-title">
+ Subscribe to EverydayOnAI
  </h1>
- <p className="text-slate-500 leading-relaxed">
- Get the best AI insights delivered to your inbox. Free, every week, no spam.
+ <p className="subscribe-copy">
+ Clear AI governance, tools, and search insights delivered weekly. No noise, no spam.
  </p>
  </div>
 
- <ul className="space-y-2.5 mb-8">
+ <ul className="subscribe-perks">
  {[
- ' Weekly roundup of the latest AI tools',
- ' Practical AI tips for business & productivity',
- ' Exclusive content for subscribers only',
- ' No spam, unsubscribe anytime',
- ].map((item) => (
- <li key={item} className="flex items-start gap-2 text-sm text-slate-600">
- <span>{item}</span>
+ [Sparkles, 'Weekly AI tools, policy, and strategy updates'],
+ [Clock3, 'Readable summaries you can finish quickly'],
+ [ShieldCheck, 'No spam. Unsubscribe anytime'],
+ ].map(([Icon, item]) => (
+ <li key={item}>
+ <span><Icon size={15} /></span>
+ <strong>{item}</strong>
  </li>
  ))}
  </ul>
@@ -99,10 +101,7 @@ export default function SubscribePage() {
  placeholder="your@email.com"
  aria-label="Email address"
  disabled={status === 'loading'}
- className="w-full px-4 py-3 rounded-xl border border-slate-200
- focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent
- text-slate-800 placeholder:text-slate-400 text-sm
- disabled:opacity-60 transition-all"
+ className="subscribe-input"
  />
  {status === 'error' && (
  <div className="flex items-center gap-2 text-red-500 text-sm">
@@ -112,21 +111,17 @@ export default function SubscribePage() {
  <button
  type="submit"
  disabled={status === 'loading'}
- className="w-full flex items-center justify-center gap-2
- bg-blue-600 hover:bg-blue-700 text-white font-bold
- py-3 px-6 rounded-xl transition-all
- hover:shadow-lg hover:shadow-blue-200/60 hover:-translate-y-0.5
- disabled:opacity-60 disabled:cursor-not-allowed disabled:translate-y-0"
+ className="subscribe-submit"
  >
  {status === 'loading' ? (
  <><Loader2 size={16} className="animate-spin" />Subscribing...</>
  ) : (
- <><Mail size={16} />Subscribe Now — It's Free!</>
+ <><Mail size={16} /><span>Subscribe Free</span></>
  )}
  </button>
  </form>
 
- <p className="text-center text-xs text-slate-400 mt-4">
+ <p className="subscribe-legal">
  By subscribing, you agree to our{' '}
  <Link href="/privacy-policy" className="text-blue-500 hover:underline">Privacy Policy</Link>.
  </p>
@@ -135,7 +130,7 @@ export default function SubscribePage() {
  </div>
 
  <div className="text-center mt-6">
- <Link href="/" className="text-sm text-slate-500 hover:text-slate-700 transition-colors">
+ <Link href="/" className="subscribe-back">
  ← Back to EverydayOnAI
  </Link>
  </div>
