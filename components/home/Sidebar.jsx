@@ -1,7 +1,8 @@
 import Link from 'next/link';
 import { TrendingUp, Eye, Mail } from 'lucide-react';
 import { formatShortDate, getDisplayDate, stripHtmlAndDecode } from '@/lib/wordpress';
-import AdSense, { AD_SLOTS } from '@/components/ui/AdSense';
+import AdSense from '@/components/ui/AdSense';
+import { AD_SLOTS } from '@/config/ads';
 
 export default function Sidebar({ recentPosts = [] }) {
  const posts = recentPosts.slice(0, 5);

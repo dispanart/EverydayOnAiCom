@@ -2,7 +2,8 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { SITE } from '@/config/site';
 import { Play, Search, Star } from 'lucide-react';
-import AdSense, { AD_SLOTS } from '@/components/ui/AdSense';
+import AdSense from '@/components/ui/AdSense';
+import { AD_SLOTS } from '@/config/ads';
 
 export const metadata = {
  title: `AI Tools — ${SITE.name}`,

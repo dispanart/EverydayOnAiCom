@@ -7,7 +7,8 @@ import Sidebar from '@/components/home/Sidebar';
 import { PostCard } from '@/components/ui';
 import Link from 'next/link';
 import { ArrowRight, Play, Search, Star } from 'lucide-react';
-import AdSense, { AD_SLOTS } from '@/components/ui/AdSense';
+import AdSense from '@/components/ui/AdSense';
+import { AD_SLOTS } from '@/config/ads';
 
 export const revalidate = 60;
 

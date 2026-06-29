@@ -1,5 +1,6 @@
 import ArticleContent from '@/components/article/ArticleContent';
-import AdSense, { AD_SLOTS } from '@/components/ui/AdSense';
+import AdSense from '@/components/ui/AdSense';
+import { AD_SLOTS } from '@/config/ads';
 
 export default function ArticleAdSlots({ html }) {
   return (

@@ -3,7 +3,8 @@ import Footer from '@/components/layout/Footer';
 import { getRecentPosts } from '@/lib/wordpress';
 import { PostCard } from '@/components/ui';
 import { SITE } from '@/config/site';
-import AdSense, { AD_SLOTS } from '@/components/ui/AdSense';
+import AdSense from '@/components/ui/AdSense';
+import { AD_SLOTS } from '@/config/ads';
 
 export const revalidate = 60;
 
