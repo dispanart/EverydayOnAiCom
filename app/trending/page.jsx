@@ -6,7 +6,7 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import BackToTop from '@/components/ui/BackToTop';
 
-export const revalidate = 300; // 5 minutes
+export const revalidate = 604800; // 7 days
 export const metadata = {
  title: 'Trending',
  description: `Most popular articles on ${SITE.name}`,

@@ -2,7 +2,7 @@
 import { NextResponse } from 'next/server';
 import { getAllCategories } from '@/lib/wordpress';
 
-export const revalidate = 300; // cache 5 minutes
+export const revalidate = 86400; // cache 24 hours
 
 export async function GET() {
  try {

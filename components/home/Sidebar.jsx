@@ -11,7 +11,7 @@ async function getPostViews(postId) {
 
  try {
  const res = await fetch(`${base.replace(/\/$/, '')}/wp-json/eonai/v1/post-engagement/${postId}`, {
- next: { revalidate: 120 },
+ next: { revalidate: 604800 },
  });
  if (!res.ok) return 0;
  const data = await res.json();

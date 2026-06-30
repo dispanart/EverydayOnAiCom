@@ -57,7 +57,6 @@ export async function POST(request) {
  revalidatePath('/'), // Homepage
  revalidatePath(`/${slug}`), // Single post
  revalidatePath('/category/[slug]', 'page'), // All category archives
- revalidatePath('/search', 'page'), // Search results
  ]);
 
  console.log(`[Revalidate] Revalidated /${slug} at ${new Date().toISOString()}`);

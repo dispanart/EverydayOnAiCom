@@ -6,7 +6,7 @@ import { CATEGORIES, SITE } from '@/config/site';
 import { getPostsByCategory, getCategoryBySlug } from '@/lib/wordpress';
 import { PostCard } from '@/components/ui';
 
-export const revalidate = 60;
+export const revalidate = 3600;
 
 export async function generateStaticParams() {
  return CATEGORIES.map((c) => ({ slug: c.slug }));

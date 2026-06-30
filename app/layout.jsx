@@ -1,5 +1,6 @@
 import { Plus_Jakarta_Sans } from 'next/font/google';
 import { SITE } from '@/config/site';
+import { getSearchIndex } from '@/lib/wordpress';
 import BackToTop from '@/components/ui/BackToTop';
 import ServiceWorkerRegister from '@/components/ui/ServiceWorkerRegister';
 import GoogleAnalytics from '@/components/ui/GoogleAnalytics';
@@ -43,15 +44,21 @@ export const metadata = {
  twitter: { card: 'summary_large_image', site: SITE.twitterHandle, creator: SITE.twitterHandle },
 };
 
+export const revalidate = 604800;
+
 export const viewport = { width: 'device-width', initialScale: 1, themeColor: '#293581' };
 
-export default function RootLayout({ children }) {
+export default async function RootLayout({ children }) {
+ const searchIndex = await getSearchIndex(200);
+ const searchIndexJson = JSON.stringify({ version: 1, items: searchIndex }).replace(/</g, '\\u003c');
+
  return (
  <html lang="en" data-theme="light" className={jakarta.variable} suppressHydrationWarning>
  <head>
  <link rel="preconnect" href="https://wp.everydayonai.com" crossOrigin="anonymous" />
  <link rel="dns-prefetch" href="//wp.everydayonai.com" />
  <link rel="dns-prefetch" href="//www.google.com" />
+ <script id="eoa-search-index" type="application/json" dangerouslySetInnerHTML={{ __html: searchIndexJson }} />
  <script
  dangerouslySetInnerHTML={{
  __html: `

@@ -11,7 +11,7 @@ export default function LikeButton({ postId }) {
 
  useEffect(() => {
  if (!postId) return;
- fetch(`/api/views/${postId}`, { cache: 'no-store' })
+ fetch(`/api/views/${postId}`, { cache: 'force-cache' })
  .then((r) => r.json())
  .then((d) => setCount(Number(d.post_likes || d.likes || 0)))
  .catch(() => {});

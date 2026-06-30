@@ -6,7 +6,7 @@ import AdSense from '@/components/ui/AdSense';
 import { AD_SLOTS } from '@/config/ads';
 import ArticlesFilter from '@/components/articles/ArticlesFilter';
 
-export const revalidate = 60;
+export const revalidate = 3600;
 
 export const metadata = {
  title: `All Articles — ${SITE.name}`,

@@ -20,7 +20,7 @@ import PushNotifButton from '@/components/ui/PushNotifButton';
 import ArticleAdSlots from '@/components/article/ArticleAdSlots';
 import ArticleViews from '@/components/article/ArticleViews';
 
-export const revalidate = 60;
+export const revalidate = 3600;
 
 export async function generateStaticParams() {
  const slugs = await getAllPostSlugs();

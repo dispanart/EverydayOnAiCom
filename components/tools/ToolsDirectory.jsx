@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import { ArrowUpRight, Search } from 'lucide-react';
+import { ArrowUpRight } from 'lucide-react';
 
 function faviconSources(domain) {
  const cleanDomain = String(domain || '').replace(/^https?:\/\//, '').replace(/\/.*$/, '');
@@ -44,33 +44,14 @@ export default function ToolsDirectory({ groups = [] }) {
  ], [groups]);
 
  const [active, setActive] = useState('all');
- const [query, setQuery] = useState('');
- const normalizedQuery = query.trim().toLowerCase();
 
- const visibleGroups = useMemo(() => {
-  const selectedGroups = active === 'all' ? groups : groups.filter((group) => normalize(group.title) === active);
-  if (!normalizedQuery) return selectedGroups;
-  return selectedGroups
-   .map((group) => ({
-    ...group,
-    tools: group.tools.filter((tool) => `${tool.name} ${tool.desc} ${tool.cat}`.toLowerCase().includes(normalizedQuery)),
-   }))
-   .filter((group) => group.tools.length > 0);
- }, [active, groups, normalizedQuery]);
+ const visibleGroups = useMemo(() => (
+  active === 'all' ? groups : groups.filter((group) => normalize(group.title) === active)
+ ), [active, groups]);
 
  return (
  <>
  <div className="tools-filter-panel">
- <div className="tools-search-field">
- <Search size={16} />
- <input
- type="search"
- value={query}
- onChange={(event) => setQuery(event.target.value)}
- placeholder="Search AI tools..."
- aria-label="Search AI tools"
- />
- </div>
  <div className="tcf" aria-label="Filter AI tools by category">
  {filters.map((filter) => (
  <button
@@ -111,7 +92,7 @@ export default function ToolsDirectory({ groups = [] }) {
  </div>
  </section>
  ))}
- {visibleGroups.length === 0 && <div className="tools-empty-state">No tools found. Try a different keyword or category.</div>}
+
  </div>
  </>
  );
