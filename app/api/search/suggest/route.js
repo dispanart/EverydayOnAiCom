@@ -11,17 +11,6 @@ globalThis.__eonaiTitleIndexCache ??= {
   fetchedAt: 0,
 };
 
-function cleanLimit(value, fallback = 12) {
-  const n = Number(value);
-  if (!Number.isFinite(n)) return fallback;
-  return Math.max(1, Math.min(24, Math.round(n)));
-}
-
-function sanitizeCategory(category) {
-  if (!category) return '';
-  return /^[a-z0-9_-]+$/i.test(category) ? category : '';
-}
-
 function stripHtml(html = '') {
   return String(html)
     .replace(/<[^>]*>/g, ' ')
@@ -44,9 +33,9 @@ function normalize(text = '') {
   return decodeEntities(stripHtml(text)).toLowerCase();
 }
 
-async function fetchSearchIndex() {
+async function fetchTitleIndex() {
   const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 2200);
+  const timeout = setTimeout(() => controller.abort(), 1800);
 
   try {
     const res = await fetch(WP_GRAPHQL_URL, {
@@ -55,7 +44,7 @@ async function fetchSearchIndex() {
       cache: 'no-store',
       signal: controller.signal,
       body: JSON.stringify({
-        query: `query EonaiFastSearchIndex($first: Int!) {
+        query: `query EonaiFastTitleIndex($first: Int!) {
           posts(first: $first, where: { orderby: { field: MODIFIED, order: DESC } }) {
             nodes {
               id
@@ -85,7 +74,6 @@ async function fetchSearchIndex() {
         excerpt: decodeEntities(stripHtml(post.excerpt || '')),
         _title: normalize(post.title),
         _excerpt: normalize(post.excerpt || ''),
-        _categorySlugs: (post.categories?.nodes || []).map((cat) => cat.slug),
       }));
 
     globalThis.__eonaiTitleIndexCache = { items: mapped, fetchedAt: Date.now() };
@@ -109,26 +97,14 @@ function score(post, query) {
   return titleHits * 18 + excerptHits * 3;
 }
 
-function sortResults(results, sort) {
-  if (sort === 'date_asc') {
-    return results.sort((a, b) => new Date(a.post.modifiedGmt || a.post.date) - new Date(b.post.modifiedGmt || b.post.date));
-  }
-  if (sort === 'date_desc') {
-    return results.sort((a, b) => new Date(b.post.modifiedGmt || b.post.date) - new Date(a.post.modifiedGmt || a.post.date));
-  }
-  return results.sort((a, b) => b.points - a.points || new Date(b.post.modifiedGmt || b.post.date) - new Date(a.post.modifiedGmt || a.post.date));
-}
-
-function searchIndex(items, { q, category, sort, limit }) {
+function searchIndex(items, q, limit) {
   const query = normalize(q);
   if (!query || query.length < 2) return [];
 
-  const scored = items
-    .filter((post) => !category || post._categorySlugs?.includes(category))
+  return items
     .map((post) => ({ post, points: score(post, query) }))
-    .filter((entry) => entry.points > 0);
-
-  return sortResults(scored, sort)
+    .filter((entry) => entry.points > 0)
+    .sort((a, b) => b.points - a.points || new Date(b.post.modifiedGmt || b.post.date) - new Date(a.post.modifiedGmt || a.post.date))
     .slice(0, limit)
     .map(({ post }) => ({
       id: post.id,
@@ -146,25 +122,16 @@ function searchIndex(items, { q, category, sort, limit }) {
 export async function GET(request) {
   const { searchParams } = new URL(request.url);
   const q = (searchParams.get('q') || '').trim();
-  const category = sanitizeCategory(searchParams.get('category') || '');
-  const sort = searchParams.get('sort') || 'relevance';
-  const limit = cleanLimit(searchParams.get('limit'), 12);
+  const limit = Math.max(1, Math.min(10, Number(searchParams.get('limit')) || 6));
 
   if (q.length < 2) return NextResponse.json({ results: [] });
 
   const cache = globalThis.__eonaiTitleIndexCache;
   const fresh = cache.items.length > 0 && Date.now() - cache.fetchedAt < CACHE_TTL;
-  const items = fresh ? cache.items : (await fetchSearchIndex()) || cache.items;
-
-  if (!items.length) {
-    return NextResponse.json(
-      { results: [], error: 'Search is still warming up. Please try again in a few seconds.' },
-      { status: 200 }
-    );
-  }
+  const items = fresh ? cache.items : (await fetchTitleIndex()) || cache.items;
 
   return NextResponse.json(
-    { results: searchIndex(items, { q, category, sort, limit }) },
+    { results: searchIndex(items, q, limit) },
     { headers: { 'Cache-Control': 'public, max-age=30, stale-while-revalidate=300' } }
   );
 }

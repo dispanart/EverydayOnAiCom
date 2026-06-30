@@ -26,8 +26,8 @@ function isActive(pathname, href) {
 }
 
 async function fetchHeaderSuggestions(q, signal) {
-  const params = new URLSearchParams({ q, limit: '5' });
-  const res = await fetch(`/api/search?${params}`, { signal, cache: 'no-store' });
+  const params = new URLSearchParams({ q, limit: '6' });
+  const res = await fetch(`/api/search/suggest?${params}`, { signal, cache: 'no-store' });
   const data = await res.json();
   return data.results ?? [];
 }
@@ -42,6 +42,7 @@ export default function Header() {
   const [suggestions, setSuggestions] = useState([]);
   const [suggesting, setSuggesting] = useState(false);
   const abortRef = useRef(null);
+  const searchInputRef = useRef(null);
 
   useEffect(() => {
     setMobileOpen(false);
@@ -77,7 +78,7 @@ export default function Header() {
       } finally {
         setSuggesting(false);
       }
-    }, 280);
+    }, 90);
 
     return () => {
       clearTimeout(timer);
@@ -143,9 +144,15 @@ export default function Header() {
 
           <div className="hr">
             <div className="header-search-wrap">
-              <form className="srch" onSubmit={submitSearch} role="search">
+              <form
+                className={`srch ${searchFocused ? 'is-open' : ''}`}
+                onSubmit={submitSearch}
+                role="search"
+                onClick={() => searchInputRef.current?.focus()}
+              >
                 <Search size={12} strokeWidth={2.5} />
                 <input
+                  ref={searchInputRef}
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
                   onFocus={() => {

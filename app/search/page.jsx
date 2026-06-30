@@ -41,6 +41,13 @@ async function fetchSearchResults({ q, category = '', sort = 'relevance', limit 
   return data;
 }
 
+async function fetchTitleSuggestions({ q, limit = 8, signal }) {
+  const params = new URLSearchParams({ q, limit: String(limit) });
+  const res = await fetch(`/api/search/suggest?${params}`, { signal, cache: 'no-store' });
+  const data = await res.json();
+  return data.results ?? [];
+}
+
 function ResultCard({ post }) {
   const img = post.featuredImage?.node;
   return (
@@ -91,7 +98,7 @@ function SearchContent() {
     if (!term) return;
 
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 7000);
+    const timeout = setTimeout(() => controller.abort(), 3500);
     setLoading(true);
     setSearched(true);
     setSearchError('');
@@ -102,7 +109,7 @@ function SearchContent() {
       if (data.error) setSearchError(data.error);
     } catch (error) {
       setResults([]);
-      setSearchError(error?.name === 'AbortError' ? 'Search is taking too long. Please try a more specific keyword.' : 'Search is temporarily unavailable.');
+      setSearchError(error?.name === 'AbortError' ? 'Search is taking longer than expected. Try a more specific title keyword.' : 'Search is temporarily unavailable.');
     } finally {
       clearTimeout(timeout);
       setLoading(false);
@@ -128,14 +135,14 @@ function SearchContent() {
     const timer = setTimeout(async () => {
       setSuggesting(true);
       try {
-        const data = await fetchSearchResults({ q: term, category, sort: 'relevance', limit: 6, signal: controller.signal });
-        setSuggestions(data.results ?? []);
+        const items = await fetchTitleSuggestions({ q: term, limit: 8, signal: controller.signal });
+        setSuggestions(items);
       } catch {
         setSuggestions([]);
       } finally {
         setSuggesting(false);
       }
-    }, 260);
+    }, 90);
 
     return () => {
       clearTimeout(timer);
