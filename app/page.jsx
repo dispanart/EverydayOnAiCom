@@ -27,7 +27,8 @@ const tools = [
 ];
 
 function faviconUrl(domain) {
- return `https://www.google.com/s2/favicons?domain=${encodeURIComponent(domain)}&sz=128`;
+ const cleanDomain = String(domain || '').replace(/^https?:\/\//, '').replace(/\/.*$/, '');
+ return `https://icons.duckduckgo.com/ip3/${cleanDomain}.ico`;
 }
 
 function ToolsStrip() {

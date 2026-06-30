@@ -3,8 +3,34 @@
 import { useMemo, useState } from 'react';
 import { ArrowUpRight, Search } from 'lucide-react';
 
-function faviconUrl(domain) {
- return `https://www.google.com/s2/favicons?domain=${encodeURIComponent(domain)}&sz=128`;
+function faviconSources(domain) {
+ const cleanDomain = String(domain || '').replace(/^https?:\/\//, '').replace(/\/.*$/, '');
+ return [
+  `https://icons.duckduckgo.com/ip3/${cleanDomain}.ico`,
+  `https://www.google.com/s2/favicons?domain=${encodeURIComponent(cleanDomain)}&sz=128`,
+ ];
+}
+
+function ToolLogo({ tool }) {
+ const sources = faviconSources(tool.domain);
+ const [index, setIndex] = useState(0);
+ const src = sources[index];
+
+ if (!src) {
+  return <span className="tool-logo-fallback" aria-hidden="true">{tool.name.slice(0, 2).toUpperCase()}</span>;
+ }
+
+ return (
+  <img
+   src={src}
+   alt=""
+   loading="lazy"
+   width="56"
+   height="56"
+   referrerPolicy="no-referrer"
+   onError={() => setIndex((current) => current + 1)}
+  />
+ );
 }
 
 function normalize(value) {
@@ -70,7 +96,7 @@ export default function ToolsDirectory({ groups = [] }) {
  {group.tools.map((tool) => (
  <a key={tool.name} className="tcl tool-card" href={tool.href} target="_blank" rel="noopener noreferrer" aria-label={`Visit ${tool.name}`}>
  <div className="tool-logo-wrap">
- <img src={faviconUrl(tool.domain)} alt="" loading="lazy" width="56" height="56" />
+ <ToolLogo tool={tool} />
  </div>
  <div className="tool-card-body">
  <div className="tnl">{tool.name}</div>

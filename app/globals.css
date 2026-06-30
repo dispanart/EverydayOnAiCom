@@ -571,3 +571,63 @@ body{font-family:var(--font-jakarta),'Plus Jakarta Sans',system-ui,sans-serif;}
 @media(max-width:1100px){.tools-card-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:768px){.tools-filter-panel{position:static;padding:14px 0 8px}.tools-search-field{border-radius:14px}.tools-card-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.tool-card{min-height:230px;padding:15px}.tool-card-footer{align-items:flex-start;flex-direction:column}.tool-card .ttb{width:100%;justify-content:center}.tools-group-head p{font-size:13px}}
 @media(max-width:520px){.tools-card-grid{grid-template-columns:1fr}.tool-card{min-height:auto}.tool-card .tdl{-webkit-line-clamp:3}.tcf{gap:6px}.tcf .fb{font-size:11.5px;padding:7px 12px}.tools-directory-grid{gap:26px}}
+
+/* AI tools logo fallback and stability */
+.tool-logo-fallback{
+ width:42px;height:42px;border-radius:12px;
+ display:flex;align-items:center;justify-content:center;
+ font-size:13px;font-weight:900;letter-spacing:.02em;
+ color:#fff;background:linear-gradient(135deg,var(--c1),var(--c2));
+ box-shadow:0 8px 20px rgba(41,53,129,.18);
+}
+.tool-logo-wrap img,.tc-logo .tlw img{background:#fff;}
+[data-theme=dark] .tool-logo-fallback{background:linear-gradient(135deg,#4274d9,#95ccd5);color:#06122d;}
+
+/* v23: Force WordPress article boxes/callouts to readable dark surfaces in dark mode */
+[data-theme=dark] .article-page .article-prose :where(div,section,aside,blockquote)[style*="background"],
+[data-theme=dark] .article-page .article-prose :where(div,section,aside,blockquote)[style*="border"],
+[data-theme=dark] .article-page .article-prose :where(div,section,aside,blockquote)[class*="box"],
+[data-theme=dark] .article-page .article-prose :where(div,section,aside,blockquote)[class*="callout"],
+[data-theme=dark] .article-page .article-prose :where(div,section,aside,blockquote)[class*="summary"],
+[data-theme=dark] .article-page .article-prose :where(div,section,aside,blockquote)[class*="takeaway"],
+[data-theme=dark] .article-page .article-prose :where(div,section,aside,blockquote)[class*="note"],
+[data-theme=dark] .article-page .article-prose :where(div,section,aside,blockquote)[class*="highlight"]{
+  background:#111d3c!important;
+  background-color:#111d3c!important;
+  border-color:rgba(149,180,232,.28)!important;
+  color:#e8eeff!important;
+  box-shadow:none!important;
+}
+
+[data-theme=dark] .article-page .article-prose :where(div,section,aside,blockquote)[style*="background"] :where(h1,h2,h3,h4,h5,h6,p,li,span,strong,em,b,i,small,mark,a),
+[data-theme=dark] .article-page .article-prose :where(div,section,aside,blockquote)[style*="border"] :where(h1,h2,h3,h4,h5,h6,p,li,span,strong,em,b,i,small,mark,a),
+[data-theme=dark] .article-page .article-prose :where(div,section,aside,blockquote)[class*="box"] :where(h1,h2,h3,h4,h5,h6,p,li,span,strong,em,b,i,small,mark,a),
+[data-theme=dark] .article-page .article-prose :where(div,section,aside,blockquote)[class*="callout"] :where(h1,h2,h3,h4,h5,h6,p,li,span,strong,em,b,i,small,mark,a),
+[data-theme=dark] .article-page .article-prose :where(div,section,aside,blockquote)[class*="summary"] :where(h1,h2,h3,h4,h5,h6,p,li,span,strong,em,b,i,small,mark,a),
+[data-theme=dark] .article-page .article-prose :where(div,section,aside,blockquote)[class*="takeaway"] :where(h1,h2,h3,h4,h5,h6,p,li,span,strong,em,b,i,small,mark,a),
+[data-theme=dark] .article-page .article-prose :where(div,section,aside,blockquote)[class*="note"] :where(h1,h2,h3,h4,h5,h6,p,li,span,strong,em,b,i,small,mark,a),
+[data-theme=dark] .article-page .article-prose :where(div,section,aside,blockquote)[class*="highlight"] :where(h1,h2,h3,h4,h5,h6,p,li,span,strong,em,b,i,small,mark,a){
+  color:#e8eeff!important;
+  -webkit-text-fill-color:#e8eeff!important;
+}
+
+[data-theme=dark] .article-page .article-prose :where(div,section,aside,blockquote)[style*="background"] a,
+[data-theme=dark] .article-page .article-prose :where(div,section,aside,blockquote)[style*="border"] a,
+[data-theme=dark] .article-page .article-prose :where(div,section,aside,blockquote)[class*="box"] a,
+[data-theme=dark] .article-page .article-prose :where(div,section,aside,blockquote)[class*="callout"] a,
+[data-theme=dark] .article-page .article-prose :where(div,section,aside,blockquote)[class*="summary"] a,
+[data-theme=dark] .article-page .article-prose :where(div,section,aside,blockquote)[class*="takeaway"] a,
+[data-theme=dark] .article-page .article-prose :where(div,section,aside,blockquote)[class*="note"] a,
+[data-theme=dark] .article-page .article-prose :where(div,section,aside,blockquote)[class*="highlight"] a{
+  color:#93c5fd!important;
+  -webkit-text-fill-color:#93c5fd!important;
+}
+
+[data-theme=dark] .article-page .article-prose :where(div,section,aside,blockquote)[style*="background"] mark,
+[data-theme=dark] .article-page .article-prose :where(div,section,aside,blockquote)[style*="border"] mark,
+[data-theme=dark] .article-page .article-prose :where(div,section,aside,blockquote)[class*="box"] mark,
+[data-theme=dark] .article-page .article-prose :where(div,section,aside,blockquote)[class*="callout"] mark{
+  background:rgba(66,116,217,.22)!important;
+  color:#fff!important;
+  -webkit-text-fill-color:#fff!important;
+}
