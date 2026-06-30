@@ -4,18 +4,18 @@ const WP_GRAPHQL_URL =
   process.env.NEXT_PUBLIC_WORDPRESS_GRAPHQL_URL || 'https://wp.everydayonai.com/graphql';
 
 const CACHE_TTL = 1000 * 60 * 10;
-const MAX_INDEX_POSTS = 250;
+const MAX_INDEX_POSTS = 500;
+const FETCH_TIMEOUT = 6000; // raised from 1800ms
+const MAX_RETRIES = 1;       // suggest endpoint stays snappier — 1 retry only
 
 globalThis.__eonaiTitleIndexCache ??= {
   items: [],
   fetchedAt: 0,
+  fetchingPromise: null,
 };
 
 function stripHtml(html = '') {
-  return String(html)
-    .replace(/<[^>]*>/g, ' ')
-    .replace(/\s+/g, ' ')
-    .trim();
+  return String(html).replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
 }
 
 function decodeEntities(text = '') {
@@ -33,9 +33,9 @@ function normalize(text = '') {
   return decodeEntities(stripHtml(text)).toLowerCase();
 }
 
-async function fetchTitleIndex() {
+async function fetchOnce() {
   const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 1800);
+  const timeout = setTimeout(() => controller.abort(), FETCH_TIMEOUT);
 
   try {
     const res = await fetch(WP_GRAPHQL_URL, {
@@ -63,10 +63,11 @@ async function fetchTitleIndex() {
       }),
     });
 
-    if (!res.ok) return null;
+    if (!res.ok) throw new Error(`WPGraphQL responded ${res.status}`);
     const json = await res.json();
     const items = json.data?.posts?.nodes ?? [];
-    const mapped = items
+
+    return items
       .filter((post) => post?.title && post?.slug)
       .map((post) => ({
         ...post,
@@ -75,14 +76,39 @@ async function fetchTitleIndex() {
         _title: normalize(post.title),
         _excerpt: normalize(post.excerpt || ''),
       }));
-
-    globalThis.__eonaiTitleIndexCache = { items: mapped, fetchedAt: Date.now() };
-    return mapped;
-  } catch {
-    return null;
   } finally {
     clearTimeout(timeout);
   }
+}
+
+async function fetchTitleIndex() {
+  if (globalThis.__eonaiTitleIndexCache.fetchingPromise) {
+    return globalThis.__eonaiTitleIndexCache.fetchingPromise;
+  }
+
+  const promise = (async () => {
+    let lastError = null;
+    for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
+      try {
+        const mapped = await fetchOnce();
+        globalThis.__eonaiTitleIndexCache = {
+          items: mapped,
+          fetchedAt: Date.now(),
+          fetchingPromise: null,
+        };
+        return mapped;
+      } catch (err) {
+        lastError = err;
+        if (attempt < MAX_RETRIES) await new Promise((r) => setTimeout(r, 300));
+      }
+    }
+    console.error('[search/suggest] fetchTitleIndex failed:', lastError?.message);
+    globalThis.__eonaiTitleIndexCache.fetchingPromise = null;
+    return null;
+  })();
+
+  globalThis.__eonaiTitleIndexCache.fetchingPromise = promise;
+  return promise;
 }
 
 function score(post, query) {
@@ -128,7 +154,12 @@ export async function GET(request) {
 
   const cache = globalThis.__eonaiTitleIndexCache;
   const fresh = cache.items.length > 0 && Date.now() - cache.fetchedAt < CACHE_TTL;
-  const items = fresh ? cache.items : (await fetchTitleIndex()) || cache.items;
+
+  let items = cache.items;
+  if (!fresh) {
+    const fetched = await fetchTitleIndex();
+    items = fetched || cache.items;
+  }
 
   return NextResponse.json(
     { results: searchIndex(items, q, limit) },

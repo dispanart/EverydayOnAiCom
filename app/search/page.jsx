@@ -93,12 +93,14 @@ function SearchContent() {
   const [focused, setFocused] = useState(false);
   const suggestionAbortRef = useRef(null);
 
-  const doSearch = useCallback(async (q, cat, s) => {
+  const doSearch = useCallback(async (q, cat, s, isRetry = false) => {
     const term = q?.trim();
     if (!term) return;
 
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 3500);
+    // Raised from 3500ms — must allow enough headroom for the backend's own
+    // 8000ms WPGraphQL timeout + retries on a cold start.
+    const timeout = setTimeout(() => controller.abort(), 9000);
     setLoading(true);
     setSearched(true);
     setSearchError('');
@@ -106,10 +108,28 @@ function SearchContent() {
     try {
       const data = await fetchSearchResults({ q: term, category: cat, sort: s, limit: 16, signal: controller.signal });
       setResults(data.results ?? []);
-      if (data.error) setSearchError(data.error);
+      if (data.error) {
+        // Auto-retry once on a "warming up" style error rather than making
+        // the user manually press search again.
+        if (!isRetry) {
+          clearTimeout(timeout);
+          setTimeout(() => doSearch(term, cat, s, true), 600);
+          return;
+        }
+        setSearchError(data.error);
+      }
     } catch (error) {
+      if (!isRetry && error?.name !== 'AbortError') {
+        clearTimeout(timeout);
+        setTimeout(() => doSearch(term, cat, s, true), 600);
+        return;
+      }
       setResults([]);
-      setSearchError(error?.name === 'AbortError' ? 'Search is taking longer than expected. Try a more specific title keyword.' : 'Search is temporarily unavailable.');
+      setSearchError(
+        error?.name === 'AbortError'
+          ? 'Search is taking longer than expected. Try a more specific keyword.'
+          : 'Search is temporarily unavailable. Please try again.'
+      );
     } finally {
       clearTimeout(timeout);
       setLoading(false);
@@ -136,13 +156,13 @@ function SearchContent() {
       setSuggesting(true);
       try {
         const items = await fetchTitleSuggestions({ q: term, limit: 8, signal: controller.signal });
-        setSuggestions(items);
-      } catch {
-        setSuggestions([]);
+        if (!controller.signal.aborted) setSuggestions(items);
+      } catch (err) {
+        if (err?.name !== 'AbortError') setSuggestions([]);
       } finally {
-        setSuggesting(false);
+        if (!controller.signal.aborted) setSuggesting(false);
       }
-    }, 90);
+    }, 220);
 
     return () => {
       clearTimeout(timer);

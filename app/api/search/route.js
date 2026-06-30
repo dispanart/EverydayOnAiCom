@@ -4,11 +4,14 @@ const WP_GRAPHQL_URL =
   process.env.NEXT_PUBLIC_WORDPRESS_GRAPHQL_URL || 'https://wp.everydayonai.com/graphql';
 
 const CACHE_TTL = 1000 * 60 * 10;
-const MAX_INDEX_POSTS = 250;
+const MAX_INDEX_POSTS = 500; // raised from 250 — ensures older articles stay searchable
+const FETCH_TIMEOUT = 8000;  // raised from 2200ms — cold starts + WP latency need more headroom
+const MAX_RETRIES = 2;
 
 globalThis.__eonaiTitleIndexCache ??= {
   items: [],
   fetchedAt: 0,
+  fetchingPromise: null, // dedupes concurrent cold-start requests into one fetch
 };
 
 function cleanLimit(value, fallback = 12) {
@@ -23,10 +26,7 @@ function sanitizeCategory(category) {
 }
 
 function stripHtml(html = '') {
-  return String(html)
-    .replace(/<[^>]*>/g, ' ')
-    .replace(/\s+/g, ' ')
-    .trim();
+  return String(html).replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
 }
 
 function decodeEntities(text = '') {
@@ -44,9 +44,10 @@ function normalize(text = '') {
   return decodeEntities(stripHtml(text)).toLowerCase();
 }
 
-async function fetchSearchIndex() {
+/** Single fetch attempt against WPGraphQL with its own timeout */
+async function fetchOnce() {
   const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 2200);
+  const timeout = setTimeout(() => controller.abort(), FETCH_TIMEOUT);
 
   try {
     const res = await fetch(WP_GRAPHQL_URL, {
@@ -74,10 +75,11 @@ async function fetchSearchIndex() {
       }),
     });
 
-    if (!res.ok) return null;
+    if (!res.ok) throw new Error(`WPGraphQL responded ${res.status}`);
     const json = await res.json();
     const items = json.data?.posts?.nodes ?? [];
-    const mapped = items
+
+    return items
       .filter((post) => post?.title && post?.slug)
       .map((post) => ({
         ...post,
@@ -87,14 +89,44 @@ async function fetchSearchIndex() {
         _excerpt: normalize(post.excerpt || ''),
         _categorySlugs: (post.categories?.nodes || []).map((cat) => cat.slug),
       }));
-
-    globalThis.__eonaiTitleIndexCache = { items: mapped, fetchedAt: Date.now() };
-    return mapped;
-  } catch {
-    return null;
   } finally {
     clearTimeout(timeout);
   }
+}
+
+/**
+ * Fetch the full index with retry on failure, and de-dupe concurrent
+ * requests during cold start so multiple simultaneous searches don't
+ * all hit WPGraphQL at once.
+ */
+async function fetchSearchIndex() {
+  if (globalThis.__eonaiTitleIndexCache.fetchingPromise) {
+    return globalThis.__eonaiTitleIndexCache.fetchingPromise;
+  }
+
+  const promise = (async () => {
+    let lastError = null;
+    for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
+      try {
+        const mapped = await fetchOnce();
+        globalThis.__eonaiTitleIndexCache = {
+          items: mapped,
+          fetchedAt: Date.now(),
+          fetchingPromise: null,
+        };
+        return mapped;
+      } catch (err) {
+        lastError = err;
+        if (attempt < MAX_RETRIES) await new Promise((r) => setTimeout(r, 400 * (attempt + 1)));
+      }
+    }
+    console.error('[search] fetchSearchIndex failed after retries:', lastError?.message);
+    globalThis.__eonaiTitleIndexCache.fetchingPromise = null;
+    return null;
+  })();
+
+  globalThis.__eonaiTitleIndexCache.fetchingPromise = promise;
+  return promise;
 }
 
 function score(post, query) {
@@ -154,11 +186,18 @@ export async function GET(request) {
 
   const cache = globalThis.__eonaiTitleIndexCache;
   const fresh = cache.items.length > 0 && Date.now() - cache.fetchedAt < CACHE_TTL;
-  const items = fresh ? cache.items : (await fetchSearchIndex()) || cache.items;
+
+  let items = cache.items;
+  if (!fresh) {
+    const fetched = await fetchSearchIndex();
+    // Fall back to stale cache rather than nothing if a refetch fails —
+    // stale results beat a "warming up" error for the user.
+    items = fetched || cache.items;
+  }
 
   if (!items.length) {
     return NextResponse.json(
-      { results: [], error: 'Search is still warming up. Please try again in a few seconds.' },
+      { results: [], error: 'Search is temporarily unavailable. Please try again in a moment.' },
       { status: 200 }
     );
   }
