@@ -18,7 +18,7 @@ const securityHeaders = [
  "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://pagead2.googlesyndication.com https://www.googletagmanager.com https://www.google-analytics.com https://va.vercel-scripts.com https://vitals.vercel-insights.com",
  "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
  "font-src 'self' https://fonts.gstatic.com",
- "img-src 'self' data: blob: https://wp.everydayonai.com https://*.wp.com https://secure.gravatar.com https://pagead2.googlesyndication.com https://res.cloudinary.com https://*.cloudinary.com https://images.unsplash.com https://*.amazonaws.com",
+ "img-src 'self' data: blob: https://wp.everydayonai.com https://*.wp.com https://secure.gravatar.com https://pagead2.googlesyndication.com https://res.cloudinary.com https://*.cloudinary.com https://images.unsplash.com https://*.amazonaws.com https://www.google.com",
  // Tambah Supabase dan Vercel Analytics ke connect-src
  "connect-src 'self' https://wp.everydayonai.com https://www.google-analytics.com https://*.supabase.co https://vitals.vercel-insights.com https://va.vercel-scripts.com",
  "frame-src https://googleads.g.doubleclick.net https://tpc.googlesyndication.com",

@@ -8,6 +8,8 @@ export default function NeuralCanvas({ id = 'neural', mini = false }) {
  useEffect(() => {
  const canvas = canvasRef.current;
  if (!canvas) return;
+ if (!mini && window.matchMedia && window.matchMedia('(max-width: 768px)').matches) return;
+ if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
  const ctx = canvas.getContext('2d');
  let raf = 0;
  let W = 0;

@@ -49,6 +49,9 @@ export default function RootLayout({ children }) {
  return (
  <html lang="en" data-theme="light" className={jakarta.variable} suppressHydrationWarning>
  <head>
+ <link rel="preconnect" href="https://wp.everydayonai.com" crossOrigin="anonymous" />
+ <link rel="dns-prefetch" href="//wp.everydayonai.com" />
+ <link rel="dns-prefetch" href="//www.google.com" />
  <script
  dangerouslySetInnerHTML={{
  __html: `

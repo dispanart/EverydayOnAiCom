@@ -1,12 +1,10 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import { Play, Search, Star } from 'lucide-react';
+import { ArrowUpRight, Search } from 'lucide-react';
 
-function Icon({ item }) {
- if (item.icon === 'play') return <Play size={26} fill="white" color="white" />;
- if (item.icon === 'search') return <Search size={26} color="#20B2AA" />;
- return <span style={{ color: '#fff', fontSize: 22, fontWeight: 900 }}>{item.icon}</span>;
+function faviconUrl(domain) {
+ return `https://www.google.com/s2/favicons?domain=${encodeURIComponent(domain)}&sz=128`;
 }
 
 function normalize(value) {
@@ -20,10 +18,33 @@ export default function ToolsDirectory({ groups = [] }) {
  ], [groups]);
 
  const [active, setActive] = useState('all');
- const visibleGroups = active === 'all' ? groups : groups.filter((group) => normalize(group.title) === active);
+ const [query, setQuery] = useState('');
+ const normalizedQuery = query.trim().toLowerCase();
+
+ const visibleGroups = useMemo(() => {
+  const selectedGroups = active === 'all' ? groups : groups.filter((group) => normalize(group.title) === active);
+  if (!normalizedQuery) return selectedGroups;
+  return selectedGroups
+   .map((group) => ({
+    ...group,
+    tools: group.tools.filter((tool) => `${tool.name} ${tool.desc} ${tool.cat}`.toLowerCase().includes(normalizedQuery)),
+   }))
+   .filter((group) => group.tools.length > 0);
+ }, [active, groups, normalizedQuery]);
 
  return (
  <>
+ <div className="tools-filter-panel">
+ <div className="tools-search-field">
+ <Search size={16} />
+ <input
+ type="search"
+ value={query}
+ onChange={(event) => setQuery(event.target.value)}
+ placeholder="Search AI tools..."
+ aria-label="Search AI tools"
+ />
+ </div>
  <div className="tcf" aria-label="Filter AI tools by category">
  {filters.map((filter) => (
  <button
@@ -36,27 +57,35 @@ export default function ToolsDirectory({ groups = [] }) {
  </button>
  ))}
  </div>
+ </div>
 
- <div id="tgrid">
+ <div id="tgrid" className="tools-directory-grid">
  {visibleGroups.map((group) => (
- <section key={group.title}>
+ <section key={group.title} className="tools-group-section">
+ <div className="tools-group-head">
  <h2 className="ts-ttl"><span className="sb" />{group.title}</h2>
- <div className="tgf">
+ {group.summary && <p>{group.summary}</p>}
+ </div>
+ <div className="tgf tools-card-grid">
  {group.tools.map((tool) => (
- <a key={tool.name} className="tcl" href={tool.href} target="_blank" rel="noopener noreferrer">
- <div className="tll" style={{ background: tool.bg }}><Icon item={tool} /></div>
+ <a key={tool.name} className="tcl tool-card" href={tool.href} target="_blank" rel="noopener noreferrer" aria-label={`Visit ${tool.name}`}>
+ <div className="tool-logo-wrap">
+ <img src={faviconUrl(tool.domain)} alt="" loading="lazy" width="56" height="56" />
+ </div>
+ <div className="tool-card-body">
  <div className="tnl">{tool.name}</div>
  <div className="tdl">{tool.desc}</div>
- <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
- <span className="fb2">{tool.cat}</span>
- <span className="tsc"><Star size={10} fill="currentColor" /> {tool.score}</span>
  </div>
- <span className="ttb">Visit tool</span>
+ <div className="tool-card-footer">
+ <span className="fb2">{tool.cat}</span>
+ <span className="ttb">Visit <ArrowUpRight size={13} /></span>
+ </div>
  </a>
  ))}
  </div>
  </section>
  ))}
+ {visibleGroups.length === 0 && <div className="tools-empty-state">No tools found. Try a different keyword or category.</div>}
  </div>
  </>
  );
