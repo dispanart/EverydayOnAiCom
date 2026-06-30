@@ -631,3 +631,89 @@ body{font-family:var(--font-jakarta),'Plus Jakarta Sans',system-ui,sans-serif;}
   color:#fff!important;
   -webkit-text-fill-color:#fff!important;
 }
+
+/* Dark mode hardening for WordPress article boxes (v24)
+   Many article callouts/stat cards come from WordPress with inline styles or custom classes.
+   These rules intentionally override those styles only inside article content in dark mode. */
+[data-theme=dark] .article-page .article-prose :is(div,section,aside,article,blockquote)[style],
+[data-theme=dark] .article-page .article-prose :is(div,section,aside,article,blockquote)[class*="box" i],
+[data-theme=dark] .article-page .article-prose :is(div,section,aside,article,blockquote)[class*="callout" i],
+[data-theme=dark] .article-page .article-prose :is(div,section,aside,article,blockquote)[class*="card" i],
+[data-theme=dark] .article-page .article-prose :is(div,section,aside,article,blockquote)[class*="note" i],
+[data-theme=dark] .article-page .article-prose :is(div,section,aside,article,blockquote)[class*="takeaway" i],
+[data-theme=dark] .article-page .article-prose :is(div,section,aside,article,blockquote)[class*="summary" i],
+[data-theme=dark] .article-page .article-prose :is(div,section,aside,article,blockquote)[class*="stat" i],
+[data-theme=dark] .article-page .article-prose :is(div,section,aside,article,blockquote)[class*="metric" i],
+[data-theme=dark] .article-page .article-prose :is(div,section,aside,article,blockquote)[class*="highlight" i],
+[data-theme=dark] .article-page .article-prose :is(div,section,aside,article,blockquote)[class*="alert" i],
+[data-theme=dark] .article-page .article-prose :is(div,section,aside,article,blockquote)[class*="panel" i]{
+  background:#101b35!important;
+  background-color:#101b35!important;
+  color:#e8eeff!important;
+  border-color:rgba(149,180,232,.24)!important;
+  box-shadow:0 10px 30px rgba(0,0,0,.24)!important;
+}
+[data-theme=dark] .article-page .article-prose :is(div,section,aside,article,blockquote)[style] *,
+[data-theme=dark] .article-page .article-prose :is(div,section,aside,article,blockquote)[class*="box" i] *,
+[data-theme=dark] .article-page .article-prose :is(div,section,aside,article,blockquote)[class*="callout" i] *,
+[data-theme=dark] .article-page .article-prose :is(div,section,aside,article,blockquote)[class*="card" i] *,
+[data-theme=dark] .article-page .article-prose :is(div,section,aside,article,blockquote)[class*="note" i] *,
+[data-theme=dark] .article-page .article-prose :is(div,section,aside,article,blockquote)[class*="takeaway" i] *,
+[data-theme=dark] .article-page .article-prose :is(div,section,aside,article,blockquote)[class*="summary" i] *,
+[data-theme=dark] .article-page .article-prose :is(div,section,aside,article,blockquote)[class*="stat" i] *,
+[data-theme=dark] .article-page .article-prose :is(div,section,aside,article,blockquote)[class*="metric" i] *,
+[data-theme=dark] .article-page .article-prose :is(div,section,aside,article,blockquote)[class*="highlight" i] *,
+[data-theme=dark] .article-page .article-prose :is(div,section,aside,article,blockquote)[class*="alert" i] *,
+[data-theme=dark] .article-page .article-prose :is(div,section,aside,article,blockquote)[class*="panel" i] *{
+  color:#e8eeff!important;
+  border-color:rgba(149,180,232,.22)!important;
+}
+[data-theme=dark] .article-page .article-prose :is(div,section,aside,article,blockquote)[style] a,
+[data-theme=dark] .article-page .article-prose :is(div,section,aside,article,blockquote)[class*="box" i] a,
+[data-theme=dark] .article-page .article-prose :is(div,section,aside,article,blockquote)[class*="callout" i] a,
+[data-theme=dark] .article-page .article-prose :is(div,section,aside,article,blockquote)[class*="card" i] a,
+[data-theme=dark] .article-page .article-prose :is(div,section,aside,article,blockquote)[class*="note" i] a,
+[data-theme=dark] .article-page .article-prose :is(div,section,aside,article,blockquote)[class*="summary" i] a,
+[data-theme=dark] .article-page .article-prose :is(div,section,aside,article,blockquote)[class*="stat" i] a{
+  color:#7db7ff!important;
+}
+[data-theme=dark] .article-page .article-prose :is(div,section,aside,article,blockquote)[style] mark,
+[data-theme=dark] .article-page .article-prose :is(div,section,aside,article,blockquote)[class*="box" i] mark,
+[data-theme=dark] .article-page .article-prose :is(div,section,aside,article,blockquote)[class*="callout" i] mark,
+[data-theme=dark] .article-page .article-prose :is(div,section,aside,article,blockquote)[class*="card" i] mark{
+  background:rgba(149,204,213,.18)!important;
+  color:#f8fbff!important;
+}
+/* Stat/card grids often use plain child divs without semantic class names. */
+[data-theme=dark] .article-page .article-prose :is(div,section)[class*="grid" i] > div,
+[data-theme=dark] .article-page .article-prose :is(div,section)[style*="grid"] > div,
+[data-theme=dark] .article-page .article-prose :is(div,section)[style*="flex"] > div[style],
+[data-theme=dark] .article-page .article-prose :is(div,section)[style*="display"] > div[style]{
+  background:#101b35!important;
+  background-color:#101b35!important;
+  color:#e8eeff!important;
+  border-color:rgba(149,180,232,.24)!important;
+}
+[data-theme=dark] .article-page .article-prose :is(div,section)[class*="grid" i] > div *,
+[data-theme=dark] .article-page .article-prose :is(div,section)[style*="grid"] > div *,
+[data-theme=dark] .article-page .article-prose :is(div,section)[style*="flex"] > div[style] *,
+[data-theme=dark] .article-page .article-prose :is(div,section)[style*="display"] > div[style] *{
+  color:#e8eeff!important;
+}
+/* Keep code blocks and tables readable without forcing every cell to become a card. */
+[data-theme=dark] .article-page .article-prose pre,
+[data-theme=dark] .article-page .article-prose code{
+  background:#020617!important;
+  color:#f8fafc!important;
+}
+[data-theme=dark] .article-page .article-prose table,
+[data-theme=dark] .article-page .article-prose tbody,
+[data-theme=dark] .article-page .article-prose tr,
+[data-theme=dark] .article-page .article-prose td{
+  background:#0f172a!important;
+  color:#e8eeff!important;
+}
+[data-theme=dark] .article-page .article-prose th{
+  background:#1d4ed8!important;
+  color:#fff!important;
+}
