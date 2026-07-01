@@ -4,6 +4,7 @@ import BackToTop from '@/components/ui/BackToTop';
 import ServiceWorkerRegister from '@/components/ui/ServiceWorkerRegister';
 import GoogleAnalytics from '@/components/ui/GoogleAnalytics';
 import GoogleAdSenseScript from '@/components/ui/GoogleAdSenseScript';
+import MicrosoftClarity from '@/components/ui/MicrosoftClarity';
 import AuthSessionProvider from '@/components/auth/AuthSessionProvider';
 import ViewTransitions from '@/components/ui/ViewTransitions';
 import { SpeedInsights } from '@vercel/speed-insights/next';
@@ -78,6 +79,7 @@ export default function RootLayout({ children }) {
  <ServiceWorkerRegister />
  <GoogleAnalytics />
  <GoogleAdSenseScript />
+ <MicrosoftClarity />
  <SpeedInsights />
  <Analytics />
  </body>
