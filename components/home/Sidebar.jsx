@@ -4,8 +4,8 @@ import { formatShortDate, getDisplayDate, stripHtmlAndDecode } from '@/lib/wordp
 import AdSense from '@/components/ui/AdSense';
 import { AD_SLOTS } from '@/config/ads';
 
-export default async function Sidebar({ recentPosts = [] }) {
- const trendingPosts = recentPosts.slice(0, 5);
+export default async function Sidebar({ recentPosts = [], trendingPosts = [] }) {
+ const posts = (trendingPosts.length ? trendingPosts : recentPosts).slice(0, 5);
 
  return (
  <aside className="sid" aria-label="Sidebar">
@@ -14,13 +14,13 @@ export default async function Sidebar({ recentPosts = [] }) {
  <div className="wid">
  <div className="wt"><TrendingUp size={11} strokeWidth={2.5} />Trending Topics</div>
  <div className="trending-list">
- {trendingPosts.map((post, i) => (
+ {posts.map((post, i) => (
  <Link key={post.id || post.slug} href={`/${post.slug}`} className="tri post-link-card trending-card">
  <span className="trn trending-rank">{String(i + 1).padStart(2, '0')}</span>
  <div>
  <div className="hot-row"><span className="hot-badge">Hot</span><span>{formatShortDate(getDisplayDate(post).date)}</span></div>
  <div className="trt">{stripHtmlAndDecode(post.title)}</div>
- <div className="tri-info">Latest article<span className="vd" />Trending</div>
+ <div className="tri-info">Latest pick<span className="vd" />Trending</div>
  </div>
  </Link>
  ))}

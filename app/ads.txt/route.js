@@ -4,7 +4,7 @@ export async function GET() {
   const publisherId =
     process.env.ADSENSE_PUBLISHER_ID ||
     process.env.NEXT_PUBLIC_ADSENSE_CLIENT?.replace('ca-', '') ||
-    '';
+    'pub-2629543840580780';
 
   const body = publisherId
     ? `google.com, ${publisherId}, DIRECT, f08c47fec0942fa0\n`

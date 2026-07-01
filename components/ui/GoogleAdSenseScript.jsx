@@ -1,8 +1,8 @@
 import Script from 'next/script';
 
 export default function GoogleAdSenseScript() {
-  const enabled = process.env.NEXT_PUBLIC_ADSENSE_ENABLED === 'true';
-  const client = process.env.NEXT_PUBLIC_ADSENSE_CLIENT;
+  const enabled = process.env.NEXT_PUBLIC_ADSENSE_ENABLED !== 'false';
+  const client = process.env.NEXT_PUBLIC_ADSENSE_CLIENT || 'ca-pub-2629543840580780';
 
   if (!enabled || !client) return null;
 

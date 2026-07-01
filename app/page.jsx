@@ -6,7 +6,7 @@ import HeroSection from '@/components/home/HeroSection';
 import Sidebar from '@/components/home/Sidebar';
 import { PostCard } from '@/components/ui';
 import Link from 'next/link';
-import { ArrowRight, Play, Search, Star } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import AdSense from '@/components/ui/AdSense';
 import { AD_SLOTS } from '@/config/ads';
 
@@ -19,17 +19,16 @@ export const metadata = {
 };
 
 const tools = [
- { rank: 1, name: 'ChatGPT', category: 'AI Assistant', score: '9.5', href: 'https://chat.openai.com', bg: '#10a37f', icon: 'bolt' },
- { rank: 2, name: 'Midjourney', category: 'AI Image', score: '9.2', href: 'https://www.midjourney.com', bg: '#000', icon: 'image' },
- { rank: 3, name: 'Claude', category: 'AI Assistant', score: '9.1', href: 'https://claude.ai', bg: '#d97706', icon: 'chat' },
- { rank: 4, name: 'Perplexity', category: 'AI Search', score: '8.8', href: 'https://perplexity.ai', bg: '#1a1a2e', icon: 'search' },
- { rank: 5, name: 'Runway', category: 'AI Video', score: '8.6', href: 'https://www.runway.ml', bg: '#6d28d9', icon: 'play' },
+ { rank: 1, name: 'ChatGPT', category: 'AI Assistant', href: 'https://chatgpt.com/', domain: 'chatgpt.com' },
+ { rank: 2, name: 'Midjourney', category: 'Creative AI', href: 'https://www.midjourney.com/', domain: 'midjourney.com' },
+ { rank: 3, name: 'NotebookLM', category: 'AI Research', href: 'https://notebooklm.google.com/', domain: 'notebooklm.google.com' },
+ { rank: 4, name: 'Cursor', category: 'Vibe Coding', href: 'https://cursor.com/', domain: 'cursor.com' },
+ { rank: 5, name: 'Perplexity', category: 'AI Search', href: 'https://www.perplexity.ai/', domain: 'perplexity.ai' },
 ];
 
-function ToolIcon({ icon }) {
- if (icon === 'play') return <Play size={26} fill="white" color="white" />;
- if (icon === 'search') return <Search size={26} color="#20B2AA" />;
- return <span style={{ color: '#fff', fontSize: 22, fontWeight: 900 }}>AI</span>;
+function faviconUrl(domain) {
+ const cleanDomain = String(domain || '').replace(/^https?:\/\//, '').replace(/\/.*$/, '');
+ return `https://icons.duckduckgo.com/ip3/${cleanDomain}.ico`;
 }
 
 function ToolsStrip() {
@@ -42,12 +41,11 @@ function ToolsStrip() {
  <p style={{ fontSize: 13, color: 'var(--muted)', marginBottom: 18, marginTop: -10 }}>Most-used AI tools by professionals. Includes referral links.</p>
  <div className="g5">
  {tools.map((tool) => (
- <a key={tool.name} className="tc" href={tool.href} target="_blank" rel="noopener noreferrer">
+ <a key={tool.name} className="tc tc-logo" href={tool.href} target="_blank" rel="noopener noreferrer">
  <span className="trk">{tool.rank}</span>
- <div className="tlw" style={{ background: tool.bg, borderRadius: 12, marginTop: 8 }}><ToolIcon icon={tool.icon} /></div>
+ <div className="tlw"><img src={faviconUrl(tool.domain)} alt="" loading="lazy" width="48" height="48" /></div>
  <div className="tn">{tool.name}</div>
  <div className="tcat">{tool.category}</div>
- <div style={{ display: 'flex', gap: 5, alignItems: 'center' }}><div className="tsc"><Star size={10} fill="currentColor" /> {tool.score}</div><span className="ref">REF</span></div>
  </a>
  ))}
  </div>
@@ -57,9 +55,10 @@ function ToolsStrip() {
 
 export default async function HomePage() {
  const categoryFetches = CATEGORIES.map((cat) => getPostsByCategory(cat.slug, cat.postCount));
- const [featuredPost, recentPosts, ...categoryPosts] = await Promise.all([
+ const [featuredPost, recentPosts, trendingPosts, ...categoryPosts] = await Promise.all([
  getFeaturedPost(),
  getRecentPosts(12),
+ getRecentPosts(5, 604800),
  ...categoryFetches,
  ]);
 
@@ -104,7 +103,7 @@ export default async function HomePage() {
  <AdSense slot={AD_SLOTS.homeBottom} className="eonai-ad-home-bottom" />
  </div>
 
- <Sidebar recentPosts={recentPosts} />
+ <Sidebar recentPosts={recentPosts} trendingPosts={trendingPosts} />
  </div>
  </div>
 

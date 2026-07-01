@@ -1,7 +1,7 @@
 import { Plus_Jakarta_Sans } from 'next/font/google';
 import { SITE } from '@/config/site';
 import BackToTop from '@/components/ui/BackToTop';
-import DisableServiceWorker from '@/components/ui/DisableServiceWorker';
+import ServiceWorkerRegister from '@/components/ui/ServiceWorkerRegister';
 import GoogleAnalytics from '@/components/ui/GoogleAnalytics';
 import GoogleAdSenseScript from '@/components/ui/GoogleAdSenseScript';
 import AuthSessionProvider from '@/components/auth/AuthSessionProvider';
@@ -46,12 +46,15 @@ export const metadata = {
 export const viewport = { width: 'device-width', initialScale: 1, themeColor: '#293581' };
 
 export default function RootLayout({ children }) {
+ const adsenseClient = process.env.NEXT_PUBLIC_ADSENSE_CLIENT || 'ca-pub-2629543840580780';
+
  return (
  <html lang="en" data-theme="light" className={jakarta.variable} suppressHydrationWarning>
  <head>
- {process.env.NEXT_PUBLIC_ADSENSE_CLIENT ? (
- <meta name="google-adsense-account" content={process.env.NEXT_PUBLIC_ADSENSE_CLIENT} />
- ) : null}
+ <meta name="google-adsense-account" content={adsenseClient} />
+ <link rel="preconnect" href="https://wp.everydayonai.com" crossOrigin="anonymous" />
+ <link rel="dns-prefetch" href="//wp.everydayonai.com" />
+ <link rel="dns-prefetch" href="//www.google.com" />
  <script
  dangerouslySetInnerHTML={{
  __html: `
@@ -72,7 +75,7 @@ export default function RootLayout({ children }) {
  <AuthSessionProvider>{children}</AuthSessionProvider>
  <ViewTransitions />
  <BackToTop />
- <DisableServiceWorker />
+ <ServiceWorkerRegister />
  <GoogleAnalytics />
  <GoogleAdSenseScript />
  <SpeedInsights />

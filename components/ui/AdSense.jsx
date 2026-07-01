@@ -3,11 +3,11 @@
 import { useEffect, useMemo } from 'react';
 
 function adsEnabled() {
-  return process.env.NEXT_PUBLIC_ADSENSE_ENABLED === 'true';
+  return process.env.NEXT_PUBLIC_ADSENSE_ENABLED !== 'false';
 }
 
 export function canShowAds(slot) {
-  const client = process.env.NEXT_PUBLIC_ADSENSE_CLIENT;
+  const client = process.env.NEXT_PUBLIC_ADSENSE_CLIENT || 'ca-pub-2629543840580780';
   return Boolean(adsEnabled() && client && slot);
 }
 
@@ -20,7 +20,7 @@ export default function AdSense({
   layoutKey = '',
   fullWidthResponsive = true,
 }) {
-  const client = process.env.NEXT_PUBLIC_ADSENSE_CLIENT;
+  const client = process.env.NEXT_PUBLIC_ADSENSE_CLIENT || 'ca-pub-2629543840580780';
   const enabled = canShowAds(slot);
 
   const insProps = useMemo(() => {
