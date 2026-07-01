@@ -16,11 +16,9 @@ import TableOfContents from '@/components/article/TableOfContents';
 import ErrorBoundary from '@/components/ui/ErrorBoundary';
 import PrintButton from '@/components/ui/PrintButton';
 import FontSizeAdjuster from '@/components/ui/FontSizeAdjuster';
-import PushNotifButton from '@/components/ui/PushNotifButton';
 import ArticleAdSlots from '@/components/article/ArticleAdSlots';
-import ArticleViews from '@/components/article/ArticleViews';
 
-export const revalidate = 3600;
+export const revalidate = 60;
 
 export async function generateStaticParams() {
  const slugs = await getAllPostSlugs();
@@ -146,7 +144,6 @@ export default async function PostPage({ params }) {
  <div className="article-meta-row">
  <span><Calendar size={14} />{isUpdated ? `Updated ${dateStr}` : dateStr}</span>
  <span><Clock size={14} />{mins} min read</span>
- <ArticleViews postId={post.databaseId} />
  </div>
  </div>
 
@@ -154,7 +151,6 @@ export default async function PostPage({ params }) {
  <ErrorBoundary fallbackMessage="Like is unavailable"><LikeButton postId={post.databaseId} /></ErrorBoundary>
  <ErrorBoundary fallbackMessage="Bookmark is unavailable"><BookmarkButton slug={post.slug} title={title} /></ErrorBoundary>
  <ErrorBoundary fallbackMessage="Font size controls are unavailable"><FontSizeAdjuster /></ErrorBoundary>
- <ErrorBoundary fallbackMessage="Push notifications are unavailable"><PushNotifButton /></ErrorBoundary>
  </div>
 
  <div className="mobile-toc">

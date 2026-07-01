@@ -1,42 +1,11 @@
 import Link from 'next/link';
-import { TrendingUp, Eye, Mail } from 'lucide-react';
+import { TrendingUp, Mail } from 'lucide-react';
 import { formatShortDate, getDisplayDate, stripHtmlAndDecode } from '@/lib/wordpress';
 import AdSense from '@/components/ui/AdSense';
 import { AD_SLOTS } from '@/config/ads';
 
-async function getPostViews(postId) {
- if (!postId) return 0;
- const base = process.env.WORDPRESS_REST_URL || process.env.WORDPRESS_API_URL;
- if (!base) return 0;
-
- try {
- const res = await fetch(`${base.replace(/\/$/, '')}/wp-json/eonai/v1/post-engagement/${postId}`, {
- next: { revalidate: 604800 },
- });
- if (!res.ok) return 0;
- const data = await res.json();
- return Number(data.views || 0);
- } catch {
- return 0;
- }
-}
-
-function formatViews(value) {
- const views = Number(value || 0);
- if (views >= 1000000) return `${(views / 1000000).toFixed(1)}M views`;
- if (views >= 1000) return `${(views / 1000).toFixed(1)}K views`;
- return `${views.toLocaleString('en-US')} views`;
-}
-
 export default async function Sidebar({ recentPosts = [] }) {
- const posts = recentPosts.slice(0, 12);
- const postsWithViews = await Promise.all(posts.map(async (post) => ({
- ...post,
- views: await getPostViews(post.databaseId),
- })));
- const trendingPosts = postsWithViews
- .sort((a, b) => Number(b.views || 0) - Number(a.views || 0))
- .slice(0, 5);
+ const trendingPosts = recentPosts.slice(0, 5);
 
  return (
  <aside className="sid" aria-label="Sidebar">
@@ -51,7 +20,7 @@ export default async function Sidebar({ recentPosts = [] }) {
  <div>
  <div className="hot-row"><span className="hot-badge">Hot</span><span>{formatShortDate(getDisplayDate(post).date)}</span></div>
  <div className="trt">{stripHtmlAndDecode(post.title)}</div>
- <div className="tri-info"><Eye size={10} />{formatViews(post.views)}<span className="vd" />Trending</div>
+ <div className="tri-info">Latest article<span className="vd" />Trending</div>
  </div>
  </Link>
  ))}

@@ -1,36 +1,12 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import { ArrowUpRight } from 'lucide-react';
+import { Play, Search, Star } from 'lucide-react';
 
-function faviconSources(domain) {
- const cleanDomain = String(domain || '').replace(/^https?:\/\//, '').replace(/\/.*$/, '');
- return [
-  `https://icons.duckduckgo.com/ip3/${cleanDomain}.ico`,
-  `https://www.google.com/s2/favicons?domain=${encodeURIComponent(cleanDomain)}&sz=128`,
- ];
-}
-
-function ToolLogo({ tool }) {
- const sources = faviconSources(tool.domain);
- const [index, setIndex] = useState(0);
- const src = sources[index];
-
- if (!src) {
-  return <span className="tool-logo-fallback" aria-hidden="true">{tool.name.slice(0, 2).toUpperCase()}</span>;
- }
-
- return (
-  <img
-   src={src}
-   alt=""
-   loading="lazy"
-   width="56"
-   height="56"
-   referrerPolicy="no-referrer"
-   onError={() => setIndex((current) => current + 1)}
-  />
- );
+function Icon({ item }) {
+ if (item.icon === 'play') return <Play size={26} fill="white" color="white" />;
+ if (item.icon === 'search') return <Search size={26} color="#20B2AA" />;
+ return <span style={{ color: '#fff', fontSize: 22, fontWeight: 900 }}>{item.icon}</span>;
 }
 
 function normalize(value) {
@@ -44,14 +20,10 @@ export default function ToolsDirectory({ groups = [] }) {
  ], [groups]);
 
  const [active, setActive] = useState('all');
-
- const visibleGroups = useMemo(() => (
-  active === 'all' ? groups : groups.filter((group) => normalize(group.title) === active)
- ), [active, groups]);
+ const visibleGroups = active === 'all' ? groups : groups.filter((group) => normalize(group.title) === active);
 
  return (
  <>
- <div className="tools-filter-panel">
  <div className="tcf" aria-label="Filter AI tools by category">
  {filters.map((filter) => (
  <button
@@ -64,35 +36,27 @@ export default function ToolsDirectory({ groups = [] }) {
  </button>
  ))}
  </div>
- </div>
 
- <div id="tgrid" className="tools-directory-grid">
+ <div id="tgrid">
  {visibleGroups.map((group) => (
- <section key={group.title} className="tools-group-section">
- <div className="tools-group-head">
+ <section key={group.title}>
  <h2 className="ts-ttl"><span className="sb" />{group.title}</h2>
- {group.summary && <p>{group.summary}</p>}
- </div>
- <div className="tgf tools-card-grid">
+ <div className="tgf">
  {group.tools.map((tool) => (
- <a key={tool.name} className="tcl tool-card" href={tool.href} target="_blank" rel="noopener noreferrer" aria-label={`Visit ${tool.name}`}>
- <div className="tool-logo-wrap">
- <ToolLogo tool={tool} />
- </div>
- <div className="tool-card-body">
+ <a key={tool.name} className="tcl" href={tool.href} target="_blank" rel="noopener noreferrer">
+ <div className="tll" style={{ background: tool.bg }}><Icon item={tool} /></div>
  <div className="tnl">{tool.name}</div>
  <div className="tdl">{tool.desc}</div>
- </div>
- <div className="tool-card-footer">
+ <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
  <span className="fb2">{tool.cat}</span>
- <span className="ttb">Visit <ArrowUpRight size={13} /></span>
+ <span className="tsc"><Star size={10} fill="currentColor" /> {tool.score}</span>
  </div>
+ <span className="ttb">Visit tool</span>
  </a>
  ))}
  </div>
  </section>
  ))}
-
  </div>
  </>
  );

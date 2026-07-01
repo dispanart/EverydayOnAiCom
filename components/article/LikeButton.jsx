@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Heart } from 'lucide-react';
 
 export default function LikeButton({ postId }) {
@@ -8,14 +8,6 @@ export default function LikeButton({ postId }) {
  const [liked, setLiked] = useState(false);
  const [loading, setLoading] = useState(false);
  const [animate, setAnimate] = useState(false);
-
- useEffect(() => {
- if (!postId) return;
- fetch(`/api/views/${postId}`, { cache: 'force-cache' })
- .then((r) => r.json())
- .then((d) => setCount(Number(d.post_likes || d.likes || 0)))
- .catch(() => {});
- }, [postId]);
 
  const handleLike = async () => {
  if (loading || !postId) return;

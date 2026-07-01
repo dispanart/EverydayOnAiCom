@@ -1,7 +1,7 @@
 import Link from 'next/link';
-import { TrendingUp, Heart, ArrowRight } from 'lucide-react';
+import { TrendingUp, ArrowRight, Clock } from 'lucide-react';
 import { SITE } from '@/config/site';
-import { supabase } from '@/lib/supabase';
+import { getRecentPosts, getDisplayDate } from '@/lib/wordpress';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import BackToTop from '@/components/ui/BackToTop';
@@ -9,18 +9,11 @@ import BackToTop from '@/components/ui/BackToTop';
 export const revalidate = 604800; // 7 days
 export const metadata = {
  title: 'Trending',
- description: `Most popular articles on ${SITE.name}`,
+ description: `Fresh article picks from ${SITE.name}`,
 };
 
 async function getTrending() {
- const { data } = await supabase.from('likes').select('slug');
- if (!data) return [];
- const counts = {};
- data.forEach(({ slug }) => { counts[slug] = (counts[slug] || 0) + 1; });
- return Object.entries(counts)
- .map(([slug, count]) => ({ slug, count }))
- .sort((a, b) => b.count - a.count)
- .slice(0, 30);
+ return getRecentPosts(30);
 }
 
 export default async function TrendingPage() {
@@ -38,7 +31,7 @@ export default async function TrendingPage() {
  </div>
  <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">Trending</h1>
  </div>
- <p className="text-slate-500">Articles readers like most</p>
+ <p className="text-slate-500">Latest articles from EverydayOnAI</p>
  </div>
  </div>
 
@@ -46,13 +39,13 @@ export default async function TrendingPage() {
  {trending.length === 0 ? (
  <div className="text-center py-20 text-slate-400">
  <TrendingUp size={48} className="mx-auto mb-4 opacity-20" />
- <p>No trending data yet. Start liking articles!</p>
+ <p>No articles available yet.</p>
  <Link href="/" className="mt-4 inline-block text-blue-600 text-sm hover:underline">← Browse Articles</Link>
  </div>
  ) : (
  <div className="space-y-3">
- {trending.map((item, i) => (
- <Link key={item.slug} href={`/${item.slug}`}
+ {trending.map((post, i) => (
+ <Link key={post.id || post.slug} href={`/${post.slug}`}
  className="flex items-center gap-4 p-4 bg-white border border-slate-100
  rounded-2xl hover:border-slate-200 hover:shadow-sm transition-all group">
  <span className={`w-9 h-9 rounded-xl flex items-center justify-center text-sm font-extrabold flex-shrink-0
@@ -61,12 +54,13 @@ export default async function TrendingPage() {
  </span>
  <div className="flex-1 min-w-0">
  <p className="font-semibold text-slate-800 text-sm group-hover:text-blue-600 transition-colors truncate">
- /{item.slug}
+ {post.title}
  </p>
+ <p className="mt-1 text-xs text-slate-400">{getDisplayDate(post)}</p>
  </div>
- <div className="flex items-center gap-1.5 text-red-400 font-bold text-sm flex-shrink-0">
- <Heart size={14} className="fill-red-400" />
- {item.count.toLocaleString()}
+ <div className="flex items-center gap-1.5 text-slate-400 font-semibold text-xs flex-shrink-0">
+ <Clock size={14} />
+ Latest
  </div>
  <ArrowRight size={14} className="text-slate-300 group-hover:text-blue-400 transition-colors flex-shrink-0" />
  </Link>
