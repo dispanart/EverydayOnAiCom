@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { TrendingUp, ArrowRight, Clock } from 'lucide-react';
 import { SITE } from '@/config/site';
-import { getRecentPosts, getDisplayDate } from '@/lib/wordpress';
+import { getRecentPosts, getDisplayDate, formatShortDate } from '@/lib/wordpress';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import BackToTop from '@/components/ui/BackToTop';
@@ -56,7 +56,7 @@ export default async function TrendingPage() {
  <p className="font-semibold text-slate-800 text-sm group-hover:text-blue-600 transition-colors truncate">
  {post.title}
  </p>
- <p className="mt-1 text-xs text-slate-400">{getDisplayDate(post)}</p>
+ <p className="mt-1 text-xs text-slate-400">{formatShortDate(getDisplayDate(post).date)}</p>
  </div>
  <div className="flex items-center gap-1.5 text-slate-400 font-semibold text-xs flex-shrink-0">
  <Clock size={14} />
